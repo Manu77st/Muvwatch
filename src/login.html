@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muvwacth</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="../scripts/login.js" defer></script>
+</head>
+<body>
+    <div id="notificaciones">
+
+    </div>
+   <div class="contenedor-general">
+    <div class="banner">
+        <img src="../images/Logo.svg" alt="logotipo">
+    </div>
+    <div class="formulario">
+        <form id="formulario-login">
+            <h1>Iniciar Sesión</h1>
+            <label>Ingresar Correo Electronico:</label>
+            <input id="correo" type="text" placeholder="usuario@ejemplo.com">
+            <label>Ingresar Contraseña:</label>
+            <div class="contenedor-password">
+                <div class="input-con-button">
+                     <input id="contraseña" type="password" placeholder="ingrese su contraseña" ><button type="button" id="toggle-password"><span class="material-icons">visibility</span></button>
+                </div>
+               
+            </div>
+            <button type="button" id="Iniciar-sesion">Ingresar</button>
+            <div class="registro">
+                <label>¿Olvidó su contraseña? <a class="label-registrar" href="registro.html">Recuperar</a></label>
+                <label >O</label>
+                <label>¿Aún no tienes cuenta? <a class="label-registrar" href="registro.html">Registrarse</a></label>
+            </div>
+        </form>
+    </div>
+   </div> 
+</body>
+</html>

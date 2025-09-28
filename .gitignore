@@ -1,0 +1,27 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración local
+config.local.php
+.env
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node modules (si usas npm en el futuro)
+node_modules/
+
+# Archivos de backup
+*.bak
+*.backup

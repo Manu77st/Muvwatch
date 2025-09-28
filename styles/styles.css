@@ -1,0 +1,156 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#notificaciones {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  max-width: 350px;
+}
+/* Estilos para el login */
+.contenedor-notificaciones {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;  
+  margin-bottom: 10px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.notificacion {
+  flex: 1;
+  padding: 10px;
+}
+.notificacion h3{
+   color: black;
+   font-size: 15px;
+   font-weight: bold;
+}
+.notificacion.exito {
+  color: green;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+.notificacion.error{
+    color: red;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+.linea{
+  background: #1B629E;
+  width: 3px;
+  border-radius: 10px;
+}
+.contenedor-general {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+}
+.banner {
+  background-color: #1B629E;
+  flex: 1.7;
+  padding: 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.formulario {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  width: 100%;
+}
+/* Opcional: para que el formulario no se estire demasiado */
+#formulario-login {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 70%;
+  
+}
+#formulario-login h1 {
+  text-align: center;
+}
+
+#correo {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 0.5px solid black;
+  outline: none;
+}
+#formulario-login button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #1B629E;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  width: 50%;
+  align-self: center;
+}
+#formulario-login button:hover {
+  background-color: white;
+  color: #1B629E;
+  border: 0.5px solid;
+  border-color: black;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.contenedor-password {
+  border: 0.5px solid black;
+  border-radius: 5px;
+}
+.input-con-button {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+  padding-right: 5px;
+  max-width: 400px;
+}
+#contraseña {
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  flex: 1;
+  width: 70%;
+}
+#toggle-password {
+    cursor: pointer;
+    flex:0 ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    border-radius: 60px;
+    height: 30px;
+    box-sizing: border-box;    
+}
+.registro {
+  text-align: center;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.registro label {
+  margin: 5px 0;
+}
+.label-registrar {
+  font-size: 14px;
+  font-weight: bold;
+  color: blue;
+  text-decoration: none;
+}
+.label-registrar:hover {
+  text-decoration: underline;
+}

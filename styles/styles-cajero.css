@@ -26,10 +26,8 @@ body {
 }
 
 .logo {
-  width: 60px;
-  height: 60px;
-  background-color: #5eb3e4;
-  border-radius: 50%;
+  width: 250px;
+  height: 62px;
   display: flex;
   align-items: center;
   justify-content: center;

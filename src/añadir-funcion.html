@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir funcion</title>
+   <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&icon_names=search" />
+
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container-navbar"> 
+                <a href="#"><img id="logo-nav" src="../images/Logo_icono.png" alt="Logo_muvwacth">
+                <h3 id="nombre">muvwacth</h3>
+                </a>
+                <div class="container-search">
+                    <input type="text" placeholder="Buscar Pelicula">
+                    <span class="material-symbols-outlined">search</span>
+                </div>
+            </div>
+        </nav>
+        <nav class="nav-move">
+            <ul class="lista-move">
+                <li class="contenido-lista-move">Inicio</li>
+                <li class="contenido-lista-move">Cartera</li>
+                <li class="contenido-lista-move">Reportes</li>
+                <li class="contenido-lista-move">Clientes V.I.P</li>
+            </ul>
+        </nav>
+    </header>
+    <div class="contenedor-funcion">
+  <h2 class="titulo-funcion">AÑADIR FUNCIÓN</h2>
+
+  <form class="form-funcion">
+    <div class="form-izquierda">
+      <label class="image-upload">
+        <input type="file" accept="image/*">
+        <div class="preview">
+          <span class="icono">📷</span>
+          <p>Insertar imagen</p>
+          <small>formato .jpg, .png</small>
+        </div>
+      </label>
+
+      <input type="text" placeholder="Nombre de la película">
+      <textarea placeholder="Descripción"></textarea>
+    </div>
+
+    <div class="form-derecha">
+      <div class="grupo">
+        <input type="text" placeholder="Clasificación">
+        <input type="text" placeholder="Géneros">
+      </div>
+
+      <div class="grupo">
+        <input type="text" placeholder="Reparto">
+        <input type="text" placeholder="Director">
+      </div>
+
+      <div class="grupo">
+        <input type="number" placeholder="Precio">
+        <input type="number" placeholder="Descuento">
+      </div>
+
+      <div class="grupo">
+        <input type="datetime-local" placeholder="Horario">
+        <input type="text" placeholder="Sala">
+      </div>
+
+      <div class="grupo">
+        <input type="url" placeholder="Enlace del tráiler">
+        <input type="date" placeholder="Publicación">
+      </div>
+    </div>
+  </form>
+
+  <div class="botones-funcion">
+    <button class="btn-cancelar">Cancelar</button>
+    <button class="btn-agregar">Agregar</button>
+  </div>
+</div>
+
+</body>
+</html>

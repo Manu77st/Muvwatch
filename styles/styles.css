@@ -154,3 +154,479 @@ body {
 .label-registrar:hover {
   text-decoration: underline;
 }
+
+/*Style navbar*/
+.navbar{
+  background: #1B629E;
+}
+
+#logo-nav,
+.navbar input,
+.container-search, #nombre {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#nombre{
+  margin-right: 20px;
+  color: #eee;
+}
+
+#logo-nav {
+  height: 50px;
+  margin: 10px 0 5px 5px;
+}
+
+/* El contenedor del input */
+.container-search {
+  position: relative; 
+}
+
+/* El input */
+.navbar input {
+  height: 35px;
+  width: 500px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 0 35px 0 10px; 
+  font-size: 15px;
+}
+
+/* El ícono dentro del input */
+.material-symbols-outlined {
+  position: absolute;
+  right: 10px;             
+  top: 50%;
+  transform: translateY(-50%); 
+  cursor: pointer;
+  color: #555;
+  font-size: 22px;
+  opacity: 0.7;
+}
+
+.material-symbols-outlined:hover {
+  opacity: 1;
+}
+
+/*Style nav-move*/
+.nav-move, .lista-move, 
+.contenido-lista-move{
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.contenido-lista-move{
+  margin-right: 25px;
+  font-size: 20px;
+  font-family: sans-serif;
+}
+
+.tarjeta{
+  display: inline-block;
+  align-items: center;
+  background: #cecece;
+  height: 200px;
+  width: 160px;
+  border-radius: 10%;
+  margin: 25px;
+}
+
+.text{
+  display: flex;
+  justify-content: center;
+  margin-top: 90%;
+}
+
+.nav-move {
+  background-color: #ededed;
+  width: 100%; 
+}
+
+.contenido-lista-move {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.contenido-lista-move:hover {
+  color: #165a9f;
+}
+/* añadir funcion admin*/
+.contenedor-funcion {
+  background: #fff;
+  margin: 40px auto;
+  width: 90%;
+  max-width: 1000px;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.titulo-funcion {
+  text-align: center;
+  font-size: 1.8em;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #000;
+}
+
+.form-funcion {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.form-izquierda, .form-derecha {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.image-upload {
+  border: 2px solid #0073e6;
+  border-radius: 10px;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.image-upload:hover {
+  background: #f2f8ff;
+}
+
+.image-upload input {
+  display: none;
+}
+
+.preview {
+  text-align: center;
+  color: #555;
+}
+
+.preview .icono {
+  font-size: 35px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+textarea {
+  background: #e0e0e0;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 15px;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+  height: 60px;
+}
+
+.grupo {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-cancelar,
+.btn-agregar {
+  border: none;
+  padding: 12px 40px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #fff;
+}
+
+.btn-cancelar {
+  background: #d32f2f;
+}
+
+.btn-agregar {
+  background: #165a9f;
+}
+
+.botones-funcion {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 25px;
+}
+/* añadir-clientes vip admin*/
+
+.container-vip {
+  background: #fff;
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 8px rgba(0,0,0,0.15);
+}
+
+.titulo-vip {
+  font-size: 1.8em;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #000;
+}
+
+.form-vip {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.campo {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.campo input {
+  background: #cfcfcf;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 15px;
+  width: 100%;
+  outline: none;
+  color: #333;
+}
+
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 25px;
+}
+
+.btn-cancelar, .btn-guardar {
+  border: none;
+  padding: 12px 45px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.btn-cancelar {
+  background: #d32f2f;
+}
+
+.btn-guardar {
+  background: #165a9f;
+}
+
+.btn-cancelar:hover, .btn-guardar:hover {
+  opacity: 0.9;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .campo {
+    flex-direction: column;
+  }
+}
+/* Consultar cliente vip*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.nav-move {
+  background-color: #f4f4f4;
+  padding: 10px 30px;
+}
+
+.lista-move {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+.contenido-lista-move {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.contenido-lista-move:hover {
+  color: #0e5a97;
+}
+
+/*  CONTENIDO PRINCIPAL  */
+.main-container {
+  background-color: #4a4a4a;
+  min-height: 90vh;
+  padding: 40px 20px;
+  color: white;
+}
+
+.main-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 20px;
+}
+
+/*  FILTROS  */
+.filtros {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.campo-buscar {
+  display: flex;
+  align-items: center;
+  background-color: #f1f1f1;
+  border-radius: 30px;
+  padding: 6px 12px;
+  width: 220px;
+}
+
+.campo-buscar input {
+  border: none;
+  outline: none;
+  background: none;
+  flex: 1;
+  color: #333;
+  font-size: 14px;
+}
+
+.campo-buscar span {
+  color: gray;
+}
+
+select {
+  background-color: #f1f1f1;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 14px;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  color: #333;
+}
+
+/* TABLA */
+.tabla-clientes {
+  width: 90%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabla-clientes th,
+.tabla-clientes td {
+  padding: 10px 15px;
+  text-align: center;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.tabla-clientes th {
+  background-color: #e6e6e6;
+  font-weight: 700;
+}
+
+.tabla-clientes tr:nth-child(even) {
+  background-color: #f8f8f8;
+}
+
+/*  BOTONES  */
+.btn-editar {
+  background-color: #1e8f2f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.btn-eliminar {
+  background-color: #c62828;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.btn-editar:hover {
+  background-color: #176d25;
+}
+
+.btn-eliminar:hover {
+  background-color: #a51f1f;
+}
+/* Reportes de ventas*/
+
+main {
+  background-color: #373636;
+  color: white;
+  width: 100%;
+  margin: 30px auto;
+  padding: 50px 25px;
+  border-radius: 4px;
+  min-height: 100vh;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* TÍTULO */
+main h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  letter-spacing: 0.5px;
+}
+
+/* TABLA */
+.tabla-clientes {
+  width: 95%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background-color: #e4e4e4;
+  color: black;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.tabla-clientes th,
+.tabla-clientes td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #bbb;
+  font-size: 14px;
+}
+
+.tabla-clientes th {
+  background-color: #d9d9d9;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.tabla-clientes tr:nth-child(even) {
+  background-color: #f3f3f3;
+}

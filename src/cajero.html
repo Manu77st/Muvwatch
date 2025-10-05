@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cajero - MuvWatch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;800&display=swap" rel="stylesheet">
+    <script src="../scripts/cajero.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Fondo gris principal -->
+        <div class="main-background"></div>
+
+        <!-- Componente Info Venta con SVG -->
+        <div class="info-venta">
+            <div class="info-venta-background">
+                <svg fill="none" preserveAspectRatio="none" viewBox="0 0 1755 1169">
+                    <g id="Info. Venta">
+                        <g filter="url(#filter0_d_1_68)" id="Rectangle 975">
+                            <path d="M1751 1160.28H4V35H1751V1160.28Z" fill="#373636" />
+                        </g>
+                        <rect fill="#1B629E" height="214" id="Rectangle 975_2" width="1747" x="4" />
+                    </g>
+                    <defs>
+                        <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="1133.28"
+                            id="filter0_d_1_68" width="1755" x="0" y="35">
+                            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                            <feColorMatrix in="SourceAlpha" result="hardAlpha" type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                            <feOffset dy="4" />
+                            <feGaussianBlur stdDeviation="2" />
+                            <feComposite in2="hardAlpha" operator="out" />
+                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                            <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_1_68" />
+                            <feBlend in="SourceGraphic" in2="effect1_dropShadow_1_68" mode="normal" result="shape" />
+                        </filter>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Título principal -->
+        <p class="main-title">Información de venta</p>
+
+        <!-- Imagen 54 (Logo) -->
+        <div class="image-54">
+            <img alt="Logo" src="https://images.unsplash.com/photo-1489599894855-9e518c0c1df6?w=200&h=200&fit=crop" />
+        </div>
+
+        <!-- Imagen 55 -->
+        <div class="image-55">
+            <img alt="Cinema" src="https://images.unsplash.com/photo-1489599894855-9e518c0c1df6?w=400&h=400&fit=crop" />
+        </div>
+
+        <!-- Paneles -->
+        <div class="panel-main"></div>
+        <div class="panel-credit"></div>
+        <div class="panel-debit"></div>
+
+        <!-- Labels del panel principal -->
+        <p class="label-blue" style="left: 213px; top: 292px; width: 145px; height: 43px;">Función:</p>
+        <p class="label-blue" style="left: 213px; top: 351px; width: 119px; height: 42px;">Fecha:</p>
+        <p class="label-blue" style="left: 213px; top: 429px; width: 108px; height: 42px;">Hora:</p>
+        <p class="label-blue" style="left: 213px; top: 500px; width: 119px; height: 43px;">Sala:</p>
+        <p class="label-blue" style="left: 213px; top: 571px; width: 119px; height: 43px;">Sillas:</p>
+        <p class="label-blue" style="left: 209px; top: 637px; width: 149px; height: 43px;">Bloque:</p>
+        <p class="label-blue" style="left: 209px; top: 704px; width: 209px; height: 42px;">Precio total:</p>
+        <p class="label-blue" style="left: 209px; top: 773px; width: 209px; height: 42px;">Descuento:</p>
+        <p class="label-blue" style="left: 213px; top: 834px; width: 359px; height: 43px;">Método de pago</p>
+
+        <!-- Valores del panel principal -->
+        <p class="text-normal" style="left: 410px; top: 297px; width: 354px; height: 35px;">Mission impossible</p>
+        <p class="text-normal" style="left: 410px; top: 349px; width: 219px; height: 35px;">30/08/2025</p>
+        <p class="text-normal" style="left: 416px; top: 429px; width: 148px; height: 36px;">9:20 pm</p>
+        <p class="text-normal" style="left: 410px; top: 500px; width: 148px; height: 36px;">4</p>
+        <p class="text-normal" style="left: 416px; top: 573px; width: 148px; height: 36px;">C5, C6</p>
+        <p class="text-normal" style="left: 418px; top: 641px; width: 148px; height: 36px;">1</p>
+        <p class="text-normal" style="left: 412px; top: 707px; width: 94px; height: 35px;">$$$$</p>
+        <p class="text-normal" style="left: 412px; top: 780px; width: 94px; height: 35px;">10%</p>
+
+        <!-- Panel de crédito -->
+        <p class="label-blue" style="left: 1209px; top: 282px; width: 218px; height: 43px;">Info. crédito</p>
+        <p class="label-blue-small" style="left: 1032px; top: 360px; width: 177px; height: 43px;">N° tarjeta:</p>
+        <p class="label-blue-small"
+            style="left: 1032px; top: 429px; width: 137px; height: 43px; text-align: center; transform: translateX(-50%); left: 1100.5px;">
+            Titular:</p>
+        <p class="label-blue-small" style="left: 1032px; top: 503px; width: 177px; height: 43px;">Tipo tarjeta:</p>
+
+        <!-- Campos de entrada crédito -->
+        <div class="input-container" style="left: 1209px; top: 353px;">
+            <input type="text" placeholder="Número de tarjeta" id="credit-number">
+        </div>
+        <div class="input-container" style="left: 1209px; top: 423px;">
+            <input type="text" placeholder="Nombre del titular" id="credit-holder">
+        </div>
+        <div class="input-container" style="left: 1209px; top: 494px;">
+            <input type="text" placeholder="Tipo de tarjeta" id="credit-type">
+        </div>
+
+        <!-- Panel de débito -->
+        <p class="label-blue" style="left: 1217px; top: 669px; width: 210px; height: 43px;">info. débito</p>
+        <p class="label-blue-small"
+            style="left: 1032px; top: 755px; width: 177px; height: 43px; text-align: center; transform: translateX(-50%); left: 1120.5px;">
+            N° tarjeta:</p>
+        <p class="label-blue-small" style="left: 1032px; top: 824px; width: 197px; height: 43px;">Banco emisor:</p>
+        <p class="label-blue-small" style="left: 1032px; top: 898px; width: 218px; height: 43px;">C. Autorización:</p>
+
+        <!-- Campos de entrada débito -->
+        <div class="input-container" style="left: 1263px; top: 749px;">
+            <input type="text" placeholder="Número de tarjeta" id="debit-number">
+        </div>
+        <div class="input-container" style="left: 1263px; top: 821px;">
+            <input type="text" placeholder="Banco emisor" id="debit-bank">
+        </div>
+        <div class="input-container" style="left: 1263px; top: 893px;">
+            <input type="text" placeholder="Código autorización" id="debit-auth">
+        </div>
+
+        <!-- Iconos de método de pago -->
+        <div class="card-icon" style="left: 213px; top: 880px;">
+            <img alt="Tarjeta" src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=50&h=50&fit=crop" />
+        </div>
+        <p class="text-normal" style="left: 276px; top: 883px; width: 319px; height: 35px;">Tarjeta de crédito</p>
+
+        <div class="card-icon" style="left: 213px; top: 939px;">
+            <img alt="Tarjeta" src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=50&h=50&fit=crop" />
+        </div>
+        <p class="text-normal" style="left: 276px; top: 941px; width: 306px; height: 36px;">Tarjeta de debito</p>
+
+        <!-- Botón Pagar -->
+        <button class="pay-button" onclick="processPayment()">
+            <span class="pay-button-text">Pagar</span>
+        </button>
+    </div>
+</body>
+
+</html>

@@ -13,33 +13,33 @@ body {
 .contenedor-notificaciones {
   display: flex;
   flex-direction: row;
-  align-items: stretch;  
+  align-items: stretch;
   margin-bottom: 10px;
   background: white;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .notificacion {
   flex: 1;
   padding: 10px;
 }
-.notificacion h3{
-   color: black;
-   font-size: 15px;
-   font-weight: bold;
+.notificacion h3 {
+  color: black;
+  font-size: 15px;
+  font-weight: bold;
 }
 .notificacion.exito {
   color: green;
   padding: 15px;
   margin-bottom: 10px;
 }
-.notificacion.error{
-    color: red;
-    padding: 15px;
-    margin-bottom: 10px;
+.notificacion.error {
+  color: red;
+  padding: 15px;
+  margin-bottom: 10px;
 }
-.linea{
-  background: #1B629E;
+.linea {
+  background: #1b629e;
   width: 3px;
   border-radius: 10px;
 }
@@ -50,7 +50,7 @@ body {
   height: 100vh;
 }
 .banner {
-  background-color: #1B629E;
+  background-color: #1b629e;
   flex: 1.7;
   padding: 20px;
   color: white;
@@ -72,7 +72,6 @@ body {
   flex-direction: column;
   gap: 10px;
   width: 70%;
-  
 }
 #formulario-login h1 {
   text-align: center;
@@ -88,7 +87,7 @@ body {
 #formulario-login button {
   padding: 10px;
   font-size: 16px;
-  background-color: #1B629E;
+  background-color: #1b629e;
   color: white;
   border: none;
   cursor: pointer;
@@ -98,7 +97,7 @@ body {
 }
 #formulario-login button:hover {
   background-color: white;
-  color: #1B629E;
+  color: #1b629e;
   border: 0.5px solid;
   border-color: black;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
@@ -126,15 +125,15 @@ body {
   width: 70%;
 }
 #toggle-password {
-    cursor: pointer;
-    flex:0 ;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    border-radius: 60px;
-    height: 30px;
-    box-sizing: border-box;    
+  cursor: pointer;
+  flex: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  border-radius: 60px;
+  height: 30px;
+  box-sizing: border-box;
 }
 .registro {
   text-align: center;
@@ -153,4 +152,235 @@ body {
 }
 .label-registrar:hover {
   text-decoration: underline;
+}
+
+/* Estilos para el cajero */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 1200px;
+  background: white;
+}
+
+/* Fondo gris principal */
+.main-background {
+  position: absolute;
+  background: #edefef;
+  height: 579px;
+  left: 56px;
+  border-radius: 61px;
+  top: 233px;
+  width: 1648px;
+}
+
+/* Componente Info Venta */
+.info-venta {
+  position: absolute;
+  height: 1160.28px;
+  left: -10px;
+  top: 0;
+  width: 1747px;
+}
+
+.info-venta-background {
+  position: absolute;
+  bottom: -0.69%;
+  left: -0.23%;
+  right: -0.23%;
+  top: 0;
+}
+
+.info-venta svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Título principal */
+.main-title {
+  position: absolute;
+  font-family: "Roboto", sans-serif;
+  font-weight: 800;
+  height: 53px;
+  line-height: normal;
+  left: 1102px;
+  color: #fdfdfd;
+  font-size: 45px;
+  top: 77px;
+  width: 590px;
+}
+
+/* Imágenes */
+.image-54 {
+  position: absolute;
+  height: 122px;
+  left: 66px;
+  top: 57px;
+  width: 126px;
+  overflow: hidden;
+}
+
+.image-54 img {
+  position: absolute;
+  height: 186.21%;
+  left: -41.77%;
+  max-width: none;
+  top: -36.05%;
+  width: 181.1%;
+}
+
+.image-55 {
+  position: absolute;
+  left: 192px;
+  width: 336px;
+  height: 336px;
+  top: -49px;
+}
+
+.image-55 img {
+  position: absolute;
+  inset: 0;
+  max-width: none;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* Paneles */
+.panel-main {
+  position: absolute;
+  background: #edefef;
+  height: 742px;
+  left: 159px;
+  border-radius: 50px;
+  top: 258px;
+  width: 597px;
+  border: 1px solid #0075d8;
+}
+
+.panel-credit {
+  position: absolute;
+  background: #edefef;
+  height: 356px;
+  left: 1007px;
+  border-radius: 50px;
+  top: 258px;
+  width: 597px;
+  border: 1px solid #0075d8;
+}
+
+.panel-debit {
+  position: absolute;
+  background: #edefef;
+  height: 356px;
+  left: 1010px;
+  border-radius: 50px;
+  top: 649px;
+  width: 597px;
+  border: 1px solid #0075d8;
+}
+
+/* Textos */
+.label-blue {
+  font-family: "Roboto", sans-serif;
+  font-weight: 800;
+  color: #1b629e;
+  font-size: 36px;
+  position: absolute;
+}
+
+.label-blue-small {
+  font-family: "Roboto", sans-serif;
+  font-weight: 800;
+  color: #1b629e;
+  font-size: 30px;
+  position: absolute;
+}
+
+.text-normal {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  color: black;
+  font-size: 30px;
+  position: absolute;
+}
+
+/* Campos de entrada */
+.input-container {
+  position: absolute;
+  background: white;
+  height: 44px;
+  border-radius: 11px;
+  width: 268px;
+  border: 1px solid black;
+}
+
+.input-container input {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0 12px;
+  color: black;
+  border-radius: 11px;
+  font-size: 14px;
+}
+
+.input-container input::placeholder {
+  color: #666;
+}
+
+/* Botón Pagar */
+.pay-button {
+  position: absolute;
+  background: #1b629e;
+  height: 73px;
+  left: 731px;
+  border-radius: 15px;
+  top: 1023px;
+  width: 275px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border: none;
+}
+
+.pay-button:hover {
+  background: rgba(27, 98, 158, 0.9);
+}
+
+.pay-button-text {
+  position: absolute;
+  font-family: "Roboto", sans-serif;
+  font-weight: 800;
+  line-height: normal;
+  left: 50%;
+  font-size: 36px;
+  text-align: center;
+  color: white;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+/* Iconos de tarjeta */
+.card-icon {
+  position: absolute;
+  height: 40px;
+  width: 41px;
+}
+
+.card-icon img {
+  position: absolute;
+  inset: 0;
+  max-width: none;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }

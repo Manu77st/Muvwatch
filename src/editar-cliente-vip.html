@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Cliente VIP</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&icon_names=search" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container-navbar"> 
+                <a href="lobby_admin.html"><img id="logo-nav" src="../images/Logo_icono.png" alt="Logo_muvwacth">
+                <h3 id="nombre">muvwacth</h3>
+                </a>
+                <div class="container-search">
+                    <input type="text" placeholder="Buscar Película...">
+                    <span class="material-symbols-outlined">search</span>
+                </div>
+                <div class="admin-section">
+                    <span class="material-symbols-outlined">person</span>
+                    <span id="nombre">Admin</span>
+                </div>
+            </div>
+        </nav>
+        <nav class="nav-move">
+            <ul class="lista-move">
+                <li class="contenido-lista-move"><a href="lobby_admin.html">Inicio</a></li>
+                <li class="contenido-lista-move"><a href="cajero.html">Cartera</a></li>
+                <li class="contenido-lista-move"><a href="Reportes-ventas.html">Reportes</a></li>
+                <li class="contenido-lista-move"><a href="Consultar-clientes-VIP.html">Clientes Vip</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container-vip">
+        <h2 class="titulo-vip">EDITAR CLIENTE VIP</h2>
+
+        <form class="form-vip">
+            <div class="campo">
+                <input type="text" placeholder="Nombre" value="Breiner" required>
+                <input type="text" placeholder="Apellido" value="Duran" required>
+            </div>
+
+            <div class="campo">
+                <input type="text" placeholder="Tipo de documento" value="CC" required>
+                <input type="text" placeholder="N. de documento" value="1065127509" required>
+            </div>
+
+            <div class="campo">
+                <input type="email" placeholder="Correo electrónico" value="breiner@gmail.com" required>
+                <input type="tel" placeholder="Teléfono" value="3224577941" required>
+            </div>
+
+            <div class="campo">
+                <input type="text" placeholder="Membresía" value="13459461" required>
+                <input type="text" placeholder="Estado" value="Inactivo" required>
+            </div>
+
+            <div class="botones">
+                <button type="button" class="btn-cancelar" onclick="window.location.href='Consultar-clientes-VIP.html'">Cancelar</button>
+                <button type="submit" class="btn-guardar">Actualizar</button>
+            </div>
+        </form>
+    </main>
+</body>
+
+</html>
+

@@ -24,10 +24,10 @@
         </nav>
         <nav class="nav-move">
             <ul class="lista-move">
-                <li class="contenido-lista-move">Inicio</li>
-                <li class="contenido-lista-move">Cartera</li>
-                <li class="contenido-lista-move">Reportes</li>
-                <li class="contenido-lista-move">Clientes V.I.P</li>
+                <li class="contenido-lista-move"><a href="lobby_admin.html">Inicio</a></li>
+                <li class="contenido-lista-move"><a href="cajero.html">Cartera</a></li>
+                <li class="contenido-lista-move"><a href="Reportes-ventas.html">Reportes</a></li>
+                <li class="contenido-lista-move"><a href="Consultar-clientes-VIP.html">Clientes Vip</a></li>
             </ul>
         </nav>
     </header>
@@ -72,17 +72,33 @@
                     <td>1065127509</td>
                     <td>breiner@gmail.com</td>
                     <td>13459461</td>
-                    <td>Activo</td>
+                    <td>Inactivo</td>
                     <td>
-                        <button class="btn-editar">✏️</button>
+                        <button class="btn-editar" onclick="window.location.href='editar-cliente-vip.html'">✏️</button>
                         <button class="btn-eliminar">🗑️</button>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="6"></td>
+                    <td>María González</td>
+                    <td>1234567890</td>
+                    <td>maria.gonzalez@email.com</td>
+                    <td>98765432</td>
+                    <td>Activo</td>
+                    <td>
+                        <button class="btn-editar" onclick="window.location.href='editar-cliente-vip.html'">✏️</button>
+                        <button class="btn-eliminar">🗑️</button>
+                    </td>
                 </tr>
                 <tr>
-                    <td colspan="6"></td>
+                    <td>Carlos Rodríguez</td>
+                    <td>0987654321</td>
+                    <td>carlos.rodriguez@email.com</td>
+                    <td>11223344</td>
+                    <td>Activo</td>
+                    <td>
+                        <button class="btn-editar" onclick="window.location.href='editar-cliente-vip.html'">✏️</button>
+                        <button class="btn-eliminar">🗑️</button>
+                    </td>
                 </tr>
             </tbody>
         </table>

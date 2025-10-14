@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Ventas - Muvwatch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/styles-cajero.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;800&display=swap" rel="stylesheet">
+    <script src="../scripts/cajero.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo-section">
+            <img src="../images/Logo-reducido.png" alt="logotipo" class="logo">
+        </div>
+        <h1 class="header-title">Información de venta</h1>
+    </header>
+
+    <div class="container">
+        <div class="card left-section">
+            <div class="info-row">
+                <span class="info-label">Función:</span>
+                <span class="info-titulo"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Fecha:</span>
+                <span class="info-fecha"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Hora:</span>
+                <span class="info-hora">9:20 pm</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Sala:</span>
+                <span class="info-sala"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Sillas:</span>
+                <span class="info-sillas"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Bloque:</span>
+                <span class="info-value">1</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Precio total:</span>
+                <span class="info-total">$$$$</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Descuento:</span>
+                <span class="info-descuento">10%</span>
+            </div>
+
+            <div class="payment-method">
+                <h2 class="section-title">Método de pago</h2>
+                <div class="radio-option">
+                    <input type="radio" id="credit" name="payment" value="credit" checked>
+                    <label for="credit">Tarjeta de crédito</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="debit" name="payment" value="debit">
+                    <label for="debit">Tarjeta de débito</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="creditCard">
+            <h2 class="section-title">Info. crédito</h2>
+            <div class="form-group">
+                <label class="form-label" for="credit-number">N° tarjeta:</label>
+                <input id="credit-number" type="text" class="form-input" placeholder="Ej. 4111 1111 1111 1111" maxlength="16" title="Número de tarjeta de crédito">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="credit-holder">Titular:</label>
+                <input id="credit-holder" type="text" class="form-input" placeholder="Nombre tal como figura en la tarjeta" title="Nombre del titular de la tarjeta">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="credit-type">Tipo tarjeta:</label>
+                <input id="credit-type" type="text" class="form-input" placeholder="Visa, MasterCard, etc." title="Tipo de la tarjeta">
+            </div>
+        </div>
+
+        <div class="card hidden" id="debitCard">
+            <h2 class="section-title">Info. débito</h2>
+            <div class="form-group">
+                <label class="form-label" for="debit-number">N° tarjeta:</label>
+                <input id="debit-number" type="text" class="form-input" placeholder="Ej. 4111 1111 1111 1111" maxlength="16" title="Número de tarjeta de débito">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="debit-holder">Banco emisor:</label>
+                <input id="debit-holder" type="text" class="form-input" placeholder="Nombre del banco emisor" title="Nombre del banco emisor">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="debit-auth">C. Autorización:</label>
+                <input id="debit-auth" type="text" class="form-input" placeholder="Código de autorización" title="Código de autorización">
+            </div>
+        </div>
+
+        <div class="pay-button-container">
+            <button class="pay-button" onclick="handlePayment()">Pagar</button>
+        </div>
+    </div>
+</body>
+
+</html>

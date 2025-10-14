@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lobby Cliente</title>
+  <link rel="stylesheet" href="/styles/styles.css" />
+  <link rel="stylesheet" href="/styles/styles-cliente.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+  <header>
+      <!-- Navbar principal -->
+      <nav class="navbar">
+        <div class="container-navbar">
+          <div class="navbar-left">
+            <a href="lobby-cliente.html" class="logo-link">
+              <img id="logo-nav" src="/images/Logo.svg" alt="Logo_muvwatch" />
+            </a>
+          </div>
+          <div class="navbar-center">
+            <div class="container-search">
+              <div class="filtros">
+                <span
+                  class="material-symbols-outlined icon-inline"
+                  aria-hidden="true"
+                  >filter_alt</span>
+              </div>
+              <div class="caja-busqueda">
+                <input type="text" placeholder="Buscar función..." />
+                <span class="material-symbols-outlined">search</span>
+              </div>
+            </div>
+          </div>
+          <div class="navbar-right">
+            <div class="cliente-box" id="clienteBox">
+              <span
+                class="material-symbols-outlined icon-inline profile-icon"
+                aria-hidden="true"
+                >account_circle</span
+              >
+              Cliente A
+              <div class="menu-cliente" id="menuCliente">
+                <a href="#">Perfil</a>
+                <a href="../src/login.html">Cerrar sesión</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    <main class="main-content">
+      <div class="movies-grid">
+        <!-- Películas existentes -->
+        <div class="movie-card" onclick="openMovieModal('mission-impossible')">
+          <img
+            src="/images/Peliculas_Cartelera/Mision imposible.jpg"
+            alt="Mission Impossible"
+          />
+          <h3>Mission Impossible</h3>
+          <div class="movie-actions">
+            <button
+              class="btn-view"
+              onclick="event.stopPropagation(); openMovieModal('mission-impossible')"
+            >
+              <span class="material-symbols-outlined">visibility</span>
+              Ver detalles
+            </button>
+            <button
+              class="btn-reservar"
+              onclick="event.stopPropagation(); window.location.href='reservar-pelicula.html';"
+            >
+              Reservar
+            </button>
+          </div>
+        </div>
+
+        <div class="movie-card" onclick="openMovieModal('spiderman')">
+          <img
+            src="/images/Peliculas_Cartelera/Spider-man.jpg"
+            alt="Spiderman"
+          />
+          <h3>Spiderman</h3>
+          <div class="movie-actions">
+            <button
+              class="btn-view"
+              onclick="event.stopPropagation(); openMovieModal('spiderman')">
+              <span class="material-symbols-outlined">visibility</span>
+              Ver detalles
+            </button>
+            <button
+              class="btn-reservar"
+              onclick="event.stopPropagation(); window.location.href='reservar-pelicula.html';"
+            >
+              Reservar
+            </button>
+          </div>
+        </div>
+
+        <div class="movie-card" onclick="openMovieModal('inside-out-2')">
+          <img
+            src="/images/Peliculas_Cartelera/Intesamente_2.jpg"
+            alt="Inside Out 2"
+          />
+          <h3>Intensamente 2</h3>
+          <div class="movie-actions">
+            <button
+              class="btn-view"
+              onclick="event.stopPropagation(); openMovieModal('inside-out-2')"
+            >
+              <span class="material-symbols-outlined">visibility</span>
+              Ver detalles
+            </button>
+            <button
+              class="btn-reservar"
+              onclick="event.stopPropagation(); window.location.href='reservar-pelicula.html';"
+            >
+              Reservar
+            </button>
+          </div>
+        </div>
+
+        <div class="movie-card" onclick="openMovieModal('beetlejuice')">
+          <img
+            src="/images/Peliculas_Cartelera/Bettlejuice.jpg"
+            alt="Beetlejuice"
+          />
+          <h3>Beetlejuice</h3>
+          <div class="movie-actions">
+            <button
+              class="btn-view"
+              onclick="event.stopPropagation(); openMovieModal('beetlejuice')"
+            >
+              <span class="material-symbols-outlined">visibility</span>
+              Ver detalles
+            </button>
+            <button
+              class="btn-reservar"
+              onclick="event.stopPropagation(); window.location.href='reservar-pelicula.html';"
+            >
+              Reservar
+            </button>
+          </div>
+        </div>
+
+        <div class="movie-card" onclick="openMovieModal('paddington')">
+          <img
+            src="/images/Peliculas_Cartelera/Paddington.jpg"
+            alt="Paddington"
+          />
+          <h3>Paddington</h3>
+          <div class="movie-actions">
+            <button
+              class="btn-view"
+              onclick="event.stopPropagation(); openMovieModal('paddington')">
+              <span class="material-symbols-outlined">visibility</span>
+              Ver detalles
+            </button>
+            <button
+              class="btn-reservar"
+              onclick="event.stopPropagation(); window.location.href='reservar-pelicula.html';"
+            >
+              Reservar
+            </button>
+          </div>
+        </div>
+
+        <div class="movie-card" onclick="openMovieModal('mission-impossible')">
+          <img
+            src="/images/Peliculas_Cartelera/Mision imposible.jpg"
+            alt="Mission Impossible"
+          />
+          <h3>Mission Impossible</h3>
+          <div class="movie-actions">
+            <button
+              class="btn-view"
+              onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
+              <span class="material-symbols-outlined">visibility</span>
+              Ver detalles
+            </button>
+            <button
+              class="btn-reservar"
+              onclick="event.stopPropagation(); window.location.href='reservar-pelicula.html';"
+            >
+              Reservar
+            </button>
+          </div>
+        </div>
+
+        <div class="movie-card" onclick="openMovieModal('spiderman')">
+          <img
+            src="/images/Peliculas_Cartelera/Spider-man.jpg"
+            alt="Spiderman"
+          />
+          <h3>Spiderman</h3>
+          <div class="movie-actions">
+            <button
+              class="btn-view"
+              onclick="event.stopPropagation(); openMovieModal('spiderman')">
+              <span class="material-symbols-outlined">visibility</span>
+              Ver detalles
+            </button>
+            <button
+              class="btn-reservar"
+              onclick="event.stopPropagation(); window.location.href='reservar-pelicula.html';"
+            >
+              Reservar
+            </button>
+          </div>
+        </div>
+
+        <div class="movie-card" onclick="openMovieModal('beetlejuice')">
+          <img
+            src="/images/Peliculas_Cartelera/Bettlejuice.jpg"
+            alt="Beetlejuice"
+          />
+          <h3>Beetlejuice</h3>
+          <div class="movie-actions">
+            <button
+              class="btn-view"
+              onclick="event.stopPropagation(); openMovieModal('beetlejuice')">
+              <span class="material-symbols-outlined">visibility</span>
+              Ver detalles
+            </button>
+            <button
+              class="btn-reservar"
+              onclick="event.stopPropagation(); window.location.href='reservar-pelicula.html';"
+            >
+              Reservar
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal de detalles de película -->
+    <div id="movieModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeMovieModal()">&times;</span>
+        <div class="modal-body">
+          <div class="modal-left">
+            <img id="modalMovieImage" src="" alt="Movie Poster" />
+            <h2 id="modalMovieTitle"></h2>
+          </div>
+          <div class="modal-right">
+            <div class="synopsis-section">
+              <h3>Sinopsis</h3>
+              <p id="modalSynopsis"></p>
+            </div>
+            <div class="movie-details">
+              <p>
+                <strong>Nombre original:</strong>
+                <span id="modalOriginalName"></span>
+              </p>
+              <p>
+                <strong>Clasificación:</strong>
+                <span id="modalClassification"></span>
+              </p>
+              <p><strong>Reparto:</strong> <span id="modalCast"></span></p>
+              <p><strong>Director:</strong> <span id="modalDirector"></span></p>
+            </div>
+            <div class="trailer-section">
+              <h3>Trailer</h3>
+              <div class="trailer-placeholder">
+                <span class="material-symbols-outlined">play_circle</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón de chatbot -->
+    <div class="chatbot-btn" id="chatbotBtn">
+      <span class="material-symbols-outlined">chat</span>
+    </div>
+    <!-- Ventana de chatbot -->
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="chatbot-header">
+        <span>
+          <img src="/images/chatbot_icon.png" alt="Chatbot" />
+          Chatsito Muvwatch
+        </span>
+        <span class="chatbot-close" id="chatbotClose">&times;</span>
+      </div>
+      <div class="chatbot-body">
+        <div>
+          <span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle;">chat</span>
+          ¡Hola! ¿En qué puedo ayudarte hoy?
+        </div>
+      </div>
+      <div class="chatbot-footer">
+        <input type="text" placeholder="Escribe tu mensaje..." />
+        <button style="background-color: #0075d8">
+          <span class="material-symbols-outlined" aria-hidden="true">send</span>
+        </button>
+      </div>
+    </div>
+
+    <script src="/scripts/lobby-cliente.js"></script>
+  </body>
+</html>

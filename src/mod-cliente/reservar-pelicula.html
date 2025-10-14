@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reservar Película</title>
+    <link rel="stylesheet" href="/styles/styles-cliente.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <!-- Navbar principal -->
+      <nav class="navbar">
+        <div class="container-navbar">
+          <div class="navbar-left">
+            <a href="lobby-cliente.html" class="logo-link">
+              <img id="logo-nav" src="/images/Logo.svg" alt="Logo_muvwatch" />
+            </a>
+          </div>
+          <div class="navbar-center">
+            <div class="container-search">
+              <div class="filtros">
+                <span
+                  class="material-symbols-outlined icon-inline"
+                  aria-hidden="true"
+                  >filter_alt</span>
+              </div>
+              <div class="caja-busqueda">
+                <input type="text" placeholder="Buscar función..." />
+                <span class="material-symbols-outlined">search</span>
+              </div>
+            </div>
+          </div>
+          <div class="navbar-right">
+            <div class="cliente-box" id="clienteBox">
+              <span
+                class="material-symbols-outlined icon-inline profile-icon"
+                aria-hidden="true"
+                >account_circle</span
+              >
+              Cliente A
+              <div class="menu-cliente" id="menuCliente">
+                <a href="#">Perfil</a>
+                <a href="../src/login.html">Cerrar sesión</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Menú secundario -->
+      <div class="menu-secundario">
+        <nav>
+          <a href="lobby-cliente.html">Inicio</a>
+          <a href="#">Cartera</a>
+          <a href="#">Promociones</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="reserve-page">
+      <div class="layout-reserva">
+        <!-- Left: sala -->
+        <div class="panel-sala">
+            <h2>SALA 3 | ESTANDAR</h2>
+          <div class="marco-sala">
+            <div class="interior-sala">
+              <div class="pantalla-superior">PANTALLA</div>
+              <div class="area-asientos">
+                <div
+                  class="bloque-asientos"
+                  id="bloqueAsientosIzquierda"
+                  aria-label="Bloque izquierdo"
+                ></div>
+                <div class="pasillo" aria-hidden="true"></div>
+                <div
+                  class="bloque-asientos"
+                  id="bloqueAsientosDerecha"
+                  aria-label="Bloque derecho"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: panel de reserva -->
+        <aside class="panel-reserva">
+          <div class="caja-reserva">
+            <h3>Reservar</h3>
+            <p><strong>Función:</strong> Mission Impossible</p>
+            <p><strong>Fecha:</strong> 30/09/25</p>
+            <p><strong>Hora:</strong> 7:00 p.m.</p>
+
+            <div class="seccion-info">
+              <h4>Estado de las sillas:</h4>
+              <ul>
+                <li>Disponible</li>
+                <li>Ocupada</li>
+                <li>Escogida</li>
+              </ul>
+            </div>
+
+            <div class="seccion-info">
+              <h4>Tipo de sillas:</h4>
+              <div>Standard $15.000</div>
+              <div>Discapacitados $10.000</div>
+            </div>
+
+            <div class="info-seleccionadas">
+              Seleccionadas: <span id="contadorSeleccionadas">0</span>
+            </div>
+
+            <div class="seccion-info">
+              <h4>Método de Pago</h4>
+              <div style="display: flex; gap: 8px; margin-top: 8px">
+                <button class="boton-pago" data-metodo="efectivo">
+                  Efectivo
+                </button>
+                <button
+                  class="boton-otro-pago"
+                  data-metodo="otro"
+                  type="button"
+                  aria-label="Otro método"
+                >
+                  Otro
+                </button>
+              </div>
+            </div>
+
+            <div style="margin-top: 18px">
+              <button id="botonConfirmar" class="btn-agregar">Confirmar</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+    <script src="/scripts/mod-cliente/reservar-pelicula.js"></script>
+  </body>
+</html>

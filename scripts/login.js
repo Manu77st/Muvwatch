@@ -32,71 +32,24 @@ function mostrarNotificacion(mensaje, tipo) {
         notificacion.remove();
     }, 3000);
 }
+const listausuarios =['luigi@gmail.com', "andres@gmail.com"]
+const listacontraseñas = ['1234', '5678']
 const btniniciarSesion = document.getElementById('Iniciar-sesion');
-
-btniniciarSesion.addEventListener('click', async (event) => {
+btniniciarSesion.addEventListener('click', (event) => {
     event.preventDefault();
-    
-    const correo = document.getElementById('correo').value.trim();
-    const contraseña = document.getElementById('contraseña').value.trim();
-    
-    // Validación básica en el frontend
-    if (!correo || !contraseña) {
-        mostrarNotificacion('Por favor complete todos los campos', 'error');
-        return;
-    }
-    
-    // Validación de formato de email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(correo)) {
-        mostrarNotificacion('Por favor ingrese un correo electrónico válido', 'error');
-        return;
-    }
-    
-    try {
-        // Deshabilitar el botón para evitar múltiples envíos
-        btniniciarSesion.disabled = true;
-        btniniciarSesion.textContent = 'Validando...';
-        
-        // Hacer petición AJAX al backend
-        const response = await fetch('../backend/validar_login.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                correo: correo,
-                contraseña: contraseña
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            // Guardar información del usuario en sessionStorage
-            sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
-            mostrarNotificacion(data.message, 'exito');
-            
-            // Redirigir según el tipo de usuario
-            setTimeout(() => {
-                if (data.usuario.tipo_usuario === 'administrador') {
-                    window.location.href = 'admin_dashboard.html';
-                } else if (data.usuario.tipo_usuario === 'cajero') {
-                    window.location.href = 'cajero_dashboard.html';
-                } else {
-                    window.location.href = 'index.html';
-                }
-            }, 1500);
-        } else {
-            mostrarNotificacion(data.message, 'error');
+    let validacion = false;
+    const correo = document.getElementById('correo').value;
+    const contraseña = document.getElementById('contraseña').value;
+    for(let i=0; i<listausuarios.length; i++){
+        if(correo === listausuarios[i] && contraseña === listacontraseñas[i]){
+            validacion=true;
+            break;
         }
-        
-    } catch (error) {
-        console.error('Error:', error);
-        mostrarNotificacion('Error de conexión. Intente nuevamente.', 'error');
-    } finally {
-        // Rehabilitar el botón
-        btniniciarSesion.disabled = false;
-        btniniciarSesion.textContent = 'Ingresar';
-    }
+    }  
+    if(validacion){
+        mostrarNotificacion('Inicio de sesión exitoso', 'exito');
+        window.location.href = 'index.html';
+    }else{
+        mostrarNotificacion('Correo o contraseña incorrectos', 'error');
+    }   
 });

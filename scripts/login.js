@@ -32,23 +32,42 @@ function mostrarNotificacion(mensaje, tipo) {
         notificacion.remove();
     }, 3000);
 }
-const listausuarios =['luigi@gmail.com', "andres@gmail.com"]
-const listacontraseñas = ['1234', '5678']
+const lista_usuarios = []
+lista_usuarios.push({
+    correo: 'luigi@gmail.com',
+    contraseña: '1234',
+    tipo_usuario: 'Cajero'},
+    {correo: 'freddy@gmail.com',
+    contraseña: '5678',
+    tipo_usuario: 'Administrador'},
+    {correo: 'Emanuel@gmail.com',
+    contraseña: '12345',
+    tipo_usuario: 'Cliente'});
+
 const btniniciarSesion = document.getElementById('Iniciar-sesion');
 btniniciarSesion.addEventListener('click', (event) => {
     event.preventDefault();
     let validacion = false;
     const correo = document.getElementById('correo').value;
     const contraseña = document.getElementById('contraseña').value;
-    for(let i=0; i<listausuarios.length; i++){
-        if(correo === listausuarios[i] && contraseña === listacontraseñas[i]){
+    for(let i=0; i<lista_usuarios.length; i++){
+        if(correo.toLowerCase() === lista_usuarios[i].correo.toLowerCase() && contraseña === lista_usuarios[i].contraseña){
             validacion=true;
+            tipo = lista_usuarios[i].tipo_usuario;
             break;
         }
     }  
     if(validacion){
         mostrarNotificacion('Inicio de sesión exitoso', 'exito');
-        window.location.href = 'index.html';
+        if(tipo === 'Administrador'){
+            window.location.href = 'lobby_admin.html';
+        }
+        else if(tipo === 'Cajero'){
+            window.location.href = 'lobby-cajero.html';
+        }
+        else if(tipo === 'Cliente'){
+            window.location.href = './src/mod-cliente/lobby-cliente.html';
+        }
     }else{
         mostrarNotificacion('Correo o contraseña incorrectos', 'error');
     }   

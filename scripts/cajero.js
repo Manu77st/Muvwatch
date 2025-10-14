@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
         const cardType = paymentMethod === 'credit' ? 'crédito' : 'débito';
         alert(`Procesando pago con tarjeta de ${cardType}...`);
+        window.history.go(-2);
     };
 
     // Formato de número de tarjeta de crédito/débito en grupos de 4 dígitos

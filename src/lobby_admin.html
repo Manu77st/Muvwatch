@@ -83,7 +83,7 @@
                 <img src="../images/Peliculas_Cartelera/Spider-man.jpg" alt="Spiderman">
                 <h3>Spiderman</h3>
                 <div class="movie-actions">
-                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('spiderman')">
                         <span class="material-symbols-outlined">visibility</span>
                         Ver detalles
                     </button>
@@ -94,7 +94,7 @@
                         Editar
                     </button>
 
-                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('mission-impossible')">
+                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('spiderman')">
                         <span class="material-symbols-outlined">delete</span>
                         Eliminar
                     </button>
@@ -105,7 +105,7 @@
                 <img src="../images/Peliculas_Cartelera/Intesamente_2.jpg" alt="Inside Out 2">
                 <h3>Intensamente 2</h3>
                 <div class="movie-actions">
-                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('inside-out-2')">
                         <span class="material-symbols-outlined">visibility</span>
                         Ver detalles
                     </button>
@@ -116,7 +116,7 @@
                         Editar
                     </button>
 
-                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('mission-impossible')">
+                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('inside-out-2')">
                         <span class="material-symbols-outlined">delete</span>
                         Eliminar
                     </button>
@@ -127,7 +127,7 @@
                 <img src="../images/Peliculas_Cartelera/Bettlejuice.jpg" alt="Beetlejuice">
                 <h3>Beetlejuice</h3>
                 <div class="movie-actions">
-                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('beetlejuice')">
                         <span class="material-symbols-outlined">visibility</span>
                         Ver detalles
                     </button>
@@ -138,7 +138,7 @@
                         Editar
                     </button>
 
-                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('mission-impossible')">
+                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('beetlejuice')">
                         <span class="material-symbols-outlined">delete</span>
                         Eliminar
                     </button>
@@ -149,7 +149,7 @@
                 <img src="../images/Peliculas_Cartelera/Paddington.jpg" alt="Paddington">
                 <h3>Paddington</h3>
                 <div class="movie-actions">
-                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('paddington')">
                         <span class="material-symbols-outlined">visibility</span>
                         Ver detalles
                     </button>
@@ -160,7 +160,7 @@
                         Editar
                     </button>
 
-                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('mission-impossible')">
+                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('paddington')">
                         <span class="material-symbols-outlined">delete</span>
                         Eliminar
                     </button>
@@ -273,18 +273,27 @@
                     director: 'Paul King',
                     synopsis: 'Paddington se embarca en una aventura épica en la selva peruana para encontrar su verdadero hogar, mientras el Sr. Brown y su familia lo siguen en una misión de rescate.'
                 }
+
             };
 
-            return movies[movieId] || movies['mission-impossible'];
+            return movies[movieId];
         }
 
         function deleteMovie(movieId) {
             if (confirm('¿Estás seguro de que quieres eliminar esta película?')) {
-                // Aquí iría la lógica para eliminar la película
-                console.log('Eliminando película:', movieId);
-                alert('Película eliminada exitosamente');
+                const movieCard = document.querySelector(`[onclick="openMovieModal('${movieId}')"]`);
+
+                if (movieCard) {
+                    movieCard.remove(); // Eliminar del DOM
+                    alert('Película eliminada exitosamente');
+                    console.log('Película eliminada:', movieId);
+                } else {
+                    alert('No se encontró la película para eliminar.');
+                }
             }
         }
+
+
 
         // Cerrar modal al hacer clic fuera de él
         window.onclick = function (event) {

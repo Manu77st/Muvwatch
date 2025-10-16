@@ -66,7 +66,7 @@ btniniciarSesion.addEventListener('click', (event) => {
             window.location.href = 'lobby-cajero.html';
         }
         else if(tipo === 'Cliente'){
-            window.location.href = './src/mod-cliente/lobby-cliente.html';
+            window.location.href = 'mod-cliente/lobby-cliente.html';
         }
     }else{
         mostrarNotificacion('Correo o contraseña incorrectos', 'error');

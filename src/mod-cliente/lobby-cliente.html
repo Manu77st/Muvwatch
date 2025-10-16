@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lobby Cliente</title>
-    <link rel="stylesheet" href="/styles/styles.css" />
-    <link rel="stylesheet" href="/styles/styles-cliente.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lobby Cliente</title>
+  <link rel="stylesheet" href="/styles/styles-cliente.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
       rel="stylesheet"
@@ -54,7 +53,7 @@
               Cliente A
               <div class="menu-cliente" id="menuCliente">
                 <a href="#">Perfil</a>
-                <a href="../src/login.html">Cerrar sesión</a>
+                <a href="/src/login.html">Cerrar sesión</a>
               </div>
             </div>
           </div>
@@ -69,9 +68,9 @@
             >Inicio</a
           >
           <a href="../mod-cliente/promociones.html" class="enlace-a"
-            >Promociones</a
-          >
+            >Promociones</a>
           <a href="contactanos.html" class="enlace-a">Contactanos</a>
+          <a href="../mod-cliente/carrito.html">Carrito</a>
         </nav>
       </div>
     </header>
@@ -271,7 +270,7 @@
         <span class="close" onclick="closeMovieModal()">&times;</span>
         <div class="modal-body">
           <div class="modal-left">
-            <img id="modalMovieImage" src="" alt="Movie Poster" />
+            <img id="modalMovieImage" src="/images/Peliculas_Cartelera" alt="Movie Poster" />
             <h2 id="modalMovieTitle"></h2>
           </div>
           <div class="modal-right">
@@ -310,7 +309,7 @@
     <div class="chatbot-window" id="chatbotWindow">
       <div class="chatbot-header">
         <span>
-          <img src="/images/chatbot_icon.png" alt="Chatbot" />
+          <img src="/images/chatbot_icon.png" style="color: white;" alt="Chatbot"/>
           Chatsito Muvwatch
         </span>
         <span class="chatbot-close" id="chatbotClose">&times;</span>

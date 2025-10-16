@@ -25,8 +25,67 @@ function filtro() {
     }
   });
 }
+
+        function getMovieData(movieId) {
+            const movies = {
+                'mission-impossible': {
+                    image: '../images/Peliculas_Cartelera/Mision imposible.jpg',
+                    title: 'Mission Impossible',
+                    originalName: 'Mission: Impossible',
+                    classification: 'PG-13',
+                    cast: 'Tom Cruise, Jon Voight, Emmanuelle Béart, Henry Czerny, Jean Reno, Ving Rhames',
+                    director: 'Brian De Palma',
+                    synopsis: 'Ethan Hunt es un agente de la Fuerza de Tareas de Imposibles (IMF) que se ve obligado a aceptar una misión para limpiar su nombre después de ser acusado de traición. Debe recuperar una lista secreta de agentes encubiertos que ha sido robada por un traidor dentro de la IMF.'
+                },
+                'spiderman': {
+                    image: '../images/Peliculas_Cartelera/Spider-man.jpg',
+                    title: 'Spiderman',
+                    originalName: 'Spider-Man: Across the Spider-Verse',
+                    classification: 'PG-13',
+                    cast: 'Shameik Moore, Hailee Steinfeld, Oscar Isaac, Jake Johnson',
+                    director: 'Joaquim Dos Santos, Kemp Powers, Justin K. Thompson',
+                    synopsis: 'Miles Morales regresa para una nueva aventura épica que transportará al amigable vecino de Brooklyn a través del Multiverso para unir fuerzas con Gwen Stacy y un nuevo equipo de Spider-People.'
+                },
+                'inside-out-2': {
+                    image: '../images/Peliculas_Cartelera/Intesamente_2.jpg',
+                    title: 'Inside Out 2',
+                    originalName: 'Inside Out 2',
+                    classification: 'PG',
+                    cast: 'Amy Poehler, Phyllis Smith, Lewis Black, Tony Hale',
+                    director: 'Kelsey Mann',
+                    synopsis: 'Riley, ahora una adolescente, debe navegar por una nueva emoción: Ansiedad. Joy, Tristeza, Ira, Miedo y Asco deben ayudar a Riley a adaptarse a los cambios de la adolescencia.'
+                },
+                'beetlejuice': {
+                    image: '../images/Peliculas_Cartelera/Bettlejuice.jpg',
+                    title: 'Beetlejuice',
+                    originalName: 'Beetlejuice 2',
+                    classification: 'PG-13',
+                    cast: 'Michael Keaton, Winona Ryder, Catherine O\'Hara, Jenna Ortega',
+                    director: 'Tim Burton',
+                    synopsis: 'La secuela de la película clásica de 1988 sigue a Lydia Deetz y su familia cuando regresan a Winter River, donde se encuentran con Beetlejuice una vez más.'
+                },
+                'paddington': {
+                    image: '../images/Peliculas_Cartelera/Paddington.jpg',
+                    title: 'Paddington',
+                    originalName: 'PADDINGTON AVENTURA EN LA SELVA',
+                    classification: 'PG',
+                    cast: 'Ben Whishaw, Hugh Grant, Madeleine Harris, Samuel Joslin',
+                    director: 'Paul King',
+                    synopsis: 'Paddington se embarca en una aventura épica en la selva peruana para encontrar su verdadero hogar, mientras el Sr. Brown y su familia lo siguen en una misión de rescate.'
+                }
+            };
+            return movies[movieId] || movies['mission-impossible'];
+        }
+        // Cerrar modal al hacer clic fuera de él
+        window.onclick = function(event) {
+            const modal = document.getElementById('movieModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
 function busquedas() {
- const resultados = document.getElementById('resultados');
+  const resultados = document.getElementById('resultados');
   const input = document.getElementById('search-input');
   const busqueda = input.value.trim().toLowerCase();
   const peliculas = document.querySelectorAll('.movie-card');
@@ -34,7 +93,7 @@ function busquedas() {
   let coincidencias = 0;
 
   peliculas.forEach(pelicula => {
-    const tituloElemento = pelicula.querySelector('.data-titulo');
+    const tituloElemento = pelicula.querySelector('h3'); 
     const titulo = tituloElemento.textContent.toLowerCase();
 
     if (titulo.includes(busqueda)) {
@@ -51,7 +110,7 @@ function busquedas() {
     resultados.innerHTML = `Resultados para: <strong>${busqueda}</strong>`;
   } else {
     resultados.innerHTML = `No se encontraron resultados para: <strong>${busqueda}</strong>`;
-  }
+  }
 }
 // Modal de película
 function openMovieModal(movieId) {

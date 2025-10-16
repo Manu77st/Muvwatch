@@ -175,104 +175,12 @@ body {
   text-decoration: underline;
 }
 
-/*Style Nav-Bar*/
-.navbar {
-  background-color: #085ea9;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 20px;
-}
 
-.container-navbar {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
 
-.container-navbar a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-}
-
-#logo-nav {
-  width: 40px;
-  height: 40px;
-}
-
-#nombre {
-  display: inline-block;
-  color: white;
+.movie-actions button .material-symbols-outlined {
+  margin-right: 6px;
   font-size: 18px;
-  font-weight: bold;
-  margin: 0;
-}
-
-.container-search {
-  position: relative;
-  flex: 1;
-  margin: 0 30px;
-}
-
-.container-search input {
-  width: 750px;
-  border: none;
-  outline: none;
-  background: white;
-  border-radius: 8px;
-  font-size: 14px;
-  padding: 8px 45px !important;
-  color: #333;
-}
-
-.container-search input::placeholder {
-  color: #999;
-}
-
-.container-search .material-symbols-outlined {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px;
-  color: #555;
-  cursor: pointer;
-}
-
-.container-search .left-icon {
-  left: 12px;
-}
-
-.container-search .right-icon {
-  right: 12px;
-}
-
-.material-symbols-outlined {
-  font-size: 20px;
-  color: #555;
-  cursor: pointer;
-}
-
-.user-container {
-  background-color: white;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.user-container .material-symbols-outlined {
-  font-size: 22px;
-  color: black;
-}
-
-.username {
-  color: black;
-  font-size: 14px;
+  vertical-align: middle;
 }
 
 /*Style nav-move*/
@@ -400,12 +308,6 @@ textarea {
 
 textarea {
   resize: none;
-  height: 60px;
-}
-
-.grupo {
-  display: flex;
-  gap: 10px;
 }
 
 .btn-cancelar,
@@ -556,37 +458,7 @@ textarea {
   font-size: 20px;
 }
 
-/*  FILTROS  */
-.filtros {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 25px;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
-}
-
-.campo-buscar {
-  display: flex;
-  align-items: center;
-  background-color: #f1f1f1;
-  border-radius: 30px;
-  padding: 6px 12px;
-  width: 220px;
-}
-
-.campo-buscar input {
-  border: none;
-  outline: none;
-  background: none;
-  flex: 1;
-  color: #333;
-  font-size: 14px;
-}
-
-.campo-buscar span {
-  color: gray;
-}
+/* Filtros y búsqueda del cliente movidos a styles-cliente.css */
 
 select {
   background-color: #f1f1f1;
@@ -707,207 +579,399 @@ main h2 {
   background-color: #f3f3f3;
 }
 
-/*Styles para el modulo de registro */
-body:has(.registro-header) {
-    background: linear-gradient(135deg, #3d3d3d 0%, #3d3d3d 100%);
-    min-height: 100vh;
-    display: flex;
+/* Estilos para el lobby admin */
+.main-content {
+  padding: 20px;
+  background-color: #f5f5f5;
+  min-height: calc(100vh - 120px);
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.movie-card {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.movie-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.movie-card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.movie-card h3 {
+  margin: 10px 0;
+  color: #333;
+  font-size: 16px;
+  text-align: center;
+}
+
+.movie-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.movie-actions button {
+  flex: 1;
+  padding: 8px 4px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.btn-view {
+  background-color: #0075d8;
+  color: white;
+}
+
+.icon-visibility {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+/* Asegurar que la fuente de Material Symbols se use correctamente */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined", sans-serif;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  line-height: 1;
+}
+
+.btn-edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-reservar {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.add-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  border: 2px dashed #ccc;
+  background-color: #fafafa;
+}
+
+.add-card:hover {
+  border-color: #1b629e;
+  background-color: #f0f8ff;
+}
+
+.add-icon {
+  font-size: 48px;
+  color: #1b629e;
+  margin-bottom: 10px;
+}
+
+.add-card h3 {
+  color: #1b629e;
+  font-weight: bold;
+}
+
+/* Estilos para el modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 2% auto;
+  padding: 0;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.close:hover {
+  color: #000;
+}
+
+.modal-body {
+  display: flex;
+  padding: 30px;
+  gap: 30px;
+}
+
+.modal-left {
+  flex: 1;
+  text-align: center;
+}
+
+.modal-left img {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.modal-left h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-edit-modal,
+.btn-disable-modal {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-edit-modal {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-disable-modal {
+  background-color: #f44336;
+  color: white;
+}
+
+.modal-right {
+  flex: 2;
+}
+
+.synopsis-section h3 {
+  color: #1b629e;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.synopsis-section p {
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.movie-details p {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.movie-details strong {
+  color: #1b629e;
+}
+
+.trailer-section h3 {
+  color: #1b629e;
+  margin: 20px 0 10px 0;
+  font-size: 18px;
+}
+
+.trailer-placeholder {
+  width: 100%;
+  height: 200px;
+  background-color: #000;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.trailer-placeholder .material-symbols-outlined {
+  font-size: 48px;
+  color: white;
+}
+
+/* Estilos para la sección de admin */
+.admin-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+}
+
+.admin-section .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* Estilos para enlaces de navegación */
+.contenido-lista-move a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.contenido-lista-move a:hover {
+  color: #165a9f;
+}
+
+/* Estilos para la página de editar función */
+.movie-poster-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.movie-poster {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+}
+
+.info-display {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-display label {
+  font-weight: bold;
+  color: #1b629e;
+  font-size: 14px;
+}
+
+.info-display span {
+  background-color: #f0f0f0;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Aquí colocaré el style para el lobby del cliente :)*/
+
+
+/* Responsive para el modal */
+@media (max-width: 768px) {
+  .modal-body {
     flex-direction: column;
-}
-
-/* Main específico para registro */
-body:has(.registro-header) main {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 20px;
-    background: transparent;
-    margin: 0;
-    min-height: auto;
-    box-shadow: none;
-}
-
-.registro-header {
-    background: linear-gradient(90deg, #2874b8 0%, #1e5a8f 100%);
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.logo-text {
-    color: white;
-    font-size: 32px;
-    font-weight: 600;
-    letter-spacing: 1px;
-}
-
-.header-title {
-    color: white;
-    font-size: 32px;
-    font-weight: 600;
-}
-
-.registro-container {
-    background: #e8e8e8;
-    border-radius: 30px;
-    padding: 50px;
-    width: 100%;
-    max-width: 1200px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-}
-
-.registro-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px 60px;
-}
-
-.left-column, .right-column {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.form-group label {
-    color: #2874b8;
-    font-weight: 600;
-    font-size: 15px;
-    text-align: left;
-}
-
-.form-group .required {
-    color: red;
-    margin-left: 4px;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="password"],
-.form-group input[type="tel"],
-.form-group input[type="date"],
-.form-group select {
-    padding: 14px 18px;
-    border: 2px solid #999;
-    border-radius: 8px;
-    font-size: 15px;
-    background: #d9d9d9;
-    transition: all 0.3s;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: #2874b8;
-    background: #e8e8e8;
-}
-
-.doc-row {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: 12px;
-}
-
-.checkbox-group {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    margin-top: 10px;
-}
-
-.checkbox-group input[type="checkbox"] {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    margin-top: 2px;
-    flex-shrink: 0;
-}
-
-.checkbox-group label {
-    color: #333;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 1.5;
-    text-align: left;
-}
-
-.checkbox-group a {
-    color: #2874b8;
-    text-decoration: underline;
-}
-
-.btn-registrarse {
-    background: #2874b8;
-    color: white;
-    border: none;
-    padding: 16px;
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-top: 20px;
-    width: 100%;
-    max-width: 220px;
-    margin-left: auto;
-    margin-right: 127px;
-    display: block;
-}
-
-.btn-registrarse:hover {
-    background: #1e5a8f;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-.registro-footer {
-    background: #3d3d3d;
     padding: 20px;
-    text-align: center;
-    color: white;
-    font-size: 16px;
+  }
+
+  .modal-content {
+    width: 95%;
+    margin: 5% auto;
+  }
+
+  .movies-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+  }
 }
 
-.registro-footer a {
-    color: #4da8da;
-    text-decoration: none;
-    font-weight: 600;
+.reserve-page {
+  background: transparent;
+}
+.screen-top {
+  height: 28px;
+  background: #444;
+  width: 80%;
+  margin: 0 auto 14px auto;
+  border-radius: 6px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+.seat-area {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: center;
+}
+.seat-block {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.aisle-space {
+  width: 40px;
 }
 
-.registro-footer a:hover {
-    text-decoration: underline;
+/* Ajustes para que las celdas se vean más pequeñas dentro del bloque */
+.seat-block .seat-cell {
+  width: 46px;
+  height: 44px;
+}
+.seat-block .seat-cell img.seat-img {
+  width: 40px;
+  height: 30px;
+}
+
+.reserve-panel .reserve-box {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 900px) {
-    .registro-form {
-        grid-template-columns: 1fr;
-    }
-    
-    .registro-header {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .registro-container {
-        padding: 30px 20px;
-    }
-    
-    .btn-registrarse {
-        margin-left: auto;
-        margin-right: auto;
-    }
+  .reserve-layout {
+    flex-direction: column;
+  }
+  .reserve-panel {
+    width: 100%;
+  }
 }

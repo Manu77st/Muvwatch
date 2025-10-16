@@ -1,3 +1,4 @@
+/*Styles para promociones*/
 body:has(.promociones-main) .navbar {
     background-color: #3b7ba6;
 }
@@ -48,16 +49,7 @@ body:has(.promociones-main) .main-content {
     letter-spacing: 0.5px;
 }
 
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 3px 10px rgba(255, 107, 107, 0.4);
-    }
-    50% {
-        transform: scale(1.02);
-        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.6);
-    }
-}
+
 
 /* Ajustes a las tarjetas de película con promoción */
 .promo-card {
@@ -109,15 +101,6 @@ body:has(.promociones-main) .main-content {
     transform: translateY(-50%);
     font-size: 14px;
     animation: sparkle 2s infinite;
-}
-
-@keyframes sparkle {
-    0%, 100% {
-        opacity: 0.3;
-    }
-    50% {
-        opacity: 1;
-    }
 }
 
 /* Responsive para promociones */

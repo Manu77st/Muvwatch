@@ -19,7 +19,7 @@
         function getMovieData(movieId) {
             const movies = {
                 'mission-impossible': {
-                    image: 'https://via.placeholder.com/200x300/000000/FFFFFF?text=Mission+Impossible',
+                    image: '../images/Peliculas_Cartelera/Mision imposible.jpg',
                     title: 'Mission Impossible',
                     originalName: 'Mission: Impossible',
                     classification: 'PG-13',
@@ -28,7 +28,7 @@
                     synopsis: 'Ethan Hunt es un agente de la Fuerza de Tareas de Imposibles (IMF) que se ve obligado a aceptar una misión para limpiar su nombre después de ser acusado de traición. Debe recuperar una lista secreta de agentes encubiertos que ha sido robada por un traidor dentro de la IMF.'
                 },
                 'spiderman': {
-                    image: 'https://via.placeholder.com/200x300/FF0000/FFFFFF?text=Spider-Man',
+                    image: '../images/Peliculas_Cartelera/Spider-man.jpg',
                     title: 'Spiderman',
                     originalName: 'Spider-Man: Across the Spider-Verse',
                     classification: 'PG-13',
@@ -37,7 +37,7 @@
                     synopsis: 'Miles Morales regresa para una nueva aventura épica que transportará al amigable vecino de Brooklyn a través del Multiverso para unir fuerzas con Gwen Stacy y un nuevo equipo de Spider-People.'
                 },
                 'inside-out-2': {
-                    image: 'https://via.placeholder.com/200x300/FF69B4/FFFFFF?text=Inside+Out+2',
+                    image: '../images/Peliculas_Cartelera/Intesamente_2.jpg',
                     title: 'Inside Out 2',
                     originalName: 'Inside Out 2',
                     classification: 'PG',
@@ -46,7 +46,7 @@
                     synopsis: 'Riley, ahora una adolescente, debe navegar por una nueva emoción: Ansiedad. Joy, Tristeza, Ira, Miedo y Asco deben ayudar a Riley a adaptarse a los cambios de la adolescencia.'
                 },
                 'beetlejuice': {
-                    image: 'https://via.placeholder.com/200x300/800080/FFFFFF?text=Beetlejuice',
+                    image: '../images/Peliculas_Cartelera/Bettlejuice.jpg',
                     title: 'Beetlejuice',
                     originalName: 'Beetlejuice 2',
                     classification: 'PG-13',
@@ -55,7 +55,7 @@
                     synopsis: 'La secuela de la película clásica de 1988 sigue a Lydia Deetz y su familia cuando regresan a Winter River, donde se encuentran con Beetlejuice una vez más.'
                 },
                 'paddington': {
-                    image: 'https://via.placeholder.com/200x300/FFA500/FFFFFF?text=Paddington',
+                    image: '../images/Peliculas_Cartelera/Paddington.jpg',
                     title: 'Paddington',
                     originalName: 'PADDINGTON AVENTURA EN LA SELVA',
                     classification: 'PG',

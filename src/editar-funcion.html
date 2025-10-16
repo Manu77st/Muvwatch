@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Función</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&icon_names=search" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container-navbar"> 
+                <a href="lobby_admin.html"><img id="logo-nav" src="../images/Logo_icono.png" alt="Logo_muvwacth">
+                <h3 id="nombre">muvwacth</h3>
+                </a>
+                <div class="container-search">
+                    <input type="text" placeholder="Buscar Película...">
+                    <span class="material-symbols-outlined">search</span>
+                </div>
+                <div class="admin-section">
+                    <span class="material-symbols-outlined">person</span>
+                    <span id="nombre">Admin</span>
+                </div>
+            </div>
+        </nav>
+        <nav class="nav-move">
+            <ul class="lista-move">
+                <li class="contenido-lista-move"><a href="lobby_admin.html">Inicio</a></li>
+                <li class="contenido-lista-move"><a href="cajero.html">Cartera</a></li>
+                <li class="contenido-lista-move"><a href="Reportes-ventas.html">Reportes</a></li>
+                <li class="contenido-lista-move"><a href="Consultar-clientes-VIP.html">Clientes Vip</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="contenedor-funcion">
+        <h2 class="titulo-funcion">EDITAR FUNCIÓN</h2>
+
+        <form class="form-funcion">
+            <div class="form-izquierda">
+                <div class="movie-poster-section">
+                    <img src="https://via.placeholder.com/200x300/000000/FFFFFF?text=Mission+Impossible" alt="Mission Impossible" class="movie-poster">
+                </div>
+
+                <input type="text" placeholder="Nombre de la película" value="Mission Impossible">
+                <textarea placeholder="Descripción">un agente de la Fuerza</textarea>
+            </div>
+
+            <div class="form-derecha">
+                <div class="grupo">
+                    <div class="info-display">
+                        <label>Clasificación:</label>
+                        <span>PG-13</span>
+                    </div>
+                    <div class="info-display">
+                        <label>Géneros:</label>
+                        <span>Acción</span>
+                    </div>
+                </div>
+
+                <div class="grupo">
+                    <div class="info-display">
+                        <label>Reparto:</label>
+                        <span>Tom Cruise, Jon Voight, Emmanuelle Beart, Henry Czerny, Jean Reno, Ving Rhames</span>
+                    </div>
+                    <div class="info-display">
+                        <label>Director:</label>
+                        <span>Brian De Palma</span>
+                    </div>
+                </div>
+
+                <div class="grupo">
+                    <input type="number" placeholder="Precio" value="20000">
+                    <input type="number" placeholder="Descuento" value="0">
+                </div>
+
+                <div class="grupo">
+                    <input type="url" placeholder="Enlace del Trailer" value="trailer">
+                </div>
+
+                <div class="grupo">
+                    <input type="datetime-local" placeholder="Horario">
+                    <input type="text" placeholder="Sala">
+                </div>
+
+                <div class="grupo">
+                    <input type="date" placeholder="Publicación">
+                </div>
+            </div>
+        </form>
+
+        <div class="botones-funcion">
+            <button class="btn-cancelar" onclick="window.location.href='lobby_admin.html'">Cancelar</button>
+            <button class="btn-agregar">Actualizar</button>
+        </div>
+    </main>
+</body>
+
+</html>
+

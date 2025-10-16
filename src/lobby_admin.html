@@ -6,39 +6,303 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lobby Admin</title>
     <link rel="stylesheet" href="../styles/styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&icon_names=search" />
+    <link rel="stylesheet" href="../styles/style-admin.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+
 </head>
 
 <body>
     <header>
         <nav class="navbar">
-            <div class="container-navbar"> 
-                <a href="#"><img id="logo-nav" src="../images/Logo_icono.png" alt="Logo_muvwacth">
-                <h3 id="nombre">muvwacth</h3>
+            <div class="container-navbar">
+                <a href="lobby_admin.html"><img id="logo-nav" src="../images/Logo_icono.png" alt="Logo_muvwacth">
+                    <h3 id="nombre">muvwatch</h3>
                 </a>
                 <div class="container-search">
-                    <input type="text" placeholder="Buscar Pelicula">
-                    <span class="material-symbols-outlined">search</span>
+                    <span class="material-symbols-outlined left-icon">filter_alt</span>
+                    <input type="text" placeholder="Buscar función">
+                    <span class="material-symbols-outlined right-icon">search</span>
                 </div>
-            </div>
+
+                <div class="user-container">
+                    <span class="material-symbols-outlined">account_circle</span>
+                    <span class="username">Admin</span>
+                </div>
+
         </nav>
         <nav class="nav-move">
+            <div class="container-filter">
+
+            </div>
             <ul class="lista-move">
-                <li class="contenido-lista-move">Inicio</li>
-                <li class="contenido-lista-move">Cartera</li>
-                <li class="contenido-lista-move">Reportes</li>
-                <li class="contenido-lista-move">Clientes V.I.P</li>
+                <li class="contenido-lista-move"><a href="lobby_admin.html">Inicio</a></li>
+                <li class="contenido-lista-move"><a href="cajero.html">Cartera</a></li>
+                <li class="contenido-lista-move"><a href="Reportes-ventas.html">Reportes</a></li>
+                <li class="contenido-lista-move"><a href="Consultar-clientes-VIP.html">Clientes Vip</a></li>
             </ul>
         </nav>
     </header>
 
-    <div class="tarjeta">
-        <p class="text">Añadir Contenido</p>
+    <main class="main-content">
+        <div class="movies-grid">
+            <!-- Tarjeta para añadir función -->
+            <div class="movie-card add-card" onclick="window.location.href='añadir-funcion.html'">
+                <h3>Añadir Funcion</h3>
+            </div>
+
+            <!-- Tarjeta para añadir cliente VIP -->
+            <div class="movie-card add-card" onclick="window.location.href='añadir-cliente-vip.html'">
+                <h3>Añadir Cliente vip</h3>
+            </div>
+
+            <!-- Películas existentes -->
+            <div class="movie-card" onclick="openMovieModal('mission-impossible')">
+                <img src="../images/Peliculas_Cartelera/Mision imposible.jpg" alt="Mission Impossible">
+                <h3>Mission Impossible</h3>
+                <div class="movie-actions">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+
+                    <button class="btn-edit"
+                        onclick="event.stopPropagation(); window.location.href='editar-funcion.html'">
+                        <span class="material-symbols-outlined">edit</span>
+                        Editar
+                    </button>
+
+                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('mission-impossible')">
+                        <span class="material-symbols-outlined">delete</span>
+                        Eliminar
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="movie-card" onclick="openMovieModal('spiderman')">
+                <img src="../images/Peliculas_Cartelera/Spider-man.jpg" alt="Spiderman">
+                <h3>Spiderman</h3>
+                <div class="movie-actions">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('spiderman')">
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+
+                    <button class="btn-edit"
+                        onclick="event.stopPropagation(); window.location.href='editar-funcion.html'">
+                        <span class="material-symbols-outlined">edit</span>
+                        Editar
+                    </button>
+
+                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('spiderman')">
+                        <span class="material-symbols-outlined">delete</span>
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+
+            <div class="movie-card" onclick="openMovieModal('inside-out-2')">
+                <img src="../images/Peliculas_Cartelera/Intesamente_2.jpg" alt="Inside Out 2">
+                <h3>Intensamente 2</h3>
+                <div class="movie-actions">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('inside-out-2')">
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+
+                    <button class="btn-edit"
+                        onclick="event.stopPropagation(); window.location.href='editar-funcion.html'">
+                        <span class="material-symbols-outlined">edit</span>
+                        Editar
+                    </button>
+
+                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('inside-out-2')">
+                        <span class="material-symbols-outlined">delete</span>
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+
+            <div class="movie-card" onclick="openMovieModal('beetlejuice')">
+                <img src="../images/Peliculas_Cartelera/Bettlejuice.jpg" alt="Beetlejuice">
+                <h3>Beetlejuice</h3>
+                <div class="movie-actions">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('beetlejuice')">
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+
+                    <button class="btn-edit"
+                        onclick="event.stopPropagation(); window.location.href='editar-funcion.html'">
+                        <span class="material-symbols-outlined">edit</span>
+                        Editar
+                    </button>
+
+                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('beetlejuice')">
+                        <span class="material-symbols-outlined">delete</span>
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+
+            <div class="movie-card" onclick="openMovieModal('paddington')">
+                <img src="../images/Peliculas_Cartelera/Paddington.jpg" alt="Paddington">
+                <h3>Paddington</h3>
+                <div class="movie-actions">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('paddington')">
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+
+                    <button class="btn-edit"
+                        onclick="event.stopPropagation(); window.location.href='editar-funcion.html'">
+                        <span class="material-symbols-outlined">edit</span>
+                        Editar
+                    </button>
+
+                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('paddington')">
+                        <span class="material-symbols-outlined">delete</span>
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de detalles de película -->
+    <div id="movieModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMovieModal()">&times;</span>
+            <div class="modal-body">
+                <div class="modal-left">
+                    <img id="modalMovieImage" src="" alt="Movie Poster">
+                    <h2 id="modalMovieTitle"></h2>
+                    <div class="modal-actions">
+                        <button class="btn-edit-modal" onclick="window.location.href='editar-funcion.html'">
+                            Editar
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-right">
+                    <div class="synopsis-section">
+                        <h3>Sinopsis</h3>
+                        <p id="modalSynopsis">Ethan Hunt es un agente de la Fuerza de Tareas de Imposibles (IMF) que se
+                            ve obligado a aceptar una misión para limpiar su nombre después de ser acusado de traición.
+                            Debe recuperar una lista secreta de agentes encubiertos que ha sido robada por un traidor
+                            dentro de la IMF.</p>
+                    </div>
+                    <div class="movie-details">
+                        <p><strong>Nombre original:</strong> <span id="modalOriginalName">Mission: Impossible</span></p>
+                        <p><strong>Clasificación:</strong> <span id="modalClassification">PG-13</span></p>
+                        <p><strong>Reparto:</strong> <span id="modalCast">Tom Cruise, Jon Voight, Emmanuelle Béart,
+                                Henry Czerny, Jean Reno, Ving Rhames</span></p>
+                        <p><strong>Director:</strong> <span id="modalDirector">Brian De Palma</span></p>
+                    </div>
+                    <div class="trailer-section">
+                        <h3>Trailer</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="tarjeta">
-        <p class="text">Añadir Cliente V.I.P</p>
-    </div>
+    <script>
+        function openMovieModal(movieId) {
+            const modal = document.getElementById('movieModal');
+            const movieData = getMovieData(movieId);
+
+            document.getElementById('modalMovieImage').src = movieData.image;
+            document.getElementById('modalMovieTitle').textContent = movieData.title;
+            document.getElementById('modalOriginalName').textContent = movieData.originalName;
+            document.getElementById('modalClassification').textContent = movieData.classification;
+            document.getElementById('modalCast').textContent = movieData.cast;
+            document.getElementById('modalDirector').textContent = movieData.director;
+            document.getElementById('modalSynopsis').textContent = movieData.synopsis;
+
+            modal.style.display = 'block';
+        }
+
+        function closeMovieModal() {
+            document.getElementById('movieModal').style.display = 'none';
+        }
+
+        function getMovieData(movieId) {
+            const movies = {
+                'mission-impossible': {
+                    image: '../images/Peliculas_Cartelera/Mision imposible.jpg',
+                    title: 'Mission Impossible',
+                    originalName: 'Mission: Impossible',
+                    classification: 'PG-13',
+                    cast: 'Tom Cruise, Jon Voight, Emmanuelle Béart, Henry Czerny, Jean Reno, Ving Rhames',
+                    director: 'Brian De Palma',
+                    synopsis: 'Ethan Hunt es un agente de la Fuerza de Tareas de Imposibles (IMF) que se ve obligado a aceptar una misión para limpiar su nombre después de ser acusado de traición. Debe recuperar una lista secreta de agentes encubiertos que ha sido robada por un traidor dentro de la IMF.'
+                },
+                'spiderman': {
+                    image: '../images/Peliculas_Cartelera/spider-man.jpg',
+                    title: 'Spiderman',
+                    originalName: 'Spider-Man: Across the Spider-Verse',
+                    classification: 'PG-13',
+                    cast: 'Shameik Moore, Hailee Steinfeld, Oscar Isaac, Jake Johnson',
+                    director: 'Joaquim Dos Santos, Kemp Powers, Justin K. Thompson',
+                    synopsis: 'Miles Morales regresa para una nueva aventura épica que transportará al amigable vecino de Brooklyn a través del Multiverso para unir fuerzas con Gwen Stacy y un nuevo equipo de Spider-People.'
+                },
+                'inside-out-2': {
+                    image: '../images/Peliculas_Cartelera/Intesamente_2.jpg',
+                    title: 'Inside Out 2',
+                    originalName: 'Inside Out 2',
+                    classification: 'PG',
+                    cast: 'Amy Poehler, Phyllis Smith, Lewis Black, Tony Hale',
+                    director: 'Kelsey Mann',
+                    synopsis: 'Riley, ahora una adolescente, debe navegar por una nueva emoción: Ansiedad. Joy, Tristeza, Ira, Miedo y Asco deben ayudar a Riley a adaptarse a los cambios de la adolescencia.'
+                },
+                'beetlejuice': {
+                    image: '../images/Peliculas_Cartelera/Bettlejuice.jpg',
+                    title: 'Beetlejuice',
+                    originalName: 'Beetlejuice 2',
+                    classification: 'PG-13',
+                    cast: 'Michael Keaton, Winona Ryder, Catherine O\'Hara, Jenna Ortega',
+                    director: 'Tim Burton',
+                    synopsis: 'La secuela de la película clásica de 1988 sigue a Lydia Deetz y su familia cuando regresan a Winter River, donde se encuentran con Beetlejuice una vez más.'
+                },
+                'paddington': {
+                    image: '../images/Peliculas_Cartelera/Paddington.jpg',
+                    title: 'Paddington',
+                    originalName: 'PADDINGTON AVENTURA EN LA SELVA',
+                    classification: 'PG',
+                    cast: 'Ben Whishaw, Hugh Grant, Madeleine Harris, Samuel Joslin',
+                    director: 'Paul King',
+                    synopsis: 'Paddington se embarca en una aventura épica en la selva peruana para encontrar su verdadero hogar, mientras el Sr. Brown y su familia lo siguen en una misión de rescate.'
+                }
+
+            };
+
+            return movies[movieId];
+        }
+
+        function deleteMovie(movieId) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta película?')) {
+                const movieCard = document.querySelector(`[onclick="openMovieModal('${movieId}')"]`);
+
+                if (movieCard) {
+                    movieCard.remove(); // Eliminar del DOM
+                    alert('Película eliminada exitosamente');
+                    console.log('Película eliminada:', movieId);
+                } else {
+                    alert('No se encontró la película para eliminar.');
+                }
+            }
+        }
+
+
+
+        // Cerrar modal al hacer clic fuera de él
+        window.onclick = function (event) {
+            const modal = document.getElementById('movieModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 
 </html>

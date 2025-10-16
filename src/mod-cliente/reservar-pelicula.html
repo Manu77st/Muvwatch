@@ -25,12 +25,12 @@
               <div class="filtros">
                 <span
                   class="material-symbols-outlined icon-inline"
-                  aria-hidden="true"
+                  aria-hidden="true" onclick="filtro()"
                   >filter_alt</span
                 >
               </div>
               <div class="caja-busqueda">
-                <input type="text" placeholder="Buscar función..." />
+                <input id="search-input" type="text" placeholder="Buscar función..." />
                 <span class="material-symbols-outlined">search</span>
               </div>
             </div>
@@ -55,12 +55,15 @@
       <!-- Menú secundario -->
       <div class="menu-secundario">
         <nav>
-          <a href="lobby-cliente.html">Inicio</a>
-          <a href="#">Cartera</a>
-          <a href="../mod-cliente/promociones.html">Promociones</a>
+          <a href="lobby-cliente.html" class="enlace-a">Inicio</a>
+          <a href="../mod-cliente/promociones.html" class="enlace-a"
+            >Promociones</a
+          >
+          <a href="contactanos.html" class="enlace-a">Contactanos</a>
         </nav>
       </div>
     </header>
+    <div id="resultados"></div>
 
     <main class="reserve-page">
       <div class="layout-reserva">
@@ -140,5 +143,6 @@
       </div>
     </main>
     <script src="/scripts/mod-cliente/reservar-pelicula.js"></script>
+    <script src="/scripts/mod-cliente/lobby-cliente.js"></script>
   </body>
 </html>

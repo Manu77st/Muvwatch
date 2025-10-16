@@ -2,7 +2,6 @@ body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
 }
-
 #notificaciones {
   position: fixed;
   top: 10px;
@@ -10,7 +9,6 @@ body {
   z-index: 1000;
   max-width: 350px;
 }
-
 /* Estilos para el login */
 .contenedor-notificaciones {
   display: flex;
@@ -21,43 +19,36 @@ body {
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
 .notificacion {
   flex: 1;
   padding: 10px;
 }
-
 .notificacion h3 {
   color: black;
   font-size: 15px;
   font-weight: bold;
 }
-
 .notificacion.exito {
   color: green;
   padding: 15px;
   margin-bottom: 10px;
 }
-
 .notificacion.error {
   color: red;
   padding: 15px;
   margin-bottom: 10px;
 }
-
 .linea {
   background: #1b629e;
   width: 3px;
   border-radius: 10px;
 }
-
 .contenedor-general {
   display: flex;
   flex-direction: row;
   width: 100vw;
   height: 100vh;
 }
-
 .banner {
   background-color: #1b629e;
   flex: 1.7;
@@ -67,7 +58,6 @@ body {
   align-items: center;
   justify-content: center;
 }
-
 .formulario {
   flex: 1;
   display: flex;
@@ -76,7 +66,6 @@ body {
   padding: 30px;
   width: 100%;
 }
-
 /* Opcional: para que el formulario no se estire demasiado */
 #formulario-login {
   display: flex;
@@ -84,7 +73,6 @@ body {
   gap: 10px;
   width: 70%;
 }
-
 #formulario-login h1 {
   text-align: center;
 }
@@ -96,7 +84,6 @@ body {
   border: 0.5px solid black;
   outline: none;
 }
-
 #formulario-login button {
   padding: 10px;
   font-size: 16px;
@@ -108,7 +95,6 @@ body {
   width: 50%;
   align-self: center;
 }
-
 #formulario-login button:hover {
   background-color: white;
   color: #1b629e;
@@ -121,7 +107,6 @@ body {
   border: 0.5px solid black;
   border-radius: 5px;
 }
-
 .input-con-button {
   display: flex;
   flex-direction: row;
@@ -130,7 +115,6 @@ body {
   padding-right: 5px;
   max-width: 400px;
 }
-
 #contraseña {
   border: none;
   outline: none;
@@ -140,7 +124,6 @@ body {
   flex: 1;
   width: 70%;
 }
-
 #toggle-password {
   cursor: pointer;
   flex: 0;
@@ -152,25 +135,21 @@ body {
   height: 30px;
   box-sizing: border-box;
 }
-
 .registro {
   text-align: center;
   margin-top: 10px;
   display: flex;
   flex-direction: column;
 }
-
 .registro label {
   margin: 5px 0;
 }
-
 .label-registrar {
   font-size: 14px;
   font-weight: bold;
   color: blue;
   text-decoration: none;
 }
-
 .label-registrar:hover {
   text-decoration: underline;
 }
@@ -184,20 +163,19 @@ body {
 }
 
 /*Style nav-move*/
-.nav-move,
-.lista-move,
-.contenido-lista-move {
+.nav-move, .lista-move, 
+.contenido-lista-move{
   display: inline-block;
   vertical-align: middle;
 }
 
-.contenido-lista-move {
+.contenido-lista-move{
   margin-right: 25px;
   font-size: 20px;
   font-family: sans-serif;
 }
 
-.tarjeta {
+.tarjeta{
   display: inline-block;
   align-items: center;
   background: #cecece;
@@ -207,7 +185,7 @@ body {
   margin: 25px;
 }
 
-.text {
+.text{
   display: flex;
   justify-content: center;
   margin-top: 90%;
@@ -215,7 +193,7 @@ body {
 
 .nav-move {
   background-color: #ededed;
-  width: 100%;
+  width: 100%; 
 }
 
 .contenido-lista-move {
@@ -226,7 +204,6 @@ body {
 .contenido-lista-move:hover {
   color: #165a9f;
 }
-
 /* añadir funcion admin*/
 .contenedor-funcion {
   background: #fff;
@@ -235,7 +212,7 @@ body {
   max-width: 1000px;
   padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .titulo-funcion {
@@ -253,8 +230,7 @@ body {
   flex-wrap: wrap;
 }
 
-.form-izquierda,
-.form-derecha {
+.form-izquierda, .form-derecha {
   flex: 1;
   min-width: 300px;
   display: flex;
@@ -335,7 +311,6 @@ textarea {
   gap: 25px;
   margin-top: 25px;
 }
-
 /* añadir-clientes vip admin*/
 
 .container-vip {
@@ -345,7 +320,7 @@ textarea {
   padding: 40px;
   border-radius: 12px;
   text-align: center;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 8px rgba(0,0,0,0.15);
 }
 
 .titulo-vip {
@@ -385,8 +360,7 @@ textarea {
   margin-top: 25px;
 }
 
-.btn-cancelar,
-.btn-guardar {
+.btn-cancelar, .btn-guardar {
   border: none;
   padding: 12px 45px;
   font-size: 16px;
@@ -404,8 +378,7 @@ textarea {
   background: #165a9f;
 }
 
-.btn-cancelar:hover,
-.btn-guardar:hover {
+.btn-cancelar:hover, .btn-guardar:hover {
   opacity: 0.9;
 }
 
@@ -415,7 +388,6 @@ textarea {
     flex-direction: column;
   }
 }
-
 /* Consultar cliente vip*/
 * {
   margin: 0;
@@ -526,8 +498,6 @@ select {
 .btn-eliminar:hover {
   background-color: #a51f1f;
 }
-
-
 /* Reportes de ventas*/
 
 main {
@@ -974,4 +944,212 @@ main h2 {
   .reserve-panel {
     width: 100%;
   }
+}
+.tabla-clientes tr:nth-child(even) {
+  background-color: #f3f3f3;
+}
+
+/*Styles para el modulo de registro */
+body:has(.registro-header) {
+    background: linear-gradient(135deg, #3d3d3d 0%, #3d3d3d 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main específico para registro */
+body:has(.registro-header) main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background: transparent;
+    margin: 0;
+    min-height: auto;
+    box-shadow: none;
+}
+
+.registro-header {
+    background: linear-gradient(90deg, #2874b8 0%, #1e5a8f 100%);
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-text {
+    color: white;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.header-title {
+    color: white;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.registro-container {
+    background: #e8e8e8;
+    border-radius: 30px;
+    padding: 50px;
+    width: 100%;
+    max-width: 1200px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.registro-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px 60px;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: #2874b8;
+    font-weight: 600;
+    font-size: 15px;
+    text-align: left;
+}
+
+.form-group .required {
+    color: red;
+    margin-left: 4px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group select {
+    padding: 14px 18px;
+    border: 2px solid #999;
+    border-radius: 8px;
+    font-size: 15px;
+    background: #d9d9d9;
+    transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #2874b8;
+    background: #e8e8e8;
+}
+
+.doc-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 12px;
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.checkbox-group label {
+    color: #333;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.checkbox-group a {
+    color: #2874b8;
+    text-decoration: underline;
+}
+
+.btn-registrarse {
+    background: #2874b8;
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 220px;
+    margin-left: auto;
+    margin-right: 127px;
+    display: block;
+}
+
+.btn-registrarse:hover {
+    background: #1e5a8f;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.registro-footer {
+    background: #3d3d3d;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+}
+
+.registro-footer a {
+    color: #4da8da;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.registro-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+    .registro-form {
+        grid-template-columns: 1fr;
+    }
+    
+    .registro-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .registro-container {
+        padding: 30px 20px;
+    }
+    
+    .btn-registrarse {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }

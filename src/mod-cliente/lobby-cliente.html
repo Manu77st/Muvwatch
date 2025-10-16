@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lobby Cliente</title>
-  
   <link rel="stylesheet" href="/styles/styles-cliente.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
@@ -13,7 +12,7 @@
   </head>
 
   <body>
-  <header>
+    <header>
       <!-- Navbar principal -->
       <nav class="navbar">
         <div class="container-navbar">
@@ -28,11 +27,19 @@
                 <span
                   class="material-symbols-outlined icon-inline"
                   aria-hidden="true"
-                  >filter_alt</span>
+                  onclick="filtro()"
+                  >filter_alt</span
+                >
               </div>
               <div class="caja-busqueda">
-                <input type="text" placeholder="Buscar función..." />
-                <span class="material-symbols-outlined">search</span>
+                <input
+                  id="search-input"
+                  type="text"
+                  placeholder="Buscar función..."
+                />
+                <span class="material-symbols-outlined" onclick="busquedas()"
+                  >search</span
+                >
               </div>
             </div>
           </div>
@@ -54,14 +61,20 @@
       </nav>
       <div class="menu-secundario">
         <nav>
-          <a href="lobby-cliente.html">Inicio</a>
+          <a
+            href="lobby-cliente.html"
+            class="enlace-a"
+            style="border-bottom-color: #3b7ba6; background: #f5f5f5"
+            >Inicio</a
+          >
+          <a href="../mod-cliente/promociones.html" class="enlace-a"
+            >Promociones</a>
           <a href="contactanos.html" class="enlace-a">Contactanos</a>
-          <a href="../mod-cliente/promociones.html">Promociones</a>
           <a href="../mod-cliente/carrito.html">Carrito</a>
         </nav>
       </div>
     </header>
-
+    <div id="resultados"></div>
     <main class="main-content">
       <div class="movies-grid">
         <!-- Películas existentes -->
@@ -70,7 +83,7 @@
             src="/images/Peliculas_Cartelera/Mision imposible.jpg"
             alt="Mission Impossible"
           />
-          <h3>Mission Impossible</h3>
+          <h3 class="data-titulo">Mission Impossible</h3>
           <div class="movie-actions">
             <button
               class="btn-view"
@@ -93,11 +106,12 @@
             src="/images/Peliculas_Cartelera/Spider-man.jpg"
             alt="Spiderman"
           />
-          <h3>Spiderman</h3>
+          <h3 class="data-titulo">Spiderman</h3>
           <div class="movie-actions">
             <button
               class="btn-view"
-              onclick="event.stopPropagation(); openMovieModal('spiderman')">
+              onclick="event.stopPropagation(); openMovieModal('spiderman')"
+            >
               <span class="material-symbols-outlined">visibility</span>
               Ver detalles
             </button>
@@ -115,7 +129,7 @@
             src="/images/Peliculas_Cartelera/Intesamente_2.jpg"
             alt="Inside Out 2"
           />
-          <h3>Intensamente 2</h3>
+          <h3 class="data-titulo">Intensamente 2</h3>
           <div class="movie-actions">
             <button
               class="btn-view"
@@ -138,7 +152,7 @@
             src="/images/Peliculas_Cartelera/Bettlejuice.jpg"
             alt="Beetlejuice"
           />
-          <h3>Beetlejuice</h3>
+          <h3 class="data-titulo">Beetlejuice</h3>
           <div class="movie-actions">
             <button
               class="btn-view"
@@ -161,11 +175,12 @@
             src="/images/Peliculas_Cartelera/Paddington.jpg"
             alt="Paddington"
           />
-          <h3>Paddington</h3>
+          <h3 class="data-titulo">Paddington</h3>
           <div class="movie-actions">
             <button
               class="btn-view"
-              onclick="event.stopPropagation(); openMovieModal('paddington')">
+              onclick="event.stopPropagation(); openMovieModal('paddington')"
+            >
               <span class="material-symbols-outlined">visibility</span>
               Ver detalles
             </button>
@@ -183,11 +198,12 @@
             src="/images/Peliculas_Cartelera/Mision imposible.jpg"
             alt="Mission Impossible"
           />
-          <h3>Mission Impossible</h3>
+          <h3 class="data-titulo">Mission Impossible</h3>
           <div class="movie-actions">
             <button
               class="btn-view"
-              onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
+              onclick="event.stopPropagation(); openMovieModal('mission-impossible')"
+            >
               <span class="material-symbols-outlined">visibility</span>
               Ver detalles
             </button>
@@ -205,11 +221,12 @@
             src="/images/Peliculas_Cartelera/Spider-man.jpg"
             alt="Spiderman"
           />
-          <h3>Spiderman</h3>
+          <h3 class="data-titulo">Spiderman</h3>
           <div class="movie-actions">
             <button
               class="btn-view"
-              onclick="event.stopPropagation(); openMovieModal('spiderman')">
+              onclick="event.stopPropagation(); openMovieModal('spiderman')"
+            >
               <span class="material-symbols-outlined">visibility</span>
               Ver detalles
             </button>
@@ -227,11 +244,12 @@
             src="/images/Peliculas_Cartelera/Bettlejuice.jpg"
             alt="Beetlejuice"
           />
-          <h3>Beetlejuice</h3>
+          <h3 class="data-titulo">Beetlejuice</h3>
           <div class="movie-actions">
             <button
               class="btn-view"
-              onclick="event.stopPropagation(); openMovieModal('beetlejuice')">
+              onclick="event.stopPropagation(); openMovieModal('beetlejuice')"
+            >
               <span class="material-symbols-outlined">visibility</span>
               Ver detalles
             </button>
@@ -257,7 +275,7 @@
           </div>
           <div class="modal-right">
             <div class="synopsis-section">
-              <h3>Sinopsis</h3>
+              <h3 class="data-titulo">Sinopsis</h3>
               <p id="modalSynopsis"></p>
             </div>
             <div class="movie-details">
@@ -273,7 +291,7 @@
               <p><strong>Director:</strong> <span id="modalDirector"></span></p>
             </div>
             <div class="trailer-section">
-              <h3>Trailer</h3>
+              <h3 class="data-titulo">Trailer</h3>
               <div class="trailer-placeholder">
                 <span class="material-symbols-outlined">play_circle</span>
               </div>
@@ -298,7 +316,11 @@
       </div>
       <div class="chatbot-body">
         <div>
-          <span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle;">chat</span>
+          <span
+            class="material-symbols-outlined"
+            style="font-size: 18px; vertical-align: middle"
+            >chat</span
+          >
           ¡Hola! ¿En qué puedo ayudarte hoy?
         </div>
       </div>

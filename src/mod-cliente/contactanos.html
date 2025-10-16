@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muvwatch - Contactanos</title>
+    <link rel="stylesheet" href="/styles/styles-cliente.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+</head>
+<body>
+    <header>
+      <!-- Navbar principal -->
+      <nav class="navbar">
+        <div class="container-navbar">
+          <div class="navbar-left">
+            <a href="lobby-cliente.html" class="logo-link">
+              <img id="logo-nav" src="/images/Logo.svg" alt="Logo_muvwatch" />
+            </a>
+          </div>
+          <div class="navbar-center">
+            <div class="container-search">
+              <div class="filtros">
+                <span
+                  class="material-symbols-outlined icon-inline"
+                  aria-hidden="true"
+                  onclick="filtro()"
+                  >filter_alt</span>
+              </div>
+              <div class="caja-busqueda">
+                <input id="search-input" type="text" placeholder="Buscar función..." onclick="window.location.href='/src/mod-cliente/lobby-cliente.html'" />
+                <span class="material-symbols-outlined" onclick="window.location.href='/src/mod-cliente/lobby-cliente.html'">search</span>
+              </div>
+            </div>
+          </div>
+          <div class="navbar-right">
+            <div class="cliente-box" id="clienteBox">
+              <span
+                class="material-symbols-outlined icon-inline profile-icon"
+                aria-hidden="true"
+                >account_circle</span
+              >
+              Cliente A
+              <div class="menu-cliente" id="menuCliente">
+                <a href="#">Perfil</a>
+                <a href="../src/login.html">Cerrar sesión</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="menu-secundario">
+        <nav>
+          <a href="lobby-cliente.html" class="enlace-a">Inicio</a>
+          <a href="../mod-cliente/promociones.html" class="enlace-a">Promociones</a>
+          <a href="contactanos.html" class="enlace-a" style=" border-bottom-color: #3b7ba6;
+          background: #f5f5f5;">Contactanos</a>
+          <a href="../mod-cliente/carrito.html">Carrito</a>
+        </nav>
+      </div>
+    </header>
+  <div id="resultados"></div>
+
+  <div class="contenedor-general">
+        <div class="secciones">
+            <div class="Quienes-somos">
+                <H1 class="titulo-contactanos">Informacion General de Muvwatch</H1>
+                    <h2>¿Quiénes somos?</h2>
+                    <div class="sobre-nosotros">
+                         <p class="texto-contactanos">Muvwatch es una plataforma de 
+                        reservas de entradas de cine en línea que 
+                        ofrece a los usuarios la posibilidad de buscar, seleccionar 
+                        y reservar asientos para funciones de cine 
+                        en diversos cines asociados.</p>
+                        <img src="" alt="">
+                    </div>
+                   
+                    <div class="objetivos">
+                        <div class="mision">
+                            <h3><span class="material-symbols-outlined">rocket_launch</span>Nuestra Mision</h3>
+                            <p>Nuestra misión es proporcionar una experiencia de reserva rápida, segura y conveniente para los amantes del cine. </p>
+                        </div>
+                        <div class="vision">
+                            <h3><span class="material-symbols-outlined">handshake</span>Nuestra Vision</h3>
+                            <p>Ser la plataforma líder en reservas de entradas
+                                 de cine en línea, reconocida por su innovación, 
+                                 facilidad de uso y excelente servicio al cliente.</p>
+                        </div>
+                    </div>
+            </div>
+            <H2>Nuestras Redes Sociales</H2>
+            <div class="redes-sociales">
+                <div class="social" id="instagram">
+                    <img src="/images/icons8-instagram.svg" alt="logo-app">
+                    <span>@Muvwacth_col</span>
+                </div>
+                 <div class="social" id="facebook">
+                    <img src="/images/icons8-facebook-nuevo.svg" alt="logo-app">
+                    <span>Muvwacth Colombia</span>
+                </div>
+                 <div class="social" id="tiktok">
+                    <img src="/images/icons8-tiktok.svg" alt="logo-app">
+                    <span>@Muvwacth_col</span>
+                </div>
+                 <div class="social" id="whatsapp">
+                    <img src="/images/icons8-whatsapp.svg" alt="logo-app">
+                    <span>Muvwacth Colombia</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer-contactanos">
+        <div class="llamanos">
+            <h2>¿Tienes alguna duda? ¡Llámanos!</h2>
+            <p>Estamos disponibles para ayudarte en cualquier momento. Nuestro equipo de atención al cliente está listo para responder tus preguntas y brindarte la asistencia que necesitas.</p>
+            <div class="contactos">
+                <div class="telefono">
+                    <span class="material-symbols-outlined">call</span>
+                    <span>+57 123 456 7890</span>
+                </div>
+                <div class="email">
+                    <span class="material-symbols-outlined">email</span>
+                    <span>servicioalcliente@muvwatch.com.co</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="/scripts/mod-cliente/lobby-cliente.js"></script>
+</body>
+</html>

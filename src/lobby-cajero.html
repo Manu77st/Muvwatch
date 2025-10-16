@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobby Cajero</title>
+    <link rel="stylesheet" href="../styles/styles-reservar-asientos.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container-navbar">
+            <div class="logo-section">
+                <a href=""><img src="../images/Logo-reducido.png" alt="logotipo" class="logo"></a>
+            </div>
+            <div class="search-container">
+                <span class="material-symbols-outlined left-icon">filter_alt</span>
+                <input type="text" placeholder="Buscar función">
+                <span class="material-symbols-outlined right-icon">search</span>
+            </div>
+            <div class="user-container">
+                <span class="material-symbols-outlined">account_circle</span>
+                <span class="username">Cajero1</span>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="movies-grid">
+            <div class="movie-card">
+                <img src="../images/Peliculas_Cartelera/Mision imposible.jpg" alt="Mission Impossible">
+                <h3>Mission Impossible</h3>
+                <div class="movie-actions">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+                    <button class="btn-tobook" onclick="window.location.href='reservar-asientos.html'">
+                        <span class="material-symbols-outlined">theater_comedy</span>
+                        Reservar asientos
+                    </button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="../images/Peliculas_Cartelera/Spider-man.jpg" alt="Spider-Man">
+                <h3>Spider-Man</h3>
+                <div class="movie-actions">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('spiderman')">
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+                    <button class="btn-tobook" onclick="window.location.href='reservar-asientos.html'">
+                        <span class="material-symbols-outlined">theater_comedy</span>
+                        Reservar asientos
+                    </button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="../images/Peliculas_Cartelera/Bettlejuice.jpg" alt="Beetlejuice">
+                <h3>Beetlejuice</h3>
+                <div class="movie-actions">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('beetlejuice')">
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+                    <button class="btn-tobook" onclick="window.location.href='reservar-asientos.html'">
+                        <span class="material-symbols-outlined">theater_comedy</span>
+                        Reservar asientos
+                    </button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="../images/Peliculas_Cartelera/Intesamente_2.jpg" alt="Intensamente 2">
+                <h3>Intensamente 2</h3>
+                <div class="movie-actions">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('inside-out-2')">
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+                    <button class="btn-tobook" onclick="window.location.href='reservar-asientos.html'">
+                        <span class="material-symbols-outlined">theater_comedy</span>
+                        Reservar asientos
+                    </button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="../images/Peliculas_Cartelera/Paddington.jpg" alt="Paddington">
+                <h3>Paddington</h3>
+                <div class="movie-actions">
+                    <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('paddington')">
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+                    <button class="btn-tobook" onclick="window.location.href='reservar-asientos.html'">
+                        <span class="material-symbols-outlined">theater_comedy</span>
+                        Reservar asientos
+                    </button>
+                </div>
+            </div>
+    </main>
+
+    <div id="movieModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMovieModal()">&times;</span>
+            <div class="modal-body">
+                <div class="modal-left">
+                    <img id="modalMovieImage" src="" alt="Movie Poster">
+                    <h2 id="modalMovieTitle"></h2>
+                    <div class="modal-actions">
+                        <button class="btn-tobook-modal" onclick="window.location.href='reservar-asientos.html'">
+                            Reservar asientos
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-right">
+                    <div class="synopsis-section">
+                        <h3>Sinopsis</h3>
+                        <p id="modalSynopsis">Ethan Hunt es un agente de la Fuerza de Tareas de Imposibles (IMF) que se
+                            ve obligado a aceptar una misión para limpiar su nombre después de ser acusado de traición.
+                            Debe recuperar una lista secreta de agentes encubiertos que ha sido robada por un traidor
+                            dentro de la IMF.</p>
+                    </div>
+                    <div class="movie-details">
+                        <p><strong>Nombre original:</strong> <span id="modalOriginalName">Mission: Impossible</span></p>
+                        <p><strong>Clasificación:</strong> <span id="modalClassification">PG-13</span></p>
+                        <p><strong>Reparto:</strong> <span id="modalCast">Tom Cruise, Jon Voight, Emmanuelle Béart,
+                                Henry Czerny, Jean Reno, Ving Rhames</span></p>
+                        <p><strong>Director:</strong> <span id="modalDirector">Brian De Palma</span></p>
+                    </div>
+                    <div class="trailer-section">
+                        <h3>Trailer</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../scripts/lobby-cajero.js"></script>
+</body>
+
+</html>

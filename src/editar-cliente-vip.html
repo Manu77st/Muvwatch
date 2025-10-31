@@ -5,37 +5,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Cliente VIP</title>
-    <link rel="stylesheet" href="../styles/styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&icon_names=search" />
+     <link rel="stylesheet" href="../styles/styles-cliente.css">
+      <link rel="stylesheet" href="../styles/style-admin.css">
+      <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+
+
 </head>
-
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="container-navbar"> 
-                <a href="lobby_admin.html"><img id="logo-nav" src="../images/Logo_icono.png" alt="Logo_muvwacth">
-                <h3 id="nombre">muvwacth</h3>
-                </a>
-                <div class="container-search">
-                    <input type="text" placeholder="Buscar Película...">
-                    <span class="material-symbols-outlined">search</span>
-                </div>
-                <div class="admin-section">
-                    <span class="material-symbols-outlined">person</span>
-                    <span id="nombre">Admin</span>
-                </div>
+      <nav class="navbar">
+        <div class="container-navbar">
+          <div class="navbar-left">
+            <a href="lobby-cliente.html" class="logo-link">
+              <img id="logo-nav" src="/images/Logo.svg" alt="Logo_muvwatch" />
+            </a>
+          </div>
+          <div class="navbar-center">
+            <div class="container-search">
+              <div class="filtros">
+                <span
+                  class="material-symbols-outlined icon-inline"
+                  aria-hidden="true"
+                  onclick="filtro()"
+                  >filter_alt</span
+                >
+              </div>
+              <div class="caja-busqueda">
+                <input
+                  id="search-input"
+                  type="text"
+                  placeholder="Buscar función..."
+                />
+                <span class="material-symbols-outlined" onclick="busquedas()"
+                  >search</span
+                >
+              </div>
             </div>
-        </nav>
-        <nav class="nav-move">
-            <ul class="lista-move">
-                <li class="contenido-lista-move"><a href="lobby_admin.html">Inicio</a></li>
-                <li class="contenido-lista-move"><a href="cajero.html">Cartera</a></li>
-                <li class="contenido-lista-move"><a href="Reportes-ventas.html">Reportes</a></li>
-                <li class="contenido-lista-move"><a href="Consultar-clientes-VIP.html">Clientes Vip</a></li>
-            </ul>
-        </nav>
+          </div>
+          <div class="navbar-right">
+            <div class="cliente-box" id="clienteBox">
+              <span
+                class="material-symbols-outlined icon-inline profile-icon"
+                aria-hidden="true"
+                >account_circle</span
+              >
+              Cliente A
+              <div class="menu-cliente" id="menuCliente">
+                <a href="#">Perfil</a>
+                <a href="/src/login.html">Cerrar sesión</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="menu-secundario">
+        <a
+            href="lobby_admin.html"
+            class="enlace-a"
+            style="border-bottom-color: #3b7ba6; background: #f5f5f5"
+            >Inicio</a>
+          <a href="Reportes-ventas.html">Reportes</a>
+          <a href="Consultar-clientes-VIP.html">Clientes VIP</a>
+      </div>
     </header>
-
+    <div id="resultados"></div>
     <main class="container-vip">
         <h2 class="titulo-vip">EDITAR CLIENTE VIP</h2>
 

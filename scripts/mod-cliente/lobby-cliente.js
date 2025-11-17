@@ -1,3 +1,4 @@
+//Scripts para cliente
 function filtro() {
   const contenedor = document.querySelector(".filtros");
   let panelExistente = document.querySelector(".filtros-panel");

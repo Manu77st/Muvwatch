@@ -1,3 +1,4 @@
+//Scripts para cliente
 // Configuración de la sala
 const filas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 const asientosPorBloque = 7;

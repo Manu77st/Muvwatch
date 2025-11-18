@@ -1,7 +1,9 @@
 import cors from 'cors';
+import dotenv from 'dotenv';
 import express from 'express';
 import mysql from 'mysql2';
-import dotenv from 'dotenv';
+import clienteRoutes from './API-cliente.js'; // Importar las rutas
+
 
 // Inicialización de Express
 const app=express();
@@ -24,6 +26,16 @@ const db=mysql.createPool({
 
 // Puerto donde correrá el servidor
 const PORT = process.env.PORT || 5000;
+
+//Ruta de prueba para evitar el Cannot Get /
+app.get('/', (req, res)=>{
+    res.json({
+        message: 'El servidor está funcionando correctamente',
+        endpoints: {
+            login: 'POST /api/login'
+        }
+    });
+});
 
 // Endpoint para reservar asiento
 app.post('/api/reservarAsiento', async (req,res)=>{
@@ -122,3 +134,63 @@ app.post('/api/reservarAsiento', async (req,res)=>{
 app.listen(PORT,()=>{
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
+
+
+
+// Usar las rutas de cliente
+app.use('/api', clienteRoutes);
+
+
+
+// Función para validar login
+export async function validarLogin(correo, contraseña) {
+    return new Promise((resolve, reject) => {
+        if (!correo || !contraseña) {
+            return resolve({
+                success: false,
+                message: 'El correo y la contraseña son necesarios'
+            });
+        }
+
+        const sql = `SELECT id_usuarios, nombres, apellidos, correo, contraseña, tipo_usuario, activo
+        FROM tbl_usuarios WHERE correo = ? AND activo = 1`
+
+        db.query(sql, [correo], (error, results) => {
+            if (error) {
+                console.error('Error en la consulta:', error);
+                return reject({
+                    success: false,
+                    message: 'Error al consultar la base de datos'
+                });
+            }
+
+            if (results.length === 0) {
+                return resolve({
+                    success: false,
+                    message: 'Correo o contraseña incorrectos'
+                });
+            }
+
+            const usuario = results[0];
+
+            if (contraseña === usuario.contraseña) {
+                resolve({
+                    success: true,
+                    message: 'Inicio de sesión exitoso :)',
+                    usuario: {
+                        id: usuario.id_usuarios,
+                        nombres: usuario.nombres,
+                        apellidos: usuario.apellidos,
+                        correo: usuario.correo,
+                        tipo_usuario: usuario.tipo_usuario
+                    }
+                });
+            } else {
+                resolve({
+                    success: false,
+                    message: 'Correo o contraseña incorrectos'
+                });
+            }
+        });
+    });
+}

@@ -44,31 +44,55 @@ lista_usuarios.push({
     contraseña: '12345',
     tipo_usuario: 'Cliente'});
 
-const btniniciarSesion = document.getElementById('Iniciar-sesion');
-btniniciarSesion.addEventListener('click', (event) => {
-    event.preventDefault();
-    let validacion = false;
-    const correo = document.getElementById('correo').value;
-    const contraseña = document.getElementById('contraseña').value;
-    for(let i=0; i<lista_usuarios.length; i++){
-        if(correo.toLowerCase() === lista_usuarios[i].correo.toLowerCase() && contraseña === lista_usuarios[i].contraseña){
-            validacion=true;
-            tipo = lista_usuarios[i].tipo_usuario;
-            break;
+    const btniniciarSesion = document.getElementById('Iniciar-sesion');
+
+    btniniciarSesion.addEventListener('click', async (event) => {
+        event.preventDefault();
+        
+        const correo = document.getElementById('correo').value.trim();
+        const contraseña = document.getElementById('contraseña').value;
+    
+        // Validación básica en el frontend
+        if (!correo || !contraseña) {
+            mostrarNotificacion('Hola, porfa llenar todos los campos', 'error');
+            return;
         }
-    }  
-    if(validacion){
-        mostrarNotificacion('Inicio de sesión exitoso', 'exito');
-        if(tipo === 'Administrador'){
-            window.location.href = 'lobby_admin.html';
+    
+        try {
+            const respuesta = await fetch('http://localhost:5000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    correo: correo,
+                    contraseña: contraseña
+                })
+            });
+    
+            // Aquí convertimos la respuesta a JSON
+            const resultado = await respuesta.json();
+            /*const resultado = await resuesta.json();*/
+    
+            if (resultado.success) {
+                mostrarNotificacion(resultado.message, 'exito :)');
+                
+                // Redirigimos según el tipo de usuario registrado
+                const tipo = resultado.usuario.tipo_usuario;
+                
+                if (tipo === 'administrador') {
+                    window.location.href = 'lobby_admin.html';
+                } else if (tipo === 'cajero') {
+                    window.location.href = 'lobby-cajero.html';
+                } else if (tipo === 'cliente') {
+                    window.location.href = 'mod-cliente/lobby-cliente.html';
+                }
+            } else {
+                mostrarNotificacion(resultado.message, 'error');
+            }
+    
+        } catch (error) {
+            console.error('Error al hacer la petición:', error);
+            mostrarNotificacion('Hubo un error de conexión con el servidor', 'error');
         }
-        else if(tipo === 'Cajero'){
-            window.location.href = 'lobby-cajero.html';
-        }
-        else if(tipo === 'Cliente'){
-            window.location.href = 'mod-cliente/lobby-cliente.html';
-        }
-    }else{
-        mostrarNotificacion('Correo o contraseña incorrectos', 'error');
-    }   
-});
+    });

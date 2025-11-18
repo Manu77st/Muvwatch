@@ -1,5 +1,8 @@
 import express from 'express';
 import { validarLogin } from './cliente.js';
+import axios from 'axios';
+
+URL_API = 'http://localhost:5000/api/reservarAsiento';
 
 const router = express.Router();
 
@@ -37,3 +40,15 @@ router.post('/login', async (req, res) => {
 });
 
 export default router;
+
+//Reservar asientos
+
+export const reservarAsiento = async (id_funcion, id_cliente, sillas) => {
+    const respuesta = await axios.post(URL_API, {
+        id_funcion,
+        id_cliente,
+        sillas
+    });
+    return respuesta.data;
+    };
+

@@ -37,7 +37,7 @@ app.get('/', (req, res)=>{
     });
 });
 
-// Endpoint para reservar asiento
+// Endpoint para reservar asientos en una función
 app.post('/api/reservarAsiento', async (req,res)=>{
        const {id_funcion, id_cliente, sillas}=req.body;
 
@@ -135,11 +135,8 @@ app.listen(PORT,()=>{
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
-
-
 // Usar las rutas de cliente
 app.use('/api', clienteRoutes);
-
 
 
 // Función para validar login

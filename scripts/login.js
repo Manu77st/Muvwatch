@@ -60,7 +60,7 @@ btniniciarSesion.addEventListener('click', (event) => {
     if(validacion){
         mostrarNotificacion('Inicio de sesión exitoso', 'exito');
         if(tipo === 'Administrador'){
-            window.location.href = 'lobby_admin.html';
+            window.location.href = '/proyecto/Muvwatch/backend/admin/lobby_admin.php';
         }
         else if(tipo === 'Cajero'){
             window.location.href = 'lobby-cajero.html';

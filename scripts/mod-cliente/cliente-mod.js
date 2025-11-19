@@ -470,7 +470,13 @@ function configurarChatbot() {
         chatbotBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             const display = chatbotWindow.style.display;
-            chatbotWindow.style.display = display === 'none' || display === '' ? 'flex' : 'none';
+            const opening = display === 'none' || display === '';
+            chatbotWindow.style.display = opening ? 'flex' : 'none';
+
+            // When opening, render quick-action buttons instead of free text
+            if(opening) {
+                renderChatbotActions();
+            }
         });
     }
 
@@ -485,6 +491,142 @@ function configurarChatbot() {
             chatbotWindow.style.display = 'none';
         }
     });
+}
+
+// Render buttons for quick actions inside the chatbot body
+function renderChatbotActions() {
+    const chatbotBody = document.querySelector('#chatbotWindow .chatbot-body');
+    if(!chatbotBody) return;
+
+    chatbotBody.innerHTML = `
+        <div class="chat-actions">
+            <button class="chat-action" data-action="recomendar">Recomiéndame películas</button>
+            <button class="chat-action" data-action="promociones">Promociones</button>
+            <button class="chat-action" data-action="mis_reservas">Mis reservas</button>
+            <button class="chat-action" data-action="contacto">Contacto</button>
+        </div>
+        <div class="chat-response" aria-live="polite"></div>
+    `;
+
+    chatbotBody.querySelectorAll('.chat-action').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const action = btn.getAttribute('data-action');
+            // Show the clicked action as user message
+            showChatMessage(btn.textContent, 'user');
+            await handleChatAction(action);
+        });
+    });
+}
+
+async function handleChatAction(action) {
+    const responseContainer = document.querySelector('#chatbotWindow .chat-response');
+    if(!responseContainer) return;
+    responseContainer.innerHTML = '';
+
+    try {
+        if(action === 'promociones') {
+            showChatMessage('Buscando promociones...', 'bot');
+            const res = await fetch(`${API_URL}?accion=promociones`, { credentials: 'include' });
+            const datos = await res.json();
+            if(datos.exito && datos.datos) {
+                showChatMessage('Estas son las promociones actuales:', 'bot');
+                renderMovieList(datos.datos, responseContainer);
+            } else {
+                showChatMessage(datos.mensaje || 'No se encontraron promociones', 'bot');
+            }
+
+        } else if(action === 'mis_reservas') {
+            showChatMessage('Cargando tus reservas...', 'bot');
+            const res = await fetch(`${API_URL}?accion=mis_reservas`, { credentials: 'include' });
+            const datos = await res.json();
+            if(datos.exito && datos.datos) {
+                if(datos.datos.length === 0) {
+                    showChatMessage('No tienes reservas registradas.', 'bot');
+                } else {
+                    showChatMessage('Estas son tus reservas:', 'bot');
+                    renderReservasList(datos.datos, responseContainer);
+                }
+            } else {
+                showChatMessage(datos.mensaje || 'Error al obtener reservas', 'bot');
+            }
+
+        } else if(action === 'recomendar') {
+            showChatMessage('Buscando recomendaciones basadas en tu historial...', 'bot');
+            // Obtener historial (películas ya reservadas)
+            const r1 = await fetch(`${API_URL}?accion=mis_reservas`, { credentials: 'include' });
+            const reservasJson = await r1.json();
+            const reservadoNombres = (reservasJson.exito && reservasJson.datos) ? reservasJson.datos.map(r => r.pelicula).filter(Boolean) : [];
+
+            // Obtener cartelera completa
+            const r2 = await fetch(`${API_URL}?accion=cartelera`, { credentials: 'include' });
+            const carteleraJson = await r2.json();
+            if(carteleraJson.exito && carteleraJson.datos) {
+                // Recomendar películas que no estén en reservadoNombres
+                const recomendaciones = carteleraJson.datos.filter(p => !reservadoNombres.includes(p.nombre)).slice(0,5);
+                if(recomendaciones.length === 0) {
+                    showChatMessage('Ya viste la mayoría de títulos; aquí hay algunas en cartelera:', 'bot');
+                    renderMovieList(carteleraJson.datos.slice(0,5), responseContainer);
+                } else {
+                    showChatMessage('Te recomiendo estas películas:', 'bot');
+                    renderMovieList(recomendaciones, responseContainer);
+                }
+            } else {
+                showChatMessage('No pude obtener la cartelera para recomendar.', 'bot');
+            }
+
+        } else if(action === 'contacto') {
+            showChatMessage('Puedes escribirnos desde la página de contacto o llamarnos al 01-800-0000.', 'bot');
+            responseContainer.innerHTML += `<p><a href="contactanos.html">Ir a Contacto</a></p>`;
+        }
+    } catch(err) {
+        console.error(err);
+        showChatMessage('Ocurrió un error. Intenta de nuevo más tarde.', 'bot');
+    }
+}
+
+function showChatMessage(text, who = 'bot') {
+    const chatBody = document.querySelector('#chatbotWindow .chatbot-body');
+    if(!chatBody) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = who === 'user' ? 'chat-msg user' : 'chat-msg bot';
+    wrapper.textContent = text;
+    // Insert before the response container if exists
+    const responseContainer = chatBody.querySelector('.chat-response');
+    if(responseContainer) responseContainer.appendChild(wrapper);
+    else chatBody.appendChild(wrapper);
+}
+
+function renderMovieList(peliculas, container) {
+    if(!container) return;
+    const list = document.createElement('div');
+    list.className = 'chat-movie-list';
+    peliculas.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'chat-movie-item';
+        item.innerHTML = `
+            <strong>${p.nombre}</strong><br/>
+            <small>${p.sipnosis ? p.sipnosis.substring(0,100) + '...' : ''}</small>
+        `;
+        list.appendChild(item);
+    });
+    container.appendChild(list);
+}
+
+function renderReservasList(reservas, container) {
+    if(!container) return;
+    const list = document.createElement('div');
+    list.className = 'chat-reserva-list';
+    reservas.forEach(r => {
+        const item = document.createElement('div');
+        item.className = 'chat-reserva-item';
+        item.innerHTML = `
+            <strong>${r.pelicula || '—'}</strong> — ${r.fecha_funcion || '—'}<br/>
+            <small>Asientos: ${r.asientos || '—'} — Estado: ${r.estado || '—'}</small>
+        `;
+        list.appendChild(item);
+    });
+    container.appendChild(list);
 }
 
 // ========================================

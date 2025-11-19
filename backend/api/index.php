@@ -4,7 +4,7 @@
  * Maneja todas las peticiones del módulo cliente
  */
 
-// Headers
+// Headers CORS
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=UTF-8');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -17,15 +17,18 @@ if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Cargar dependencias
+require_once __DIR__ . '/../configuracion/base_datos.php';
+require_once __DIR__ . '/../utilidades/Utilidades.php';
+require_once __DIR__ . '/../modelos/UsuarioModelos.php';
+require_once __DIR__ . '/../modelos/CineModelos.php';
 require_once __DIR__ . '/../controladores/AutenticacionControlador.php';
 require_once __DIR__ . '/../controladores/ClienteControlador.php';
-require_once __DIR__ . '/../utilidades/Utilidades.php';
 
 // Obtener la acción de la URL
 $accion = $_GET['accion'] ?? '';
 $metodo = $_SERVER['REQUEST_METHOD'];
 
-// Obtener datos del body para POST/PUT
+// Obtener datos del body para POST/PUT/DELETE
 $datos = [];
 if(in_array($metodo, ['POST', 'PUT', 'DELETE'])) {
     $datos = json_decode(file_get_contents("php://input"), true) ?? [];
@@ -118,17 +121,26 @@ try {
             $resultado = $controlador->obtenerFuncion($_GET['id'] ?? '');
             Respuesta::json($resultado, $resultado['exito'] ? 200 : 404);
             break;
-        case 'asientos_funcion':
+
+        case 'obtener_asientos':
             if($metodo !== 'GET') {
                 Respuesta::error('Método no permitido', 405);
             }
             $controlador = new ClienteControlador();
-            // Llamar al método que devuelve los asientos disponibles
-            // El controlador define obtenerAsientosDisponibles
-            $resultado = $controlador->obtenerAsientosDisponibles($_GET['id'] ?? '');
+            $resultado = $controlador->obtenerAsientosDisponibles($_GET['id_funcion'] ?? '');
             Respuesta::json($resultado, $resultado['exito'] ? 200 : 404);
             break;
-        // ========== RESERVAS Y COMPRAS ==========
+
+        case 'calcular_total':
+            if($metodo !== 'POST') {
+                Respuesta::error('Método no permitido', 405);
+            }
+            $controlador = new ClienteControlador();
+            $resultado = $controlador->calcularTotal($datos['id_funcion'] ?? '', $datos['cantidad_asientos'] ?? '');
+            Respuesta::json($resultado, $resultado['exito'] ? 200 : 400);
+            break;
+
+        // ========== RESERVAS ==========
         case 'crear_reserva':
             if($metodo !== 'POST') {
                 Respuesta::error('Método no permitido', 405);
@@ -137,31 +149,66 @@ try {
             $resultado = $controlador->crearReserva($datos);
             Respuesta::json($resultado, $resultado['exito'] ? 201 : 400);
             break;
+
         case 'mis_reservas':
             if($metodo !== 'GET') {
                 Respuesta::error('Método no permitido', 405);
             }
             $controlador = new ClienteControlador();
             $resultado = $controlador->obtenerMisReservas();
-            Respuesta::json($resultado);
+            Respuesta::json($resultado, $resultado['exito'] ? 200 : 401);
             break;
-        case 'cancelar_reserva':
-            if($metodo !== 'DELETE') {
+
+        case 'detalle_reserva':
+            if($metodo !== 'GET') {
                 Respuesta::error('Método no permitido', 405);
             }
             $controlador = new ClienteControlador();
-            $resultado = $controlador->cancelarReserva($_GET['id'] ?? '');
+            $resultado = $controlador->obtenerDetalleReserva($_GET['id'] ?? '');
+            Respuesta::json($resultado, $resultado['exito'] ? 200 : 404);
+            break;
+
+        case 'cancelar_reserva':
+            if($metodo !== 'POST') {
+                Respuesta::error('Método no permitido', 405);
+            }
+            $controlador = new ClienteControlador();
+            $resultado = $controlador->cancelarReserva($datos['id_reserva'] ?? '');
             Respuesta::json($resultado, $resultado['exito'] ? 200 : 400);
             break;
-        default:
-            Respuesta::error('Acción no encontrada', 404);
+
+        // ========== PERFIL ==========
+        case 'perfil':
+            if($metodo === 'GET') {
+                $controlador = new ClienteControlador();
+                $resultado = $controlador->obtenerPerfil();
+                Respuesta::json($resultado, $resultado['exito'] ? 200 : 401);
+            } elseif($metodo === 'PUT') {
+                $controlador = new ClienteControlador();
+                $resultado = $controlador->actualizarPerfil($datos);
+                Respuesta::json($resultado, $resultado['exito'] ? 200 : 400);
+            } else {
+                Respuesta::error('Método no permitido', 405);
+            }
             break;
-    }
+
+        case 'historial_compras':
+            if($metodo !== 'GET') {
+                Respuesta::error('Método no permitido', 405);
+            }
+            $controlador = new ClienteControlador();
+            $resultado = $controlador->obtenerHistorialCompras();
+            Respuesta::json($resultado, $resultado['exito'] ? 200 : 401);
+            break;
+
+        // ========== ACCIÓN NO ENCONTRADA ==========
+        default:
+            Respuesta::error('Acción no encontrada: ' . $accion, 404);
+            break;
+
+    } // Fin del switch
+
 } catch(Exception $e) {
-    Respuesta::error('Error interno del servidor', 500);
+    Respuesta::error('Error interno del servidor: ' . $e->getMessage(), 500);
 }
-            Respuesta::json([
-                'exito' => false,
-                'mensaje' => $mensaje
-            ], $codigo);
 ?>

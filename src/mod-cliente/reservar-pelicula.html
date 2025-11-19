@@ -1,148 +1,196 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Reservar Película</title>
+    <title>Reservar Película - MuvWatch</title>
     <link rel="stylesheet" href="../../styles/styles-cliente.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+<body>
+    <!-- HEADER -->
     <header>
-      <!-- Navbar principal -->
-      <nav class="navbar">
-        <div class="container-navbar">
-          <div class="navbar-left">
-            <a href="lobby-cliente.html" class="logo-link">
-              <img id="logo-nav" src="../../images/Logo.svg" alt="Logo_muvwatch" />
-            </a>
-          </div>
-          <div class="navbar-center">
-            <div class="container-search">
-              <div class="filtros">
-                <span
-                  class="material-symbols-outlined icon-inline"
-                  aria-hidden="true" onclick="filtro()"
-                  >filter_alt</span
-                >
-              </div>
-              <div class="caja-busqueda">
-                <input id="search-input" type="text" placeholder="Buscar función..." />
-                <span class="material-symbols-outlined">search</span>
-              </div>
+        <nav class="navbar">
+            <div class="container-navbar">
+                <div class="navbar-left">
+                    <a href="lobby-cliente.html" class="logo-link">
+                        <img id="logo-nav" src="../../images/Logo.svg" alt="Logo MuvWatch" />
+                    </a>
+                </div>
+                <div class="navbar-center">
+                    <div class="container-search">
+                        <div class="filtros">
+                            <span class="material-symbols-outlined icon-inline" aria-hidden="true" onclick="filtro()">
+                                filter_alt
+                            </span>
+                        </div>
+                        <div class="caja-busqueda">
+                            <input id="search-input" type="text" placeholder="Buscar función..." />
+                            <span class="material-symbols-outlined" onclick="busquedas()">search</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="navbar-right">
+                    <div class="cliente-box" id="clienteBox">
+                        <span class="material-symbols-outlined icon-inline profile-icon" aria-hidden="true">
+                            account_circle
+                        </span>
+                        Cliente
+                        <div class="menu-cliente" id="menuCliente">
+                            <a href="#">Perfil</a>
+                            <a href="/src/login.html">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="navbar-right">
-            <div class="cliente-box" id="clienteBox">
-              <span
-                class="material-symbols-outlined icon-inline profile-icon"
-                aria-hidden="true"
-                >account_circle</span
-              >
-              Cliente A
-              <div class="menu-cliente" id="menuCliente">
-                <a href="#">Perfil</a>
-                <a href="/src/login.html">Cerrar sesión</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <!-- Menú secundario -->
-      <div class="menu-secundario">
-        <nav>
-          <a href="lobby-cliente.html" class="enlace-a">Inicio</a>
-          <a href="../mod-cliente/promociones.html" class="enlace-a"
-            >Promociones</a>
-          <a href="contactanos.html" class="enlace-a">Contactanos</a>
-          <a href="../mod-cliente/carrito.html">Carrito</a>
         </nav>
-      </div>
-    </header>
-    <div id="resultados"></div>
 
+        <div class="menu-secundario">
+            <nav>
+                <a href="lobby-cliente.html" class="enlace-a">Inicio</a>
+                <a href="promociones.html" class="enlace-a">Promociones</a>
+                <a href="contactanos.html" class="enlace-a">Contactanos</a>
+                <a href="carrito.html" class="enlace-a">Carrito</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
     <main class="reserve-page">
-      <div class="layout-reserva">
-        <!-- Left: sala -->
-        <div class="panel-sala">
-          <h2>SALA 3 | ESTANDAR</h2>
-          <div class="marco-sala">
-            <div class="interior-sala">
-              <div class="pantalla-superior">PANTALLA</div>
-              <div class="area-asientos">
-                <div
-                  class="bloque-asientos"
-                  id="bloqueAsientosIzquierda"
-                  aria-label="Bloque izquierdo"
-                ></div>
-                <div class="pasillo" aria-hidden="true"></div>
-                <div
-                  class="bloque-asientos"
-                  id="bloqueAsientosDerecha"
-                  aria-label="Bloque derecho"
-                ></div>
-              </div>
+        <div class="layout-reserva">
+            
+            <!-- PANEL IZQUIERDO: SALA Y ASIENTOS -->
+            <div class="panel-sala">
+                <h2>Cargando funciones disponibles...</h2>
             </div>
-          </div>
+
+            <!-- PANEL DERECHO: INFORMACIÓN Y CONTROLES -->
+            <aside class="panel-reserva">
+                <div class="caja-reserva">
+                    <h3>Reservar Boletos</h3>
+                    
+                    <!-- Información de la función -->
+                    <div class="info-funcion">
+                        <p><strong>Función:</strong> <span id="funcionNombre">—</span></p>
+                        <p><strong>Fecha:</strong> <span id="funcionFecha">—</span></p>
+                        <p><strong>Hora:</strong> <span id="funcionHora">—</span></p>
+                    </div>
+
+                    <!-- Leyenda de asientos -->
+                    <div class="seccion-info">
+                        <h4>Estado de las sillas:</h4>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin: 5px 0;">
+                                <span class="asiento disponible" style="display: inline-block; width: 25px; height: 25px; vertical-align: middle;"></span>
+                                Disponible
+                            </li>
+                            <li style="margin: 5px 0;">
+                                <span class="asiento ocupado" style="display: inline-block; width: 25px; height: 25px; vertical-align: middle;"></span>
+                                Ocupada
+                            </li>
+                            <li style="margin: 5px 0;">
+                                <span class="asiento seleccionado" style="display: inline-block; width: 25px; height: 25px; vertical-align: middle;"></span>
+                                Escogida
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tipos de sillas -->
+                    <div class="seccion-info">
+                        <h4>Precio por tipo:</h4>
+                        <p style="margin: 5px 0;">Standard: $15.000</p>
+                        <p style="margin: 5px 0;">Discapacitados: $10.000</p>
+                    </div>
+
+                    <!-- Contador -->
+                    <div class="info-seleccionadas" style="padding: 10px; background: #f5f5f5; border-radius: 5px; margin: 10px 0;">
+                        Asientos seleccionados: <span id="contadorSeleccionadas" style="font-weight: bold; color: #3b7ba6;">0</span>
+                    </div>
+
+                    <!-- Métodos de pago -->
+                    <div class="seccion-info">
+                        <h4>Método de Pago</h4>
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <button class="boton-pago" data-metodo="efectivo" style="flex: 1; padding: 10px; border: 2px solid #ddd; background: white; border-radius: 5px; cursor: pointer; transition: all 0.3s;">
+                                💵 Efectivo
+                            </button>
+                            <button class="boton-pago" data-metodo="tarjeta" style="flex: 1; padding: 10px; border: 2px solid #ddd; background: white; border-radius: 5px; cursor: pointer; transition: all 0.3s;">
+                                💳 Tarjeta
+                            </button>
+                            <button class="boton-pago" data-metodo="transferencia" style="flex: 1; padding: 10px; border: 2px solid #ddd; background: white; border-radius: 5px; cursor: pointer; transition: all 0.3s;">
+                                🏦 Transferencia
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Botón confirmar -->
+                    <div style="margin-top: 20px;">
+                        <button id="botonConfirmar" class="btn-agregar" style="width: 100%; padding: 12px; font-size: 16px; font-weight: bold;">
+                            Confirmar Reserva
+                        </button>
+                    </div>
+
+                    <!-- Botón volver -->
+                    <div style="margin-top: 10px;">
+                        <button onclick="window.location.href='lobby-cliente.html'" class="btn-agregar" style="width: 100%; padding: 12px; font-size: 16px; background: #999; border: none; cursor: pointer; border-radius: 5px; color: white;">
+                            Volver a la Cartelera
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
         </div>
 
-        <!-- Right: panel de reserva -->
-        <aside class="panel-reserva">
-          <div class="caja-reserva">
-            <h3>Reservar</h3>
-            <p><strong>Función:</strong> <span id="funcionNombre">—</span></p>
-            <p><strong>Fecha:</strong> <span id="funcionFecha">—</span></p>
-            <p><strong>Hora:</strong> <span id="funcionHora">—</span></p>
+        <!-- MARCO CON SALA Y ASIENTOS (OCULTO INICIALMENTE) -->
+        <style>
+            .marco-sala {
+                display: none;
+            }
+            
+            .marco-sala.activo {
+                display: block;
+            }
 
-            <div class="seccion-info">
-              <h4>Estado de las sillas:</h4>
-              <ul>
-                <li>Disponible</li>
-                <li>Ocupada</li>
-                <li>Escogida</li>
-              </ul>
-            </div>
+            .boton-pago.activo {
+                background: #3b7ba6 !important;
+                color: white !important;
+                border-color: #3b7ba6 !important;
+            }
 
-            <div class="seccion-info">
-              <h4>Tipo de sillas:</h4>
-              <div>Standard $15.000</div>
-              <div>Discapacitados $10.000</div>
-            </div>
+            .asiento {
+                transition: all 0.2s;
+            }
 
-            <div class="info-seleccionadas">
-              Seleccionadas: <span id="contadorSeleccionadas">0</span>
-            </div>
+            .asiento.disponible {
+                background-color: #fff;
+                border-color: #999;
+            }
 
-            <div class="seccion-info">
-              <h4>Método de Pago</h4>
-              <div style="display: flex; gap: 8px; margin-top: 8px">
-                <button class="boton-pago" data-metodo="efectivo">
-                  Efectivo
-                </button>
-                <button
-                  class="boton-otro-pago"
-                  data-metodo="otro"
-                  type="button"
-                  aria-label="Otro método"
-                  onclick="window.location.href='../otro-metodo.html';"
-                >
-                  Otro
-                </button>
-              </div>
-            </div>
+            .asiento.disponible:hover {
+                background-color: #e3f2fd;
+                border-color: #3b7ba6;
+            }
 
-            <div style="margin-top: 18px">
-              <button id="botonConfirmar" class="btn-agregar">Confirmar</button>
-            </div>
-          </div>
-        </aside>
-      </div>
+            .asiento.ocupado {
+                background-color: #ddd;
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
+
+            .asiento.seleccionado {
+                background-color: #4caf50;
+                color: white;
+                border-color: #388e3c;
+            }
+
+            .asiento.discapacitado {
+                border-style: dashed;
+            }
+        </style>
     </main>
+
+    <!-- SCRIPTS -->
     <script src="../../scripts/mod-cliente/cliente-mod.js"></script>
-    <script src="../../scripts/reservar-asientos.js"></script>
-  </body>
+    <script src="../../scripts/mod-cliente/reservar-asientos.js"></script>
+</body>
 </html>

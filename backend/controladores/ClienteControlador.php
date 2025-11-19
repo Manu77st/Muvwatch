@@ -273,10 +273,15 @@ class ClienteControlador {
         $cliente = new Cliente($this->conexion);
         $cliente->id_cliente = $id_cliente;
 
-        $stmt = $cliente->obtenerReservasActivas();
+        // Obtener todas las reservas del usuario (incluye reservas creadas manualmente
+        // o con referencias faltantes en tablas relacionadas)
+        $stmt = $cliente->obtenerReservasPorUsuario();
         
         $reservas = [];
         while($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $precio = isset($fila['precio']) ? floatval($fila['precio']) : 0;
+            $cantidad = isset($fila['cantidad_asientos']) ? intval($fila['cantidad_asientos']) : 0;
+
             $reservas[] = [
                 'id_reserva' => $fila['id_reserva'],
                 'fecha_reserva' => $fila['fecha_reserva'],
@@ -289,10 +294,10 @@ class ClienteControlador {
                 'genero' => $fila['genero'],
                 'sala' => $fila['sala'],
                 'fecha_funcion' => $fila['fecha_funcion'],
-                'precio' => $fila['precio'],
+                'precio' => $precio,
                 'asientos' => $fila['asientos'],
-                'cantidad_asientos' => $fila['cantidad_asientos'],
-                'total' => $fila['precio'] * $fila['cantidad_asientos']
+                'cantidad_asientos' => $cantidad,
+                'total' => $precio * $cantidad
             ];
         }
 

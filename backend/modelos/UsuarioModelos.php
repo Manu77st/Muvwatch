@@ -227,6 +227,33 @@ class Cliente {
         return $stmt;
     }
 
+    // Obtener todas las reservas del cliente (sin filtrar por estado/expiración)
+    // Usa LEFT JOIN para no perder reservas si faltan filas relacionadas
+    public function obtenerReservasPorUsuario() {
+        $consulta = "SELECT r.id_reserva, r.fecha_reserva, r.hora, 
+                           r.fecha_expiracion, r.estado,
+                           p.nombre as pelicula, p.clasificacion, p.duracion, p.genero,
+                           s.nombre as sala, f.fecha_funcion, f.precio,
+                           GROUP_CONCAT(CONCAT(si.fila, si.columna) 
+                                ORDER BY si.fila, si.columna SEPARATOR ', ') as asientos,
+                           COUNT(si.id_silla) as cantidad_asientos
+                    FROM tbl_reservas r
+                    LEFT JOIN tbl_funcion f ON r.id_funcion = f.id_funcion
+                    LEFT JOIN tbl_pelicula p ON f.id_pelicula = p.id_pelicula
+                    LEFT JOIN tbl_salas s ON f.id_sala = s.id_sala
+                    LEFT JOIN detalles_reserva dr ON r.id_reserva = dr.id_reserva
+                    LEFT JOIN tbl_sillas si ON dr.id_silla = si.id_silla
+                    WHERE r.id_cliente = :id_cliente
+                    GROUP BY r.id_reserva
+                    ORDER BY r.fecha_reserva DESC, r.hora DESC";
+
+        $stmt = $this->conexion->prepare($consulta);
+        $stmt->bindParam(":id_cliente", $this->id_cliente);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
     public function obtenerHistorialCompras() {
         $consulta = "SELECT v.id_venta, v.fecha_venta, v.total, v.numero_ticket,
                            p.nombre as pelicula, s.nombre as sala,

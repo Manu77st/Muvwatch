@@ -100,13 +100,13 @@ function cargarContenidoPrincipal() {
     // Detectar página actual
     const paginaActual = window.location.pathname;
 
-    if(paginaActual.includes('lobby-cliente')) {
-        cargarCartelera();
-    } else if(paginaActual.includes('promociones')) {
-        cargarPromociones();
-    } else if(paginaActual.includes('mis-reservas')) {
-        cargarMisReservas();
-    }
+  if (paginaActual.includes("lobby-cliente")) {
+    cargarCartelera();
+  } else if (paginaActual.includes("promociones")) {
+    cargarPromociones();
+  } else if (paginaActual.includes("mis-reservas") || paginaActual.includes("carrito")) {
+    cargarReservas();
+  }
 }
 
 // ========================================
@@ -146,21 +146,129 @@ async function cargarPromociones() {
 }
 
 // ========================================
-// CARGAR MIS RESERVAS
+// CARGAR RESERVAS (CARRITO) - ACTUALIZADO
 // ========================================
-async function cargarMisReservas() {
-    try {
-        const respuesta = await fetch(`${API_URL}?accion=mis_reservas`);
-        const datos = await respuesta.json();
+async function cargarReservas() {
+  const contenedor = document.querySelector('.reservas-container');
+  const noReservas = contenedor ? contenedor.querySelector('.no-reservas') : null;
 
-        if(datos.exito && datos.datos) {
-            renderizarReservas(datos.datos);
-        } else {
-            mostrarMensajeVacio('No tienes reservas');
-        }
-    } catch(error) {
-        console.error('Error cargando reservas:', error);
+  try {
+    const res = await fetch(`${API_BASE}?accion=mis_reservas`, { credentials: 'include' });
+    const j = await res.json();
+    if (!j.exito) {
+      console.warn('No se pudo obtener reservas:', j.mensaje);
+      if (noReservas) noReservas.style.display = 'block';
+      return;
     }
+
+    const datos = Array.isArray(j.datos) ? j.datos : [];
+    const contador = document.querySelector('.reservas-count .count-number');
+    if (contador) contador.textContent = datos.length;
+
+    if (!contenedor) return;
+
+    if (datos.length === 0) {
+      if (noReservas) noReservas.style.display = 'block';
+      return;
+    }
+
+    if (noReservas) noReservas.style.display = 'none';
+    contenedor.innerHTML = '';
+
+    datos.forEach(r => {
+      const card = document.createElement('div');
+      card.className = 'reserva-card';
+
+      const status = document.createElement('div');
+      status.className = 'reserva-status ' + (r.estado === 'activa' ? 'activa' : r.estado);
+      status.innerHTML = `<span class="material-symbols-outlined">${r.estado === 'activa' ? 'check_circle' : 'calendar_today'}</span> ${r.estado === 'activa' ? 'Confirmada' : r.estado}`;
+
+      const content = document.createElement('div');
+      content.className = 'reserva-content';
+
+      const left = document.createElement('div');
+      left.className = 'reserva-left';
+      const img = document.createElement('img');
+      let posterPath = '';
+      if (r.poster) {
+        posterPath = r.poster.startsWith('http') ? r.poster : `../../images/Peliculas_Cartelera/${r.poster}`;
+      } else if (r.pelicula) {
+        const fn = filenameFromTitle(r.pelicula);
+        posterPath = `../../images/Peliculas_Cartelera/${fn}.jpg`;
+      } else {
+        posterPath = '../../images/Logo.svg';
+      }
+      img.src = posterPath;
+      img.alt = r.pelicula || 'Póster';
+      img.onerror = function() { this.src = '../../images/Logo.svg'; };
+      left.appendChild(img);
+
+      const info = document.createElement('div');
+      info.className = 'reserva-info';
+
+      const title = document.createElement('h3');
+      title.textContent = r.pelicula || 'Sin título';
+
+      const filaFecha = document.createElement('div');
+      filaFecha.className = 'info-row';
+      filaFecha.innerHTML = `<span class="material-symbols-outlined">calendar_today</span> <span>Fecha: ${ (r.fecha_funcion || r.fecha_reserva) || '' }</span>`;
+
+      const filaHora = document.createElement('div');
+      filaHora.className = 'info-row';
+      filaHora.innerHTML = `<span class="material-symbols-outlined">schedule</span> <span>Hora: ${ r.hora || '' }</span>`;
+
+      const filaAsientos = document.createElement('div');
+      filaAsientos.className = 'info-row';
+      filaAsientos.innerHTML = `<span class="material-symbols-outlined">event_seat</span> <span>Asientos: ${r.asientos || ''}</span>`;
+
+      const filaSala = document.createElement('div');
+      filaSala.className = 'info-row';
+      filaSala.innerHTML = `<span class="material-symbols-outlined">location_on</span> <span>Sala: ${r.sala || ''}</span>`;
+
+      const filaPrecio = document.createElement('div');
+      filaPrecio.className = 'info-row precio';
+      const total = r.total || (r.precio && r.cantidad_asientos ? (Number(r.precio) * Number(r.cantidad_asientos)) : 0);
+      filaPrecio.innerHTML = `<span class="material-symbols-outlined">payments</span> <span>Total: <strong>$${Number(total).toLocaleString('es-CO')}</strong></span>`;
+
+      info.appendChild(title);
+      info.appendChild(filaFecha);
+      info.appendChild(filaHora);
+      info.appendChild(filaAsientos);
+      info.appendChild(filaSala);
+      info.appendChild(filaPrecio);
+
+      const actions = document.createElement('div');
+      actions.className = 'reserva-actions';
+
+      const btnDownload = document.createElement('button');
+      btnDownload.className = 'btn-descargar';
+      btnDownload.innerHTML = `<span class="material-symbols-outlined">download</span> Descargar ticket`;
+      btnDownload.addEventListener('click', () => {
+        alert('Descarga de ticket no implementada en esta versión.');
+      });
+
+      const btnCancel = document.createElement('button');
+      btnCancel.className = 'btn-cancelar';
+      btnCancel.innerHTML = `<span class="material-symbols-outlined">cancel</span> Cancelar reserva`;
+      btnCancel.addEventListener('click', () => cancelarReserva(r.id_reserva));
+
+      actions.appendChild(btnDownload);
+      actions.appendChild(btnCancel);
+
+      content.appendChild(left);
+      content.appendChild(info);
+      content.appendChild(actions);
+
+      card.appendChild(status);
+      card.appendChild(content);
+
+      contenedor.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error('Error cargando reservas:', err);
+    if (noReservas) noReservas.style.display = 'block';
+  }
 }
 
 // ========================================
@@ -254,101 +362,33 @@ function renderizarPromociones(peliculas) {
 }
 
 // ========================================
-// RENDERIZAR MIS RESERVAS
-// ========================================
-function renderizarReservas(reservas) {
-    const contenedor = document.querySelector('.reservas-container');
-    if(!contenedor) return;
-
-    if(reservas.length === 0) {
-        mostrarMensajeVacio('No tienes reservas');
-        return;
-    }
-
-    contenedor.innerHTML = reservas.map(reserva => {
-        const fechaFormato = formatearFecha(reserva.fecha_funcion);
-        const horaFormato = formatearHora(reserva.fecha_funcion);
-        const imagenNombre = normalizarNombreImagen(reserva.pelicula);
-
-        return `
-            <div class="reserva-card">
-                <div class="reserva-status ${reserva.estado}">
-                    <span class="material-symbols-outlined">
-                        ${reserva.estado === 'activa' ? 'check_circle' : 'info'}
-                    </span>
-                    ${reserva.estado === 'activa' ? 'Confirmada' : 'Expirada'}
-                </div>
-                <div class="reserva-content">
-                    <div class="reserva-left">
-                        <img 
-                            src="../../images/Peliculas_Cartelera/${imagenNombre}.jpg" 
-                            alt="${reserva.pelicula}"
-                            onerror="this.src='../../images/Logo.svg'"
-                        />
-                    </div>
-                    <div class="reserva-info">
-                        <h3>${reserva.pelicula}</h3>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">calendar_today</span>
-                            <span>Fecha: ${fechaFormato}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">schedule</span>
-                            <span>Hora: ${horaFormato}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">event_seat</span>
-                            <span>Asientos: ${reserva.asientos}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">location_on</span>
-                            <span>Sala: ${reserva.sala}</span>
-                        </div>
-                        <div class="info-row precio">
-                            <span class="material-symbols-outlined">payments</span>
-                            <span>Total: <strong>$${reserva.total.toLocaleString('es-CO')}</strong></span>
-                        </div>
-                    </div>
-                    <div class="reserva-actions">
-                        <button class="btn-descargar" onclick="descargarTicket(${reserva.id_reserva})">
-                            <span class="material-symbols-outlined">download</span>
-                            Descargar ticket
-                        </button>
-                        ${reserva.estado === 'activa' ? `
-                            <button class="btn-cancelar" onclick="cancelarReserva(${reserva.id_reserva})">
-                                <span class="material-symbols-outlined">cancel</span>
-                                Cancelar
-                            </button>
-                        ` : ''}
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-// ========================================
 // MODAL DE DETALLES DE PELÍCULA
 // ========================================
-function abrirDetallesPelicula(id) {
-    const pelicula = peliculasCache[id];
-    if(!pelicula) return;
+function abrirDetallesPelicula(idPelicula) {
+  const pelicula = peliculasCache[idPelicula];
+  if (!pelicula) return;
 
-    const modal = document.getElementById('movieModal');
-    if(!modal) return;
+  const modal = document.getElementById("movieModal");
+  if (!modal) return;
 
-    const imagenNombre = normalizarNombreImagen(pelicula.nombre);
+  // Llenar datos del modal
+  document.getElementById("modalMovieTitle").textContent = pelicula.nombre;
+  document.getElementById("modalSynopsis").textContent = pelicula.sipnosis || "Sin sinopsis disponible";
+  document.getElementById("modalGenero").textContent = pelicula.genero || "N/A";
+  document.getElementById("modalClassification").textContent = pelicula.clasificacion || "N/A";
+  document.getElementById("modalCast").textContent = pelicula.reparto || "N/A";
+  document.getElementById("modalDirector").textContent = pelicula.director || "N/A";
+  document.getElementById("modalDuracion").textContent = pelicula.duracion || "N/A";
+  document.getElementById("modalEstreno").textContent = pelicula.fecha_estreno || "N/A";
 
-    document.getElementById('modalMovieImage').src = 
-        `../../images/Peliculas_Cartelera/${imagenNombre}.jpg`;
-    document.getElementById('modalMovieTitle').textContent = pelicula.nombre;
-    document.getElementById('modalSynopsis').textContent = pelicula.sipnosis;
-    document.getElementById('modalOriginalName').textContent = pelicula.nombre;
-    document.getElementById('modalClassification').textContent = pelicula.clasificacion;
-    document.getElementById('modalCast').textContent = pelicula.reparto;
-    document.getElementById('modalDirector').textContent = pelicula.director;
+  // Configurar imagen
+  const imagenNombre = normalizarNombreImagen(pelicula.nombre);
+  const imgElement = document.getElementById("modalMovieImage");
+  imgElement.src = `../../images/Peliculas_Cartelera/${imagenNombre}.jpg`;
+  imgElement.alt = pelicula.nombre;
+  imgElement.onerror = function() { this.src = '../../images/Logo.svg'; };
 
-    modal.style.display = 'block';
+  modal.style.display = "block";
 }
 
 function cerrarDetallesPelicula() {
@@ -367,7 +407,7 @@ window.onclick = function(event) {
 };
 
 // ========================================
-// RESERVAS
+// RESERVAS - CANCELAR RESERVA
 // ========================================
 async function cancelarReserva(id_reserva) {
     if(!confirm('¿Deseas cancelar esta reserva?')) return;
@@ -381,15 +421,16 @@ async function cancelarReserva(id_reserva) {
 
         const datos = await respuesta.json();
 
-        if(datos.exito) {
-            alert('Reserva cancelada exitosamente');
-            cargarMisReservas();
-        } else {
-            alert('Error: ' + datos.mensaje);
-        }
-    } catch(error) {
-        console.error('Error al cancelar reserva:', error);
+    if (datos.exito) {
+      alert("Reserva cancelada exitosamente");
+      cargarReservas(); // Recargar la lista
+    } else {
+      alert("Error: " + datos.mensaje);
     }
+  } catch (error) {
+    console.error("Error al cancelar reserva:", error);
+    alert("Error al cancelar la reserva");
+  }
 }
 
 function descargarTicket(id_reserva) {
@@ -700,171 +741,29 @@ const closeMovieModal = cerrarDetallesPelicula;
 // DEBUG
 // ========================================
 function mostrarEstado() {
-    console.log('Estado Global:', {
-        url_api: API_URL,
-        peliculas_cache: Object.keys(peliculasCache).length,
-        session_storage: sessionStorage
-    });
+  console.log("Estado Global:", {
+    url_api: API_URL,
+    peliculas_cache: Object.keys(peliculasCache).length,
+    session_storage: sessionStorage,
+  });
 }
 
-    // Inicializar carrito si estamos en la página de "Mis Reservas"
-    if (document.querySelector('.reservas-container')) {
-      cargarReservas();
-    };
-  
-  // Calcular total
-  function calcularTotal() {
-    let total = 0;
-    asientosSeleccionados.forEach(id => {
-      if (asientosDiscapacidad.includes(id)) {
-        total += 10000;
-      } else {
-        total += 15000;
-      }
-    });
-    return total;
-  }
-
-  // ===== CARRITO / MIS RESERVAS =====
-  async function cargarReservas() {
-    const contenedor = document.querySelector('.reservas-container');
-    const noReservas = contenedor ? contenedor.querySelector('.no-reservas') : null;
-
-    try {
-      const res = await fetch(`${API_BASE}?accion=mis_reservas`, { credentials: 'include' });
-      const j = await res.json();
-      if (!j.exito) {
-        console.warn('No se pudo obtener reservas:', j.mensaje);
-        if (noReservas) noReservas.style.display = 'block';
-        return;
-      }
-
-      const datos = Array.isArray(j.datos) ? j.datos : [];
-      const contador = document.querySelector('.reservas-count .count-number');
-      if (contador) contador.textContent = datos.length;
-
-      if (!contenedor) return;
-
-      if (datos.length === 0) {
-        if (noReservas) noReservas.style.display = 'block';
-        return;
-      }
-
-      if (noReservas) noReservas.style.display = 'none';
-      contenedor.innerHTML = '';
-
-      datos.forEach(r => {
-        const card = document.createElement('div');
-        card.className = 'reserva-card';
-
-        const status = document.createElement('div');
-        status.className = 'reserva-status ' + (r.estado === 'activa' ? 'activa' : r.estado);
-        status.innerHTML = `<span class="material-symbols-outlined">${r.estado === 'activa' ? 'check_circle' : 'calendar_today'}</span> ${r.estado === 'activa' ? 'Confirmada' : r.estado}`;
-
-        const content = document.createElement('div');
-        content.className = 'reserva-content';
-
-        const left = document.createElement('div');
-        left.className = 'reserva-left';
-        const img = document.createElement('img');
-        let posterPath = '';
-        if (r.poster) {
-          posterPath = r.poster.startsWith('http') ? r.poster : `../../images/Peliculas_Cartelera/${r.poster}`;
-        } else if (r.pelicula) {
-          const fn = filenameFromTitle(r.pelicula);
-          posterPath = `../../images/Peliculas_Cartelera/${fn}.jpg`;
-        } else {
-          posterPath = '../../images/Logo.svg';
-        }
-        img.src = posterPath;
-        img.alt = r.pelicula || 'Póster';
-        img.onerror = function() { this.src = '../../images/Logo.svg'; };
-        left.appendChild(img);
-
-        const info = document.createElement('div');
-        info.className = 'reserva-info';
-
-        const title = document.createElement('h3');
-        title.textContent = r.pelicula || 'Sin título';
-
-        const filaFecha = document.createElement('div');
-        filaFecha.className = 'info-row';
-        filaFecha.innerHTML = `<span class="material-symbols-outlined">calendar_today</span> <span>Fecha: ${ (r.fecha_funcion || r.fecha_reserva) || '' }</span>`;
-
-        const filaHora = document.createElement('div');
-        filaHora.className = 'info-row';
-        filaHora.innerHTML = `<span class="material-symbols-outlined">schedule</span> <span>Hora: ${ r.hora || '' }</span>`;
-
-        const filaAsientos = document.createElement('div');
-        filaAsientos.className = 'info-row';
-        filaAsientos.innerHTML = `<span class="material-symbols-outlined">event_seat</span> <span>Asientos: ${r.asientos || ''}</span>`;
-
-        const filaSala = document.createElement('div');
-        filaSala.className = 'info-row';
-        filaSala.innerHTML = `<span class="material-symbols-outlined">location_on</span> <span>Sala: ${r.sala || ''}</span>`;
-
-        const filaPrecio = document.createElement('div');
-        filaPrecio.className = 'info-row precio';
-        const total = r.total || (r.precio && r.cantidad_asientos ? (Number(r.precio) * Number(r.cantidad_asientos)) : 0);
-        filaPrecio.innerHTML = `<span class="material-symbols-outlined">payments</span> <span>Total: <strong>$${Number(total).toLocaleString('es-CO')}</strong></span>`;
-
-        info.appendChild(title);
-        info.appendChild(filaFecha);
-        info.appendChild(filaHora);
-        info.appendChild(filaAsientos);
-        info.appendChild(filaSala);
-        info.appendChild(filaPrecio);
-
-        const actions = document.createElement('div');
-        actions.className = 'reserva-actions';
-
-        const btnDownload = document.createElement('button');
-        btnDownload.className = 'btn-descargar';
-        btnDownload.innerHTML = `<span class="material-symbols-outlined">download</span> Descargar ticket`;
-        btnDownload.addEventListener('click', () => {
-          alert('Descarga de ticket no implementada en esta versión.');
-        });
-
-        const btnCancel = document.createElement('button');
-        btnCancel.className = 'btn-cancelar';
-        btnCancel.innerHTML = `<span class="material-symbols-outlined">cancel</span> Cancelar reserva`;
-        btnCancel.addEventListener('click', () => cancelarReserva(r.id_reserva));
-
-        actions.appendChild(btnDownload);
-        actions.appendChild(btnCancel);
-
-        content.appendChild(left);
-        content.appendChild(info);
-        content.appendChild(actions);
-
-        card.appendChild(status);
-        card.appendChild(content);
-
-        contenedor.appendChild(card);
-      });
-
-    } catch (err) {
-      console.error('Error cargando reservas:', err);
-      if (noReservas) noReservas.style.display = 'block';
+// Calcular total
+function calcularTotal() {
+  let total = 0;
+  asientosSeleccionados.forEach((id) => {
+    if (asientosDiscapacidad.includes(id)) {
+      total += 10000;
+    } else {
+      total += 15000;
     }
-  }
+  });
+  return total;
+}
 
-  async function cancelarReserva(id_reserva) {
-    if (!confirm('¿Seguro que quieres cancelar esta reserva?')) return;
-    try {
-      const res = await fetch(`${API_BASE}?accion=cancelar_reserva&id=${encodeURIComponent(id_reserva)}`, {
-        method: 'DELETE',
-        credentials: 'include'
-      });
-      const j = await res.json();
-      if (j.exito) {
-        alert(j.mensaje || 'Reserva cancelada');
-        cargarReservas();
-      } else {
-        alert(j.mensaje || 'No se pudo cancelar la reserva');
-      }
-    } catch (err) {
-      console.error('Error cancelando reserva:', err);
-      alert('Error al comunicarse con el servidor');
-    }
-  }
+// Exportar funciones globalmente para HTML
+window.cargarReservas = cargarReservas;
+window.cancelarReserva = cancelarReserva;
+window.irACarrito = irACarrito;
+window.abrirDetallesPelicula = abrirDetallesPelicula;
+window.cerrarDetallesPelicula = cerrarDetallesPelicula;

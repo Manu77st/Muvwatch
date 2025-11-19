@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mis Reservas - Muvwatch</title>
-    <link rel="stylesheet" href="/styles/styles-cliente.css" />
-    <link rel="stylesheet" href="/styles/styles-carrito.css" />
+    <link rel="stylesheet" href="../../styles/styles-cliente.css" />
+    <link rel="stylesheet" href="../../styles/styles-carrito.css" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
 
@@ -16,7 +16,7 @@
             <div class="container-navbar">
                 <div class="navbar-left">
                     <a href="lobby-cliente.html" class="logo-link">
-                        <img id="logo-nav" src="/images/Logo.svg" alt="Logo_muvwatch" />
+                        <img id="logo-nav" src="../../images/Logo.svg" alt="Logo_muvwatch" />
                     </a>
                 </div>
                 <div class="navbar-center">
@@ -69,147 +69,8 @@
             </div>
         </div>
 
-        <!-- Contenedor de reservas -->
+        <!-- Contenedor de reservas (se rellenará desde la API) -->
         <div class="reservas-container">
-            <!-- Reserva 1 -->
-            <div class="reserva-card">
-                <div class="reserva-status activa">
-                    <span class="material-symbols-outlined">check_circle</span>
-                    Confirmada
-                </div>
-                <div class="reserva-content">
-                    <div class="reserva-left">
-                        <img src="/images/Peliculas_Cartelera/Mision imposible.jpg" alt="Mission Impossible" />
-                    </div>
-                    <div class="reserva-info">
-                        <h3>Mission Impossible</h3>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">calendar_today</span>
-                            <span>Fecha: 20 de Octubre, 2025</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">schedule</span>
-                            <span>Hora: 7:30 PM</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">event_seat</span>
-                            <span>Asientos: F5, F6</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">location_on</span>
-                            <span>Sala: 3 - IMAX</span>
-                        </div>
-                        <div class="info-row precio">
-                            <span class="material-symbols-outlined">payments</span>
-                            <span>Total: <strong>$24.000</strong></span>
-                        </div>
-                    </div>
-                    <div class="reserva-actions">
-                        <button class="btn-descargar">
-                            <span class="material-symbols-outlined">download</span>
-                            Descargar ticket
-                        </button>
-                        <button class="btn-cancelar">
-                            <span class="material-symbols-outlined">cancel</span>
-                            Cancelar reserva
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reserva 2 -->
-            <div class="reserva-card">
-                <div class="reserva-status activa">
-                    <span class="material-symbols-outlined">check_circle</span>
-                    Confirmada
-                </div>
-                <div class="reserva-content">
-                    <div class="reserva-left">
-                        <img src="/images/Peliculas_Cartelera/Spider-man.jpg" alt="Spiderman" />
-                    </div>
-                    <div class="reserva-info">
-                        <h3>Spiderman</h3>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">calendar_today</span>
-                            <span>Fecha: 22 de Octubre, 2025</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">schedule</span>
-                            <span>Hora: 5:00 PM</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">event_seat</span>
-                            <span>Asientos: A3, A4, A5</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">location_on</span>
-                            <span>Sala: 1 - 3D</span>
-                        </div>
-                        <div class="info-row precio">
-                            <span class="material-symbols-outlined">payments</span>
-                            <span>Total: <strong>$36.000</strong></span>
-                        </div>
-                    </div>
-                    <div class="reserva-actions">
-                        <button class="btn-descargar">
-                            <span class="material-symbols-outlined">download</span>
-                            Descargar ticket
-                        </button>
-                        <button class="btn-cancelar">
-                            <span class="material-symbols-outlined">cancel</span>
-                            Cancelar reserva
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reserva 3 -->
-            <div class="reserva-card">
-                <div class="reserva-status activa">
-                    <span class="material-symbols-outlined">check_circle</span>
-                    Confirmada
-                </div>
-                <div class="reserva-content">
-                    <div class="reserva-left">
-                        <img src="/images/Peliculas_Cartelera/Intesamente_2.jpg" alt="Intensamente 2" />
-                    </div>
-                    <div class="reserva-info">
-                        <h3>Intensamente 2</h3>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">calendar_today</span>
-                            <span>Fecha: 25 de Octubre, 2025</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">schedule</span>
-                            <span>Hora: 3:30 PM</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">event_seat</span>
-                            <span>Asientos: D8, D9</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="material-symbols-outlined">location_on</span>
-                            <span>Sala: 2 - Estándar</span>
-                        </div>
-                        <div class="info-row precio">
-                            <span class="material-symbols-outlined">payments</span>
-                            <span>Total: <strong>$23.400</strong></span>
-                        </div>
-                    </div>
-                    <div class="reserva-actions">
-                        <button class="btn-descargar">
-                            <span class="material-symbols-outlined">download</span>
-                            Descargar ticket
-                        </button>
-                        <button class="btn-cancelar">
-                            <span class="material-symbols-outlined">cancel</span>
-                            Cancelar reserva
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mensaje cuando no hay reservas (oculto por defecto) -->
             <div class="no-reservas" style="display: none;">
                 <span class="material-symbols-outlined">shopping_cart</span>
                 <h3>No tienes reservas</h3>
@@ -217,6 +78,8 @@
                 <a href="lobby-cliente.html" class="btn-explorar">Explorar películas</a>
             </div>
         </div>
+    
+    <script src="../../scripts/mod-cliente/cliente-mod.js"></script>
     </main>
 
     <!-- Botón de chatbot -->

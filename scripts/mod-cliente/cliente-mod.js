@@ -79,6 +79,99 @@ function filtro() {
     }
   }
 
+  // Cargar promociones desde la API
+  async function loadPromociones() {
+    try {
+      const res = await fetch(`${API_BASE}?accion=promociones`, { method: 'GET', credentials: 'include' });
+      const json = await res.json();
+      if (json && json.exito && Array.isArray(json.datos)) {
+        renderPromociones(json.datos);
+      } else {
+        console.warn('No hay promociones o la respuesta no es válida', json);
+      }
+    } catch (err) {
+      console.error('Error cargando promociones:', err);
+    }
+  }
+
+  function renderPromociones(peliculas) {
+    const grid = document.querySelector('.movies-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    peliculas.forEach(pel => {
+      const id = pel.id_pelicula || pel.id || Math.random().toString(36).slice(2,9);
+      moviesCache[id] = pel;
+
+      const funciones = pel.funciones || [];
+      const funcion = funciones[0] || {};
+      const precio = funcion.precio || 0;
+      const descuento = funcion.descuento || 0;
+      const precioFinal = precio - descuento;
+      const porcentaje = funcion.porcentaje_descuento || Math.round((descuento / (precio || 1)) * 100);
+
+      const card = document.createElement('div');
+      card.className = 'movie-card promo-card';
+      card.dataset.peliculaId = id;
+      card.addEventListener('click', () => openMovieModal(id));
+
+      const badge = document.createElement('div');
+      badge.className = 'promo-badge';
+      badge.textContent = `Hoy en descuento del ${porcentaje}%`;
+
+      const img = document.createElement('img');
+      const filename = filenameFromTitle(pel.nombre || pel.title || 'poster');
+      img.src = `../../images/Peliculas_Cartelera/${filename}.jpg`;
+      img.alt = pel.nombre || 'Póster';
+      img.onerror = function() { this.src = '../../images/Logo.svg'; };
+
+      const h3 = document.createElement('h3');
+      h3.textContent = pel.nombre || pel.title || 'Sin título';
+
+      const precioSection = document.createElement('div');
+      precioSection.className = 'precio-section';
+      const antes = document.createElement('span');
+      antes.className = 'precio-antes';
+      antes.textContent = `$${Number(precio).toLocaleString('es-CO')}`;
+      const ahora = document.createElement('span');
+      ahora.className = 'precio-ahora';
+      ahora.textContent = `$${Number(precioFinal).toLocaleString('es-CO')}`;
+      precioSection.appendChild(antes);
+      precioSection.appendChild(ahora);
+
+      const actions = document.createElement('div');
+      actions.className = 'movie-actions';
+
+      const btnView = document.createElement('button');
+      btnView.className = 'btn-view';
+      btnView.innerHTML = `<span class="material-symbols-outlined">visibility</span>Ver detalles`;
+      btnView.addEventListener('click', (e) => { e.stopPropagation(); openMovieModal(id); });
+
+      const btnReservar = document.createElement('button');
+      btnReservar.className = 'btn-reservar';
+      btnReservar.textContent = 'Reservar';
+      btnReservar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (funcion.id_funcion) {
+          window.location.href = `reservar-pelicula.html?id_funcion=${funcion.id_funcion}`;
+        } else {
+          window.location.href = `reservar-pelicula.html?id_pelicula=${id}`;
+        }
+      });
+
+      actions.appendChild(btnView);
+      actions.appendChild(btnReservar);
+
+      card.appendChild(badge);
+      card.appendChild(img);
+      card.appendChild(h3);
+      card.appendChild(precioSection);
+      card.appendChild(actions);
+
+      grid.appendChild(card);
+    });
+  }
+
   function filenameFromTitle(title) {
     if (!title) return '';
     // Crear nombre de archivo aproximado: quitar caracteres especiales básicos
@@ -333,8 +426,12 @@ function populateModal(pel) {
   
   // Manejo de botones de pago
   document.addEventListener('DOMContentLoaded', function() {
-    // Cargar cartelera dinámica al iniciar
-    loadCartelera();
+    // Cargar cartelera o promociones según la página
+    if (document.querySelector('.promociones-main')) {
+      loadPromociones();
+    } else {
+      loadCartelera();
+    }
     document.querySelectorAll('.boton-pago').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.boton-pago').forEach(b => b.classList.remove('active'));
@@ -363,7 +460,9 @@ function populateModal(pel) {
     }
   
     // Inicializar asientos si estamos en la página de reserva
-    generarAsientos();
+    if (document.getElementById('bloqueAsientosIzquierda')) {
+      generarAsientos();
+    }
   });
   
   // Calcular total

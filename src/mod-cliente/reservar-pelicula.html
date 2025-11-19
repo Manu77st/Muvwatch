@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Reservar Película</title>
-    <link rel="stylesheet" href="/styles/styles-cliente.css" />
+    <link rel="stylesheet" href="../../styles/styles-cliente.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
       rel="stylesheet"
@@ -17,7 +17,7 @@
         <div class="container-navbar">
           <div class="navbar-left">
             <a href="lobby-cliente.html" class="logo-link">
-              <img id="logo-nav" src="/images/Logo.svg" alt="Logo_muvwatch" />
+              <img id="logo-nav" src="../../images/Logo.svg" alt="Logo_muvwatch" />
             </a>
           </div>
           <div class="navbar-center">
@@ -94,9 +94,9 @@
         <aside class="panel-reserva">
           <div class="caja-reserva">
             <h3>Reservar</h3>
-            <p><strong>Función:</strong> Mission Impossible</p>
-            <p><strong>Fecha:</strong> 30/09/25</p>
-            <p><strong>Hora:</strong> 7:00 p.m.</p>
+            <p><strong>Función:</strong> <span id="funcionNombre">—</span></p>
+            <p><strong>Fecha:</strong> <span id="funcionFecha">—</span></p>
+            <p><strong>Hora:</strong> <span id="funcionHora">—</span></p>
 
             <div class="seccion-info">
               <h4>Estado de las sillas:</h4>
@@ -142,6 +142,7 @@
         </aside>
       </div>
     </main>
-    <script src="/scripts/mod-cliente/cliente-mod.js"></script>
+    <script src="../../scripts/mod-cliente/cliente-mod.js"></script>
+    <script src="../../scripts/reservar-asientos.js"></script>
   </body>
 </html>

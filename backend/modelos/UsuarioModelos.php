@@ -31,7 +31,7 @@ class Usuario {
                     SET nombres = :nombres, 
                         apellidos = :apellidos, 
                         correo = :correo,
-                        contraseña = :contraseña, 
+                        contraseña = :contrasena, 
                         telefono = :telefono,
                         tipo_documento = :tipo_documento, 
                         numero_documento = :numero_documento,
@@ -58,7 +58,7 @@ class Usuario {
         $stmt->bindParam(":nombres", $this->nombres);
         $stmt->bindParam(":apellidos", $this->apellidos);
         $stmt->bindParam(":correo", $this->correo);
-        $stmt->bindParam(":contraseña", $contraseña_hash);
+        $stmt->bindParam(":contrasena", $contraseña_hash);
         $stmt->bindParam(":telefono", $this->telefono);
         $stmt->bindParam(":tipo_documento", $this->tipo_documento);
         $stmt->bindParam(":numero_documento", $this->numero_documento);

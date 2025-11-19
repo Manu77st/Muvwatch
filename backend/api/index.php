@@ -123,7 +123,9 @@ try {
                 Respuesta::error('Método no permitido', 405);
             }
             $controlador = new ClienteControlador();
-            $resultado = $controlador->obtenerAsientosFuncion($_GET['id'] ?? '');
+            // Llamar al método que devuelve los asientos disponibles
+            // El controlador define obtenerAsientosDisponibles
+            $resultado = $controlador->obtenerAsientosDisponibles($_GET['id'] ?? '');
             Respuesta::json($resultado, $resultado['exito'] ? 200 : 404);
             break;
         // ========== RESERVAS Y COMPRAS ==========

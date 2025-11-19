@@ -61,74 +61,133 @@ function filtro() {
     }
   }
   
-  // Datos de películas
-  function getMovieData(movieId) {
-    const movies = {
-      'mission-impossible': {
-        image: '../images/Peliculas_Cartelera/Mision imposible.jpg',
-        title: 'Mission Impossible',
-        originalName: 'Mission: Impossible',
-        classification: 'PG-13',
-        cast: 'Tom Cruise, Jon Voight, Emmanuelle Béart, Henry Czerny, Jean Reno, Ving Rhames',
-        director: 'Brian De Palma',
-        synopsis: 'Ethan Hunt es un agente de la Fuerza de Tareas de Imposibles (IMF) que se ve obligado a aceptar una misión para limpiar su nombre después de ser acusado de traición. Debe recuperar una lista secreta de agentes encubiertos que ha sido robada por un traidor dentro de la IMF.'
-      },
-      'spiderman': {
-        image: '../images/Peliculas_Cartelera/Spider-man.jpg',
-        title: 'Spiderman',
-        originalName: 'Spider-Man: Across the Spider-Verse',
-        classification: 'PG-13',
-        cast: 'Shameik Moore, Hailee Steinfeld, Oscar Isaac, Jake Johnson',
-        director: 'Joaquim Dos Santos, Kemp Powers, Justin K. Thompson',
-        synopsis: 'Miles Morales regresa para una nueva aventura épica que transportará al amigable vecino de Brooklyn a través del Multiverso para unir fuerzas con Gwen Stacy y un nuevo equipo de Spider-People.'
-      },
-      'inside-out-2': {
-        image: '../images/Peliculas_Cartelera/Intesamente_2.jpg',
-        title: 'Inside Out 2',
-        originalName: 'Inside Out 2',
-        classification: 'PG',
-        cast: 'Amy Poehler, Phyllis Smith, Lewis Black, Tony Hale',
-        director: 'Kelsey Mann',
-        synopsis: 'Riley, ahora una adolescente, debe navegar por una nueva emoción: Ansiedad. Joy, Tristeza, Ira, Miedo y Asco deben ayudar a Riley a adaptarse a los cambios de la adolescencia.'
-      },
-      'beetlejuice': {
-        image: '../images/Peliculas_Cartelera/Bettlejuice.jpg',
-        title: 'Beetlejuice',
-        originalName: 'Beetlejuice 2',
-        classification: 'PG-13',
-        cast: 'Michael Keaton, Winona Ryder, Catherine O\'Hara, Jenna Ortega',
-        director: 'Tim Burton',
-        synopsis: 'La secuela de la película clásica de 1988 sigue a Lydia Deetz y su familia cuando regresan a Winter River, donde se encuentran con Beetlejuice una vez más.'
-      },
-      'paddington': {
-        image: '../images/Peliculas_Cartelera/Paddington.jpg',
-        title: 'Paddington',
-        originalName: 'PADDINGTON AVENTURA EN LA SELVA',
-        classification: 'PG',
-        cast: 'Ben Whishaw, Hugh Grant, Madeleine Harris, Samuel Joslin',
-        director: 'Paul King',
-        synopsis: 'Paddington se embarca en una aventura épica en la selva peruana para encontrar su verdadero hogar, mientras el Sr. Brown y su familia lo siguen en una misión de rescate.'
+  // --- Cartelera dinámica desde backend ---
+  const API_BASE = `${window.location.origin}/Muvwatch/backend/api/index.php`;
+  let moviesCache = {};
+
+  async function loadCartelera() {
+    try {
+      const res = await fetch(`${API_BASE}?accion=cartelera`, { method: 'GET', credentials: 'include' });
+      const json = await res.json();
+      if (json && json.exito && Array.isArray(json.datos)) {
+        renderCartelera(json.datos);
+      } else {
+        console.warn('No hay datos de cartelera o la respuesta no es válida', json);
       }
-    };
-    return movies[movieId] || movies['mission-impossible'];
+    } catch (err) {
+      console.error('Error cargando cartelera:', err);
+    }
+  }
+
+  function filenameFromTitle(title) {
+    if (!title) return '';
+    // Crear nombre de archivo aproximado: quitar caracteres especiales básicos
+    return title.replace(/[:\/\\\?\%\*\|\"<>]/g, '').trim();
+  }
+
+  function renderCartelera(peliculas) {
+    const grid = document.querySelector('.movies-grid');
+    if (!grid) return;
+    grid.innerHTML = ''; // limpiar tarjetas estáticas
+
+    peliculas.forEach(pel => {
+      const id = pel.id_pelicula || pel.id || Math.random().toString(36).slice(2,9);
+      moviesCache[id] = pel;
+
+      const card = document.createElement('div');
+      card.className = 'movie-card';
+      card.dataset.peliculaId = id;
+      card.addEventListener('click', () => openMovieModal(id));
+
+      const img = document.createElement('img');
+      // Intentar usar una imagen por nombre (fallback si no existe)
+      const filename = filenameFromTitle(pel.nombre || pel.nombre_original || pel.title || 'poster');
+      img.src = `../../images/Peliculas_Cartelera/${filename}.jpg`;
+      img.alt = pel.nombre || 'Póster';
+      img.onerror = function() { this.src = '../../images/Logo.svg'; };
+
+      const h3 = document.createElement('h3');
+      h3.className = 'data-titulo';
+      h3.textContent = pel.nombre || pel.title || 'Sin título';
+
+      const actions = document.createElement('div');
+      actions.className = 'movie-actions';
+
+      const btnView = document.createElement('button');
+      btnView.className = 'btn-view';
+      btnView.innerHTML = `<span class="material-symbols-outlined">visibility</span>Ver detalles`;
+      btnView.addEventListener('click', (e) => { e.stopPropagation(); openMovieModal(id); });
+
+      const btnReservar = document.createElement('button');
+      btnReservar.className = 'btn-reservar';
+      btnReservar.textContent = 'Reservar';
+      btnReservar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Si hay funciones asociadas, redirigir con id_funcion de la primera
+        const funciones = pel.funciones || [];
+        if (funciones.length > 0) {
+          const id_funcion = funciones[0].id_funcion;
+          window.location.href = `reservar-pelicula.html?id_funcion=${id_funcion}`;
+        } else {
+          // Redirigir por id_pelicula
+          window.location.href = `reservar-pelicula.html?id_pelicula=${id}`;
+        }
+      });
+
+      actions.appendChild(btnView);
+      actions.appendChild(btnReservar);
+
+      card.appendChild(img);
+      card.appendChild(h3);
+      card.appendChild(actions);
+
+      grid.appendChild(card);
+    });
   }
   
   // Modal de película
   function openMovieModal(movieId) {
-    const modal = document.getElementById("movieModal");
-    const movieData = getMovieData(movieId);
-  
-    document.getElementById("modalMovieImage").src = movieData.image;
-    document.getElementById("modalMovieTitle").textContent = movieData.title;
-    document.getElementById("modalOriginalName").textContent = movieData.originalName;
-    document.getElementById("modalClassification").textContent = movieData.classification;
-    document.getElementById("modalCast").textContent = movieData.cast;
-    document.getElementById("modalDirector").textContent = movieData.director;
-    document.getElementById("modalSynopsis").textContent = movieData.synopsis;
-  
-    modal.style.display = "block";
+    const modal = document.getElementById('movieModal');
+    const pel = moviesCache[movieId];
+    if (!pel) {
+      // Intentar cargar desde API por id
+      fetch(`${API_BASE}?accion=pelicula&id=${movieId}`)
+        .then(r => r.json())
+        .then(j => {
+          if (j.exito && j.datos) {
+            moviesCache[movieId] = j.datos;
+            populateModal(j.datos);
+            modal.style.display = 'block';
+          }
+        }).catch(err => console.error(err));
+      return;
+    }
+
+    populateModal(pel);
+    modal.style.display = 'block';
   }
   
+function populateModal(pel) {
+  const imageEl = document.getElementById('modalMovieImage');
+  const titleEl = document.getElementById('modalMovieTitle');
+  const originalEl = document.getElementById('modalOriginalName');
+  const classEl = document.getElementById('modalClassification');
+  const castEl = document.getElementById('modalCast');
+  const dirEl = document.getElementById('modalDirector');
+  const synEl = document.getElementById('modalSynopsis');
+
+  const filename = filenameFromTitle(pel.nombre || pel.title || 'poster');
+  if (imageEl) {
+    imageEl.src = `../../images/Peliculas_Cartelera/${filename}.jpg`;
+    imageEl.onerror = function() { this.src = '../../images/Logo.svg'; };
+  }
+  if (titleEl) titleEl.textContent = pel.nombre || pel.title || '';
+  if (originalEl) originalEl.textContent = pel.nombre || '';
+  if (classEl) classEl.textContent = pel.clasificacion || '';
+  if (castEl) castEl.textContent = pel.reparto || '';
+  if (dirEl) dirEl.textContent = pel.director || '';
+  if (synEl) synEl.textContent = pel.sipnosis || '';
+}
   function closeMovieModal() {
     document.getElementById("movieModal").style.display = "none";
   }
@@ -274,6 +333,8 @@ function filtro() {
   
   // Manejo de botones de pago
   document.addEventListener('DOMContentLoaded', function() {
+    // Cargar cartelera dinámica al iniciar
+    loadCartelera();
     document.querySelectorAll('.boton-pago').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.boton-pago').forEach(b => b.classList.remove('active'));

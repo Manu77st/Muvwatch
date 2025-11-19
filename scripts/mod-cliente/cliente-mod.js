@@ -4,6 +4,13 @@
  */
 
 const API_URL = "../../backend/api/index.php";
+// Compatibilidad: algunos scripts anteriores usan `API_BASE`
+const API_BASE = API_URL;
+
+// Compatibilidad con otra versión del archivo (alias a normalizarNombreImagen)
+function filenameFromTitle(title) {
+    return normalizarNombreImagen(title);
+}
 
 // Cache de películas para modal
 let peliculasCache = {};

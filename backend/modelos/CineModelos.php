@@ -90,7 +90,7 @@ class Pelicula {
 }
 
 // ============================================
-// MODELO: Funcion (CORREGIDO)
+// MODELO: Funcion
 // ============================================
 class Funcion {
     private $conexion;
@@ -109,12 +109,11 @@ class Funcion {
 
     public function obtenerPorId() {
         $consulta = "SELECT f.id_funcion, f.id_pelicula, f.id_sala, f.fecha_funcion, f.precio, f.descuento, f.activa,
-                            p.nombre as pelicula, s.nombre as sala
-                     FROM " . $this->tabla . " f
+                            p.nombre as pelicula, s.nombre as sala, s.capacidad
+                     FROM tbl_funcion f
                      INNER JOIN tbl_pelicula p ON f.id_pelicula = p.id_pelicula
                      INNER JOIN tbl_salas s ON f.id_sala = s.id_sala
-                     WHERE f.id_funcion = :id_funcion 
-                     AND f.activa = 1
+                     WHERE f.id_funcion = :id_funcion
                      LIMIT 1";
 
         $stmt = $this->conexion->prepare($consulta);
@@ -124,16 +123,13 @@ class Funcion {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // MÉTODO CORREGIDO: Ahora está en la clase correcta
     public function obtenerPorPelicula() {
-        $consulta = "SELECT f.id_funcion, f.id_pelicula, f.id_sala, f.fecha_funcion, f.precio, f.descuento, f.activa,
-                            s.nombre as sala, s.capacidad
-                     FROM " . $this->tabla . " f
-                     INNER JOIN tbl_salas s ON f.id_sala = s.id_sala
-                     WHERE f.id_pelicula = :id_pelicula
-                     AND f.activa = 1
-                     AND f.fecha_funcion >= CURDATE()
-                     ORDER BY f.fecha_funcion";
+        $consulta = "SELECT id_funcion, fecha_funcion, precio, descuento, id_sala
+                     FROM tbl_funcion
+                     WHERE id_pelicula = :id_pelicula
+                     AND activa = 1
+                     AND fecha_funcion >= CURDATE()
+                     ORDER BY fecha_funcion";
 
         $stmt = $this->conexion->prepare($consulta);
         $stmt->bindParam(':id_pelicula', $this->id_pelicula);
@@ -142,7 +138,6 @@ class Funcion {
         return $stmt;
     }
 
-    // MÉTODO CORREGIDO: Devuelve PDOStatement, no array
     public function obtenerAsientosDisponibles() {
         $consulta = "
         SELECT 
@@ -178,10 +173,9 @@ class Funcion {
         $stmt->bindParam(':id_funcion', $this->id_funcion);
         $stmt->execute();
 
-        return $stmt; // ✅ Devuelve PDOStatement, no array
+        return $stmt;
     }
 
-    // MÉTODO NUEVO: Para verificar asientos ocupados
     public function obtenerAsientosOcupados() {
         $consulta = "
         SELECT DISTINCT s.id_silla
@@ -201,18 +195,79 @@ class Funcion {
         return $stmt;
     }
 
-    public function calcularTotal($cantidad_asientos, $porcentaje_vip = 0) {
-        $precio_unitario = ($this->precio ?? 0) - ($this->descuento ?? 0);
-        $precio_unitario = max(0, $precio_unitario);
-        if($porcentaje_vip > 0) {
-            $precio_unitario = $precio_unitario * (1 - ($porcentaje_vip / 100));
+    public function asientoDisponible($id_silla) {
+        // Revisar en reservas activas
+        $consulta = "SELECT dr.id_silla
+                     FROM detalles_reserva dr
+                     INNER JOIN tbl_reservas r ON dr.id_reserva = r.id_reserva
+                     WHERE r.id_funcion = :id_funcion
+                       AND r.estado = 'activa'
+                       AND dr.id_silla = :id_silla
+                     LIMIT 1";
+
+        $stmt = $this->conexion->prepare($consulta);
+        $stmt->bindParam(':id_funcion', $this->id_funcion);
+        $stmt->bindParam(':id_silla', $id_silla);
+        $stmt->execute();
+        if ($stmt->fetch(PDO::FETCH_ASSOC)) {
+            return false;
         }
-        return round($precio_unitario * intval($cantidad_asientos), 2);
+
+        // Revisar ventas/compras ya pagadas
+        $consulta2 = "SELECT dv.id_silla
+                      FROM detalles_venta dv
+                      INNER JOIN tbl_ventas v ON dv.id_venta = v.id_venta
+                      WHERE v.id_funcion = :id_funcion
+                        AND dv.id_silla = :id_silla
+                      LIMIT 1";
+
+        $stmt2 = $this->conexion->prepare($consulta2);
+        $stmt2->bindParam(':id_funcion', $this->id_funcion);
+        $stmt2->bindParam(':id_silla', $id_silla);
+        $stmt2->execute();
+        if ($stmt2->fetch(PDO::FETCH_ASSOC)) {
+            return false;
+        }
+
+        // Verificar que la silla exista y esté activa
+        $consulta3 = "SELECT activa FROM tbl_sillas WHERE id_silla = :id_silla LIMIT 1";
+        $stmt3 = $this->conexion->prepare($consulta3);
+        $stmt3->bindParam(':id_silla', $id_silla);
+        $stmt3->execute();
+        $fila = $stmt3->fetch(PDO::FETCH_ASSOC);
+        if(!$fila || $fila['activa'] != 1) return false;
+
+        return true;
+    }
+
+    public function calcularTotal($cantidad_asientos, $porcentaje_vip = 0) {
+        $cantidad = max(0, (int)$cantidad_asientos);
+        $precio = isset($this->precio) ? floatval($this->precio) : 0.0;
+        $descuento = isset($this->descuento) ? floatval($this->descuento) : 0.0;
+
+        // Precio después del descuento de la función
+        $precioDespuesDescuento = max(0, $precio - $descuento);
+
+        // Descuento VIP en porcentaje (por ejemplo 10 => 10%)
+        $porcentaje_vip = floatval($porcentaje_vip);
+        $montoVip = $precioDespuesDescuento * ($porcentaje_vip / 100.0);
+
+        $precioFinalUnitario = max(0, $precioDespuesDescuento - $montoVip);
+        $total = $precioFinalUnitario * $cantidad;
+
+        return [
+            'precio_unitario' => round($precio, 2),
+            'descuento_funcion' => round($descuento, 2),
+            'porcentaje_vip' => $porcentaje_vip,
+            'precio_unitario_final' => round($precioFinalUnitario, 2),
+            'cantidad' => $cantidad,
+            'total' => round($total, 2)
+        ];
     }
 }
 
 // ============================================
-// MODELO: Reserva (CORREGIDO)
+// MODELO: Reserva
 // ============================================
 class Reserva {
     private $conexion;
@@ -344,7 +399,6 @@ class Reserva {
         return $stmt->execute();
     }
 
-    // Método para obtener detalles de reserva
     public function obtenerPorId() {
         $consulta = "SELECT r.*, p.nombre as pelicula, f.fecha_funcion, s.nombre as sala
                      FROM {$this->tabla} r
@@ -359,6 +413,16 @@ class Reserva {
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function cancelar() {
+        $consulta = "UPDATE {$this->tabla} SET estado = 'cancelada' WHERE id_reserva = :id_reserva AND id_cliente = :id_cliente AND estado = 'activa'";
+        $stmt = $this->conexion->prepare($consulta);
+        $stmt->bindParam(':id_reserva', $this->id_reserva);
+        $stmt->bindParam(':id_cliente', $this->id_cliente);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
     }
 }
 ?>

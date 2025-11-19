@@ -237,44 +237,34 @@ class ClienteControlador {
     // ===== RESERVAS =====
 
     public function crearReserva($datos) {
-        // Verificar sesión
-        $id_cliente = Sesion::verificarCliente();
+    // Verificar sesión
+    $id_cliente = Sesion::verificarCliente();
 
-        // Validar datos
-        $validacion = Validador::camposRequeridos($datos, ['id_funcion', 'asientos']);
-        if(!$validacion['valido']) {
-            return ['exito' => false, 'mensaje' => $validacion['mensaje']];
-        }
-
-        if(!is_array($datos['asientos']) || count($datos['asientos']) === 0) {
-            return ['exito' => false, 'mensaje' => 'Debe seleccionar al menos un asiento'];
-        }
-
-        // Crear reserva
-        $reserva = new Reserva($this->conexion);
-        $reserva->id_cliente = $id_cliente;
-        $reserva->id_funcion = $datos['id_funcion'];
-
-        $resultado = $reserva->crear($datos['asientos']);
-
-        if($resultado['exito']) {
-            // Obtener detalles de la reserva creada
-            $reserva->id_reserva = $resultado['id_reserva'];
-            $detalles = $reserva->obtenerPorId();
-
-            return [
-                'exito' => true,
-                'mensaje' => 'Reserva creada exitosamente',
-                'datos' => [
-                    'id_reserva' => $resultado['id_reserva'],
-                    'fecha_expiracion' => $resultado['fecha_expiracion'],
-                    'detalles' => $detalles
-                ]
-            ];
-        }
-
-        return $resultado;
+    // Validar datos
+    if (empty($datos['id_funcion']) || empty($datos['asientos']) || !is_array($datos['asientos'])) {
+        return ['exito' => false, 'mensaje' => 'Datos de reserva incompletos'];
     }
+
+    $reserva = new Reserva($this->conexion);
+    $reserva->id_cliente = $id_cliente;
+    $reserva->id_funcion = $datos['id_funcion'];
+
+    $resultado = $reserva->crear($datos['asientos']);
+
+    if ($resultado['exito']) {
+        return [
+            'exito' => true,
+            'mensaje' => 'Reserva creada exitosamente',
+            'datos' => [
+                'id_reserva' => $resultado['id_reserva'],
+                'fecha_expiracion' => $resultado['fecha_expiracion']
+            ]
+        ];
+    }
+
+    return $resultado;
+}
+
 
     public function obtenerMisReservas() {
         // Verificar sesión

@@ -5,6 +5,9 @@
 
 const API_URL = '../../backend/api/index.php';
 
+// Cache de películas para modal
+let peliculasCache = {};
+
 // ========================================
 // INICIALIZACIÓN GLOBAL
 // ========================================
@@ -12,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     verificarSesionGlobal();
     configurarChatbot();
     configurarMenu();
+    cargarContenidoPrincipal();
+    configurarEventosGlobales();
 });
 
 // ========================================
@@ -25,12 +30,12 @@ async function verificarSesionGlobal() {
         if(datos.exito && datos.datos) {
             actualizarMenuUsuario(datos.datos);
         } else {
-            // No hay sesión activa, redirigir al login si no estamos en páginas públicas
+            // Permitir acceso a páginas públicas
             const paginasPublicas = ['login.html', 'registro.html'];
             const paginaActual = window.location.pathname.split('/').pop();
             
             if(!paginasPublicas.includes(paginaActual)) {
-                // Permitir solo si es login o registro
+                // Redirigir solo si no está en páginas públicas
                 if(!window.location.href.includes('login') && !window.location.href.includes('registro')) {
                     // redirigirAlLogin();
                 }
@@ -72,10 +77,7 @@ async function cerrarSesionGlobal(e) {
         const datos = await respuesta.json();
 
         if(datos.exito) {
-            // Limpiar sessionStorage
             sessionStorage.clear();
-            
-            // Redirigir al login
             window.location.href = '../../src/login.html';
         }
     } catch(error) {
@@ -84,8 +86,308 @@ async function cerrarSesionGlobal(e) {
     }
 }
 
-function redirigirAlLogin() {
-    window.location.href = '../../src/login.html';
+// ========================================
+// CARGAR CONTENIDO SEGÚN PÁGINA
+// ========================================
+function cargarContenidoPrincipal() {
+    // Detectar página actual
+    const paginaActual = window.location.pathname;
+
+    if(paginaActual.includes('lobby-cliente')) {
+        cargarCartelera();
+    } else if(paginaActual.includes('promociones')) {
+        cargarPromociones();
+    } else if(paginaActual.includes('mis-reservas')) {
+        cargarMisReservas();
+    }
+}
+
+// ========================================
+// CARGAR CARTELERA
+// ========================================
+async function cargarCartelera() {
+    try {
+        const respuesta = await fetch(`${API_URL}?accion=cartelera`);
+        const datos = await respuesta.json();
+
+        if(datos.exito && datos.datos) {
+            renderizarCartelera(datos.datos);
+        } else {
+            console.warn('No se pudieron cargar las películas');
+        }
+    } catch(error) {
+        console.error('Error cargando cartelera:', error);
+    }
+}
+
+// ========================================
+// CARGAR PROMOCIONES
+// ========================================
+async function cargarPromociones() {
+    try {
+        const respuesta = await fetch(`${API_URL}?accion=promociones`);
+        const datos = await respuesta.json();
+
+        if(datos.exito && datos.datos) {
+            renderizarPromociones(datos.datos);
+        } else {
+            console.warn('No hay promociones disponibles');
+        }
+    } catch(error) {
+        console.error('Error cargando promociones:', error);
+    }
+}
+
+// ========================================
+// CARGAR MIS RESERVAS
+// ========================================
+async function cargarMisReservas() {
+    try {
+        const respuesta = await fetch(`${API_URL}?accion=mis_reservas`);
+        const datos = await respuesta.json();
+
+        if(datos.exito && datos.datos) {
+            renderizarReservas(datos.datos);
+        } else {
+            mostrarMensajeVacio('No tienes reservas');
+        }
+    } catch(error) {
+        console.error('Error cargando reservas:', error);
+    }
+}
+
+// ========================================
+// RENDERIZAR CARTELERA
+// ========================================
+function renderizarCartelera(peliculas) {
+    const grid = document.querySelector('.movies-grid');
+    if(!grid) return;
+
+    grid.innerHTML = peliculas.map(pelicula => {
+        const id = pelicula.id_pelicula;
+        peliculasCache[id] = pelicula;
+
+        const primeraFuncion = pelicula.funciones?.[0] || {};
+        const imagenNombre = normalizarNombreImagen(pelicula.nombre);
+
+        return `
+            <div class="movie-card" data-pelicula-id="${id}" onclick="abrirDetallesPelicula(${id})">
+                <img 
+                    src="../../images/Peliculas_Cartelera/${imagenNombre}.jpg" 
+                    alt="${pelicula.nombre}"
+                    onerror="this.src='../../images/Logo.svg'"
+                />
+                <h3 class="data-titulo">${pelicula.nombre}</h3>
+                <div class="movie-actions">
+                    <button 
+                        class="btn-view" 
+                        onclick="event.stopPropagation(); abrirDetallesPelicula(${id})"
+                    >
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+                    <button 
+                        class="btn-reservar" 
+                        onclick="event.stopPropagation(); irAReservar(${id})"
+                    >
+                        Reservar
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// ========================================
+// RENDERIZAR PROMOCIONES
+// ========================================
+function renderizarPromociones(peliculas) {
+    const grid = document.querySelector('.movies-grid');
+    if(!grid) return;
+
+    grid.innerHTML = peliculas.map(pelicula => {
+        const id = pelicula.id_pelicula;
+        peliculasCache[id] = pelicula;
+
+        const primeraFuncion = pelicula.funciones?.[0] || {};
+        const porcentajeDescuento = primeraFuncion.porcentaje_descuento || 0;
+        const imagenNombre = normalizarNombreImagen(pelicula.nombre);
+
+        return `
+            <div class="movie-card promo-card" data-pelicula-id="${id}" onclick="abrirDetallesPelicula(${id})">
+                <div class="promo-badge">Hoy en descuento del ${porcentajeDescuento}%</div>
+                <img 
+                    src="../../images/Peliculas_Cartelera/${imagenNombre}.jpg" 
+                    alt="${pelicula.nombre}"
+                    onerror="this.src='../../images/Logo.svg'"
+                />
+                <h3 class="data-titulo">${pelicula.nombre}</h3>
+                <div class="precio-section">
+                    <span class="precio-antes">$${parseFloat(primeraFuncion.precio || 0).toLocaleString('es-CO')}</span>
+                    <span class="precio-ahora">$${parseFloat(primeraFuncion.precio_final || 0).toLocaleString('es-CO')}</span>
+                </div>
+                <div class="movie-actions">
+                    <button 
+                        class="btn-view" 
+                        onclick="event.stopPropagation(); abrirDetallesPelicula(${id})"
+                    >
+                        <span class="material-symbols-outlined">visibility</span>
+                        Ver detalles
+                    </button>
+                    <button 
+                        class="btn-reservar" 
+                        onclick="event.stopPropagation(); irAReservar(${id})"
+                    >
+                        Reservar
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// ========================================
+// RENDERIZAR MIS RESERVAS
+// ========================================
+function renderizarReservas(reservas) {
+    const contenedor = document.querySelector('.reservas-container');
+    if(!contenedor) return;
+
+    if(reservas.length === 0) {
+        mostrarMensajeVacio('No tienes reservas');
+        return;
+    }
+
+    contenedor.innerHTML = reservas.map(reserva => {
+        const fechaFormato = formatearFecha(reserva.fecha_funcion);
+        const horaFormato = formatearHora(reserva.fecha_funcion);
+        const imagenNombre = normalizarNombreImagen(reserva.pelicula);
+
+        return `
+            <div class="reserva-card">
+                <div class="reserva-status ${reserva.estado}">
+                    <span class="material-symbols-outlined">
+                        ${reserva.estado === 'activa' ? 'check_circle' : 'info'}
+                    </span>
+                    ${reserva.estado === 'activa' ? 'Confirmada' : 'Expirada'}
+                </div>
+                <div class="reserva-content">
+                    <div class="reserva-left">
+                        <img 
+                            src="../../images/Peliculas_Cartelera/${imagenNombre}.jpg" 
+                            alt="${reserva.pelicula}"
+                            onerror="this.src='../../images/Logo.svg'"
+                        />
+                    </div>
+                    <div class="reserva-info">
+                        <h3>${reserva.pelicula}</h3>
+                        <div class="info-row">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Fecha: ${fechaFormato}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>Hora: ${horaFormato}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="material-symbols-outlined">event_seat</span>
+                            <span>Asientos: ${reserva.asientos}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="material-symbols-outlined">location_on</span>
+                            <span>Sala: ${reserva.sala}</span>
+                        </div>
+                        <div class="info-row precio">
+                            <span class="material-symbols-outlined">payments</span>
+                            <span>Total: <strong>$${reserva.total.toLocaleString('es-CO')}</strong></span>
+                        </div>
+                    </div>
+                    <div class="reserva-actions">
+                        <button class="btn-descargar" onclick="descargarTicket(${reserva.id_reserva})">
+                            <span class="material-symbols-outlined">download</span>
+                            Descargar ticket
+                        </button>
+                        ${reserva.estado === 'activa' ? `
+                            <button class="btn-cancelar" onclick="cancelarReserva(${reserva.id_reserva})">
+                                <span class="material-symbols-outlined">cancel</span>
+                                Cancelar
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// ========================================
+// MODAL DE DETALLES DE PELÍCULA
+// ========================================
+function abrirDetallesPelicula(id) {
+    const pelicula = peliculasCache[id];
+    if(!pelicula) return;
+
+    const modal = document.getElementById('movieModal');
+    if(!modal) return;
+
+    const imagenNombre = normalizarNombreImagen(pelicula.nombre);
+
+    document.getElementById('modalMovieImage').src = 
+        `../../images/Peliculas_Cartelera/${imagenNombre}.jpg`;
+    document.getElementById('modalMovieTitle').textContent = pelicula.nombre;
+    document.getElementById('modalSynopsis').textContent = pelicula.sipnosis;
+    document.getElementById('modalOriginalName').textContent = pelicula.nombre;
+    document.getElementById('modalClassification').textContent = pelicula.clasificacion;
+    document.getElementById('modalCast').textContent = pelicula.reparto;
+    document.getElementById('modalDirector').textContent = pelicula.director;
+
+    modal.style.display = 'block';
+}
+
+function cerrarDetallesPelicula() {
+    const modal = document.getElementById('movieModal');
+    if(modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Cerrar modal al hacer click fuera
+window.onclick = function(event) {
+    const modal = document.getElementById('movieModal');
+    if(event.target === modal) {
+        cerrarDetallesPelicula();
+    }
+};
+
+// ========================================
+// RESERVAS
+// ========================================
+async function cancelarReserva(id_reserva) {
+    if(!confirm('¿Deseas cancelar esta reserva?')) return;
+
+    try {
+        const respuesta = await fetch(`${API_URL}?accion=cancelar_reserva`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_reserva })
+        });
+
+        const datos = await respuesta.json();
+
+        if(datos.exito) {
+            alert('Reserva cancelada exitosamente');
+            cargarMisReservas();
+        } else {
+            alert('Error: ' + datos.mensaje);
+        }
+    } catch(error) {
+        console.error('Error al cancelar reserva:', error);
+    }
+}
+
+function descargarTicket(id_reserva) {
+    alert('Descargando ticket #' + id_reserva);
+    // Implementar descarga de PDF en el futuro
 }
 
 // ========================================
@@ -116,6 +418,15 @@ function irAContacto() {
     window.location.href = 'contactanos.html';
 }
 
+function irAReservar(id_pelicula) {
+    sessionStorage.setItem('id_pelicula', id_pelicula);
+    window.location.href = 'reservar-pelicula.html';
+}
+
+function redirigirAlLogin() {
+    window.location.href = '../../src/login.html';
+}
+
 // ========================================
 // MENÚ DESPLEGABLE
 // ========================================
@@ -131,7 +442,6 @@ function configurarMenu() {
             }
         });
 
-        // Cerrar menú al hacer click en el documento
         document.addEventListener('click', () => {
             const menu = clienteBox.querySelector('.menu-cliente');
             if(menu) {
@@ -163,7 +473,6 @@ function configurarChatbot() {
         });
     }
 
-    // Cerrar chatbot al hacer click fuera
     document.addEventListener('click', (e) => {
         if(chatbotWindow && !chatbotWindow.contains(e.target) && !chatbotBtn?.contains(e.target)) {
             chatbotWindow.style.display = 'none';
@@ -172,46 +481,46 @@ function configurarChatbot() {
 }
 
 // ========================================
-// NOTIFICACIONES
+// EVENTOS GLOBALES
 // ========================================
-function mostrarNotificacion(mensaje, tipo = 'info') {
-    const clases = {
-        'exito': 'background: #4caf50; color: white;',
-        'error': 'background: #f44336; color: white;',
-        'info': 'background: #2196f3; color: white;',
-        'advertencia': 'background: #ff9800; color: white;'
-    };
+function configurarEventosGlobales() {
+    // Botones de métodos de pago
+    document.querySelectorAll('.boton-pago').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.boton-pago').forEach(b => b.classList.remove('activo'));
+            btn.classList.add('activo');
+        });
+    });
 
-    const estiloNotif = clases[tipo] || clases['info'];
-
-    console.log(`%c${mensaje}`, estiloNotif);
-    
-    // Implementar notificación visual (opcional)
-    // const notif = document.createElement('div');
-    // notif.textContent = mensaje;
-    // notif.style.cssText = `
-    //     position: fixed;
-    //     top: 20px;
-    //     right: 20px;
-    //     padding: 15px;
-    //     border-radius: 5px;
-    //     z-index: 9999;
-    //     ${estiloNotif}
-    // `;
-    // document.body.appendChild(notif);
-    // setTimeout(() => notif.remove(), 3000);
+    // Búsqueda
+    const inputBusqueda = document.getElementById('search-input');
+    if(inputBusqueda) {
+        inputBusqueda.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                busquedas();
+            }
+        });
+    }
 }
 
 // ========================================
-// UTILITARIOS
+// UTILIDADES
 // ========================================
+function normalizarNombreImagen(nombre) {
+    if(!nombre) return 'placeholder';
+    return nombre.replace(/[:%\*|\"<>]/g, '').trim();
+}
+
+function mostrarMensajeVacio(mensaje) {
+    const contenedor = document.querySelector('.reservas-container') || 
+                      document.querySelector('.movies-grid');
+    if(contenedor) {
+        contenedor.innerHTML = `<p style="text-align: center; padding: 20px;">${mensaje}</p>`;
+    }
+}
+
 function formatearPrecio(precio) {
-    return parseFloat(precio).toLocaleString('es-CO', {
-        style: 'currency',
-        currency: 'COP',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    });
+    return parseFloat(precio).toLocaleString('es-CO');
 }
 
 function formatearFecha(fecha) {
@@ -231,20 +540,20 @@ function formatearHora(fecha) {
 }
 
 // ========================================
-// FUNCIONES ALIAS (COMPATIBILIDAD)
+// ALIAS DE COMPATIBILIDAD
 // ========================================
 const filtro = () => console.log('Filtros - Por implementar');
 const busquedas = () => console.log('Búsqueda - Por implementar');
-const openMovieModal = () => console.log('Modal - No disponible');
-const closeMovieModal = () => console.log('Modal - No disponible');
+const openMovieModal = abrirDetallesPelicula;
+const closeMovieModal = cerrarDetallesPelicula;
 
 // ========================================
-// HELPERS DE DEBUG
+// DEBUG
 // ========================================
 function mostrarEstado() {
     console.log('Estado Global:', {
         url_api: API_URL,
-        session_storage: sessionStorage,
-        usuario_id: sessionStorage.getItem('usuario_id')
+        peliculas_cache: Object.keys(peliculasCache).length,
+        session_storage: sessionStorage
     });
 }

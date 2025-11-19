@@ -87,64 +87,71 @@ class AutenticacionControlador {
     }
 
     public function iniciarSesion($correo, $contraseña) {
-        // Validar campos
-        if(empty($correo) || empty($contraseña)) {
-            return ['exito' => false, 'mensaje' => 'Correo y contraseña son requeridos'];
-        }
+    // Validar campos
+    if(empty($correo) || empty($contraseña)) {
+        return ['exito' => false, 'mensaje' => 'Correo y contraseña son requeridos'];
+    }
 
-        // Buscar usuario
-        $usuario = new Usuario($this->conexion);
-        $usuario->correo = $correo;
-        $stmt = $usuario->buscarPorCorreo();
+    // Buscar usuario
+    $usuario = new Usuario($this->conexion);
+    $usuario->correo = $correo;
+    $stmt = $usuario->buscarPorCorreo();
 
-        if($stmt->rowCount() > 0) {
-            $fila = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            // Verificar contraseña
-            if(password_verify($contraseña, $fila['contraseña'])) {
-                
-                // Verificar que sea cliente
-                if($fila['tipo_usuario'] !== 'cliente') {
-                    return [
-                        'exito' => false, 
-                        'mensaje' => 'Este usuario no tiene permisos de cliente'
-                    ];
-                }
-
-                // Obtener información del cliente (VIP)
-                $cliente = new Cliente($this->conexion);
-                $cliente->id_cliente = $fila['id_usuarios'];
-                $cliente->esVIP();
-
-                // Establecer sesión
-                Sesion::establecerDatos([
-                    'id' => $fila['id_usuarios'],
-                    'tipo' => $fila['tipo_usuario'],
-                    'nombres' => $fila['nombres'],
-                    'apellidos' => $fila['apellidos']
-                ], $cliente->cliente_vip, $cliente->porcentaje_descuento);
-
-                return [
-                    'exito' => true,
-                    'mensaje' => 'Inicio de sesión exitoso',
-                    'datos' => [
-                        'id_usuario' => $fila['id_usuarios'],
-                        'nombres' => $fila['nombres'],
-                        'apellidos' => $fila['apellidos'],
-                        'correo' => $fila['correo'],
-                        'telefono' => $fila['telefono'],
-                        'tipo_usuario' => $fila['tipo_usuario'],
-                        'cliente_vip' => $cliente->cliente_vip,
-                        'porcentaje_descuento' => $cliente->porcentaje_descuento
-                    ]
-                ];
-            } else {
-                return ['exito' => false, 'mensaje' => 'Contraseña incorrecta'];
-            }
-        }
-
+    if($stmt->rowCount() === 0) {
         return ['exito' => false, 'mensaje' => 'Usuario no encontrado'];
     }
+
+    $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Verificar contraseña
+    if(!password_verify($contraseña, $fila['contraseña'])) {
+        return ['exito' => false, 'mensaje' => 'Contraseña incorrecta'];
+    }
+
+    $tipo_usuario = strtolower($fila['tipo_usuario']);
+    $lobby = '';
+
+    switch($tipo_usuario) {
+        case 'administrador':
+            $lobby = 'lobby_admin.html';
+            break;
+        case 'cajero':
+            $lobby = 'lobby-cajero.html';
+            break;
+        case 'cliente':
+            $cliente = new Cliente($this->conexion);
+            $cliente->id_cliente = $fila['id_usuarios'];
+            $cliente->esVIP();
+            $lobby = 'mod-cliente/lobby-cliente.html';
+            break;
+        default:
+            return ['exito' => false, 'mensaje' => 'Tipo de usuario desconocido'];
+    }
+
+    // Establecer sesión
+    Sesion::establecerDatos([
+        'id' => $fila['id_usuarios'],
+        'tipo' => $fila['tipo_usuario'],
+        'nombres' => $fila['nombres'],
+        'apellidos' => $fila['apellidos']
+    ], $cliente->cliente_vip ?? 0, $cliente->porcentaje_descuento ?? 0);
+
+    return [
+        'exito' => true,
+        'mensaje' => 'Inicio de sesión exitoso',
+        'datos' => [
+            'id_usuario' => $fila['id_usuarios'],
+            'nombres' => $fila['nombres'],
+            'apellidos' => $fila['apellidos'],
+            'correo' => $fila['correo'],
+            'telefono' => $fila['telefono'],
+            'tipo_usuario' => $fila['tipo_usuario'],
+            'lobby' => $lobby,
+            'cliente_vip' => $cliente->cliente_vip ?? 0,
+            'porcentaje_descuento' => $cliente->porcentaje_descuento ?? 0
+        ]
+    ];
+}
 
     public function cerrarSesion() {
         Sesion::destruir();

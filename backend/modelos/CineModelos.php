@@ -25,6 +25,7 @@ class Pelicula {
                     FROM " . $this->tabla . " p
                     INNER JOIN tbl_funcion f ON p.id_pelicula = f.id_pelicula
                     INNER JOIN tbl_salas s ON f.id_sala = s.id_sala
+                    WHERE f.activa = 1 AND p.activa = 1
                     ORDER BY p.nombre, f.fecha_funcion";
         
         $stmt = $this->conexion->prepare($consulta);
@@ -38,6 +39,7 @@ class Pelicula {
                            genero, reparto, director, duracion, fecha_estreno
                     FROM " . $this->tabla . "
                     WHERE id_pelicula = :id_pelicula 
+                    AND activa = 1
                     LIMIT 1";
         
         $stmt = $this->conexion->prepare($consulta);
@@ -51,10 +53,11 @@ class Pelicula {
         $consulta = "SELECT id_pelicula, nombre, sipnosis, clasificacion, 
                            genero, reparto, director, duracion, fecha_estreno
                     FROM " . $this->tabla . "
-                    WHERE nombre LIKE :termino 
+                    WHERE (nombre LIKE :termino 
                        OR genero LIKE :termino 
                        OR reparto LIKE :termino 
-                       OR director LIKE :termino
+                       OR director LIKE :termino)
+                    AND activa = 1
                     ORDER BY nombre";
         
         $stmt = $this->conexion->prepare($consulta);
@@ -74,7 +77,9 @@ class Pelicula {
                     FROM " . $this->tabla . " p
                     INNER JOIN tbl_funcion f ON p.id_pelicula = f.id_pelicula
                     INNER JOIN tbl_salas s ON f.id_sala = s.id_sala
-                    WHERE f.descuento > 0
+                    WHERE f.descuento > 0 
+                    AND f.activa = 1 
+                    AND p.activa = 1
                     ORDER BY porcentaje_descuento DESC, p.nombre";
         
         $stmt = $this->conexion->prepare($consulta);
@@ -85,76 +90,61 @@ class Pelicula {
 }
 
 // ============================================
-// MODELO: Funcion (relacionado con Pelicula)
+// MODELO: Funcion (CORREGIDO)
 // ============================================
-class Reserva {
+class Funcion {
     private $conexion;
-    private $tabla = "tbl_reservas";
+    private $tabla = 'tbl_funcion';
 
-    public $id_reserva;
-    public $id_cliente;
     public $id_funcion;
+    public $id_pelicula;
+    public $id_sala;
+    public $fecha_funcion;
+    public $precio;
+    public $descuento;
 
     public function __construct($bd) {
         $this->conexion = $bd;
     }
 
-    // Crear reserva segura con múltiples asientos
-    public function crear(array $asientos) {
-        if (empty($asientos)) {
-            return ['exito' => false, 'mensaje' => 'No se han seleccionado asientos'];
-        }
+    public function obtenerPorId() {
+        $consulta = "SELECT f.id_funcion, f.id_pelicula, f.id_sala, f.fecha_funcion, f.precio, f.descuento, f.activa,
+                            p.nombre as pelicula, s.nombre as sala
+                     FROM " . $this->tabla . " f
+                     INNER JOIN tbl_pelicula p ON f.id_pelicula = p.id_pelicula
+                     INNER JOIN tbl_salas s ON f.id_sala = s.id_sala
+                     WHERE f.id_funcion = :id_funcion 
+                     AND f.activa = 1
+                     LIMIT 1";
 
-        $this->conexion->beginTransaction();
-        try {
-            // Verificar disponibilidad de todos los asientos
-            foreach ($asientos as $id_silla) {
-                if (!$this->asientoDisponible($id_silla)) {
-                    throw new Exception("El asiento {$id_silla} no está disponible");
-                }
-            }
+        $stmt = $this->conexion->prepare($consulta);
+        $stmt->bindParam(':id_funcion', $this->id_funcion);
+        $stmt->execute();
 
-            $fecha_expiracion = date('Y-m-d H:i:s', strtotime('+2 hours'));
-
-            // Insertar reserva
-            $stmt = $this->conexion->prepare("
-                INSERT INTO {$this->tabla} 
-                    (id_cliente, id_funcion, fecha_reserva, hora, fecha_expiracion, estado)
-                VALUES (:id_cliente, :id_funcion, CURDATE(), CURTIME(), :fecha_expiracion, 'activa')
-            ");
-            $stmt->bindParam(":id_cliente", $this->id_cliente);
-            $stmt->bindParam(":id_funcion", $this->id_funcion);
-            $stmt->bindParam(":fecha_expiracion", $fecha_expiracion);
-            $stmt->execute();
-
-            $this->id_reserva = $this->conexion->lastInsertId();
-
-            // Insertar detalles de asientos
-            $stmtDetalle = $this->conexion->prepare("
-                INSERT INTO detalles_reserva (id_reserva, id_silla) 
-                VALUES (:id_reserva, :id_silla)
-            ");
-            foreach ($asientos as $id_silla) {
-                $stmtDetalle->bindParam(":id_reserva", $this->id_reserva);
-                $stmtDetalle->bindParam(":id_silla", $id_silla);
-                $stmtDetalle->execute();
-            }
-
-            $this->registrarLog('Reserva creada', 'Reserva #' . $this->id_reserva . ' - ' . count($asientos) . ' asientos');
-
-            $this->conexion->commit();
-
-            return ['exito' => true, 'id_reserva' => $this->id_reserva, 'fecha_expiracion' => $fecha_expiracion];
-
-        } catch (Exception $e) {
-            $this->conexion->rollBack();
-            return ['exito' => false, 'mensaje' => $e->getMessage()];
-        }
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Verifica si un asiento está disponible
-   public function obtenerAsientosDisponibles() {
-    $consulta = "
+    // MÉTODO CORREGIDO: Ahora está en la clase correcta
+    public function obtenerPorPelicula() {
+        $consulta = "SELECT f.id_funcion, f.id_pelicula, f.id_sala, f.fecha_funcion, f.precio, f.descuento, f.activa,
+                            s.nombre as sala, s.capacidad
+                     FROM " . $this->tabla . " f
+                     INNER JOIN tbl_salas s ON f.id_sala = s.id_sala
+                     WHERE f.id_pelicula = :id_pelicula
+                     AND f.activa = 1
+                     AND f.fecha_funcion >= CURDATE()
+                     ORDER BY f.fecha_funcion";
+
+        $stmt = $this->conexion->prepare($consulta);
+        $stmt->bindParam(':id_pelicula', $this->id_pelicula);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    // MÉTODO CORREGIDO: Devuelve PDOStatement, no array
+    public function obtenerAsientosDisponibles() {
+        $consulta = "
         SELECT 
             s.id_silla, 
             s.fila, 
@@ -180,29 +170,159 @@ class Reserva {
             WHERE v.id_funcion = :id_funcion
         ) dv ON s.id_silla = dv.id_silla
         WHERE s.id_sala = (SELECT id_sala FROM tbl_funcion WHERE id_funcion = :id_funcion)
+        AND s.activa = 1
         ORDER BY s.fila, s.columna
-    ";
+        ";
 
-    $stmt = $this->conexion->prepare($consulta);
-    $stmt->bindParam(":id_funcion", $this->id_funcion);
-    $stmt->execute();
+        $stmt = $this->conexion->prepare($consulta);
+        $stmt->bindParam(':id_funcion', $this->id_funcion);
+        $stmt->execute();
 
-    $asientos = [];
-    while ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $asientos[] = [
-            'id_silla' => $fila['id_silla'],
-            'fila' => $fila['fila'],
-            'columna' => $fila['columna'],
-            'tipo' => $fila['tipo'],
-            'activa' => $fila['activa'] == 1,
-            'disponible' => $fila['disponible'] == 1
-        ];
+        return $stmt; // ✅ Devuelve PDOStatement, no array
     }
 
-    return $asientos;
+    // MÉTODO NUEVO: Para verificar asientos ocupados
+    public function obtenerAsientosOcupados() {
+        $consulta = "
+        SELECT DISTINCT s.id_silla
+        FROM tbl_sillas s
+        LEFT JOIN detalles_reserva dr ON s.id_silla = dr.id_silla
+        LEFT JOIN tbl_reservas r ON dr.id_reserva = r.id_reserva
+        LEFT JOIN detalles_venta dv ON s.id_silla = dv.id_silla
+        LEFT JOIN tbl_ventas v ON dv.id_venta = v.id_venta
+        WHERE (r.id_funcion = :id_funcion AND r.estado = 'activa')
+           OR (v.id_funcion = :id_funcion)
+        ";
+
+        $stmt = $this->conexion->prepare($consulta);
+        $stmt->bindParam(':id_funcion', $this->id_funcion);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    public function calcularTotal($cantidad_asientos, $porcentaje_vip = 0) {
+        $precio_unitario = ($this->precio ?? 0) - ($this->descuento ?? 0);
+        $precio_unitario = max(0, $precio_unitario);
+        if($porcentaje_vip > 0) {
+            $precio_unitario = $precio_unitario * (1 - ($porcentaje_vip / 100));
+        }
+        return round($precio_unitario * intval($cantidad_asientos), 2);
+    }
 }
 
-    // Registrar log de actividad
+// ============================================
+// MODELO: Reserva (CORREGIDO)
+// ============================================
+class Reserva {
+    private $conexion;
+    private $tabla = "tbl_reservas";
+
+    public $id_reserva;
+    public $id_cliente;
+    public $id_funcion;
+
+    public function __construct($bd) {
+        $this->conexion = $bd;
+    }
+
+    public function crear(array $asientos) {
+        if (empty($asientos)) {
+            return ['exito' => false, 'mensaje' => 'No se han seleccionado asientos'];
+        }
+
+        $this->conexion->beginTransaction();
+        try {
+            // Verificar disponibilidad de todos los asientos
+            foreach ($asientos as $id_silla) {
+                if (!$this->asientoDisponible($id_silla)) {
+                    throw new Exception("El asiento {$id_silla} no está disponible");
+                }
+            }
+
+            $fecha_expiracion = date('Y-m-d H:i:s', strtotime('+2 hours'));
+
+            // Insertar reserva
+            $stmt = $this->conexion->prepare("
+                INSERT INTO {$this->tabla} 
+                    (id_cliente, id_funcion, fecha_reserva, hora, fecha_expiracion, estado, cantidad_asientos)
+                VALUES (:id_cliente, :id_funcion, CURDATE(), CURTIME(), :fecha_expiracion, 'activa', :cantidad_asientos)
+            ");
+            $stmt->bindParam(":id_cliente", $this->id_cliente);
+            $stmt->bindParam(":id_funcion", $this->id_funcion);
+            $stmt->bindParam(":fecha_expiracion", $fecha_expiracion);
+            $stmt->bindParam(":cantidad_asientos", count($asientos));
+            $stmt->execute();
+
+            $this->id_reserva = $this->conexion->lastInsertId();
+
+            // Insertar detalles de asientos
+            $stmtDetalle = $this->conexion->prepare("
+                INSERT INTO detalles_reserva (id_reserva, id_silla, id_funcion) 
+                VALUES (:id_reserva, :id_silla, :id_funcion)
+            ");
+            
+            foreach ($asientos as $id_silla) {
+                $stmtDetalle->bindParam(":id_reserva", $this->id_reserva);
+                $stmtDetalle->bindParam(":id_silla", $id_silla);
+                $stmtDetalle->bindParam(":id_funcion", $this->id_funcion);
+                $stmtDetalle->execute();
+            }
+
+            $this->registrarLog('Reserva creada', 'Reserva #' . $this->id_reserva . ' - ' . count($asientos) . ' asientos');
+
+            $this->conexion->commit();
+
+            return [
+                'exito' => true, 
+                'id_reserva' => $this->id_reserva, 
+                'fecha_expiracion' => $fecha_expiracion,
+                'cantidad_asientos' => count($asientos)
+            ];
+
+        } catch (Exception $e) {
+            $this->conexion->rollBack();
+            return ['exito' => false, 'mensaje' => $e->getMessage()];
+        }
+    }
+
+    public function asientoDisponible($id_silla) {
+        // Verificar en reservas activas
+        $consulta = "SELECT 1 FROM detalles_reserva dr 
+                    INNER JOIN tbl_reservas r ON dr.id_reserva = r.id_reserva 
+                    WHERE dr.id_silla = :id_silla 
+                    AND r.id_funcion = :id_funcion 
+                    AND r.estado = 'activa' 
+                    LIMIT 1";
+        $stmt = $this->conexion->prepare($consulta);
+        $stmt->bindParam(':id_silla', $id_silla);
+        $stmt->bindParam(':id_funcion', $this->id_funcion);
+        $stmt->execute();
+        if($stmt->fetch()) return false;
+
+        // Verificar en ventas
+        $consulta2 = "SELECT 1 FROM detalles_venta dv 
+                     INNER JOIN tbl_ventas v ON dv.id_venta = v.id_venta 
+                     WHERE dv.id_silla = :id_silla 
+                     AND v.id_funcion = :id_funcion 
+                     LIMIT 1";
+        $stmt2 = $this->conexion->prepare($consulta2);
+        $stmt2->bindParam(':id_silla', $id_silla);
+        $stmt2->bindParam(':id_funcion', $this->id_funcion);
+        $stmt2->execute();
+        if($stmt2->fetch()) return false;
+
+        // Verificar que la silla exista y esté activa
+        $consulta3 = "SELECT activa FROM tbl_sillas WHERE id_silla = :id_silla LIMIT 1";
+        $stmt3 = $this->conexion->prepare($consulta3);
+        $stmt3->bindParam(':id_silla', $id_silla);
+        $stmt3->execute();
+        $fila = $stmt3->fetch(PDO::FETCH_ASSOC);
+        if(!$fila || $fila['activa'] != 1) return false;
+
+        return true;
+    }
+
     private function registrarLog($accion, $descripcion) {
         $stmt = $this->conexion->prepare("
             INSERT INTO logs_actividad (id_usuario, accion, descripcion)
@@ -222,6 +342,23 @@ class Reserva {
         
         $stmt = $conexion->prepare($consulta);
         return $stmt->execute();
+    }
+
+    // Método para obtener detalles de reserva
+    public function obtenerPorId() {
+        $consulta = "SELECT r.*, p.nombre as pelicula, f.fecha_funcion, s.nombre as sala
+                     FROM {$this->tabla} r
+                     INNER JOIN tbl_funcion f ON r.id_funcion = f.id_funcion
+                     INNER JOIN tbl_pelicula p ON f.id_pelicula = p.id_pelicula
+                     INNER JOIN tbl_salas s ON f.id_sala = s.id_sala
+                     WHERE r.id_reserva = :id_reserva
+                     LIMIT 1";
+
+        $stmt = $this->conexion->prepare($consulta);
+        $stmt->bindParam(':id_reserva', $this->id_reserva);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
 ?>

@@ -17,12 +17,7 @@ class Sesion {
         self::iniciar();
         
         if(!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'cliente') {
-            http_response_code(401);
-            echo json_encode([
-                'exito' => false,
-                'mensaje' => 'Acceso no autorizado. Debe iniciar sesión como cliente'
-            ]);
-            exit();
+            Respuesta::error('Acceso no autorizado. Debe iniciar sesión como cliente', 401);
         }
         
         return $_SESSION['usuario_id'];

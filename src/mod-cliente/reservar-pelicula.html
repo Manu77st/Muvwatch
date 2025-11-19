@@ -11,13 +11,18 @@
     />
   </head>
   <body>
+    <!-- Reservar Pelicula -->
     <header>
       <!-- Navbar principal -->
       <nav class="navbar">
         <div class="container-navbar">
           <div class="navbar-left">
             <a href="lobby-cliente.html" class="logo-link">
-              <img id="logo-nav" src="../../images/Logo.svg" alt="Logo_muvwatch" />
+              <img
+                id="logo-nav"
+                src="../../images/Logo.svg"
+                alt="Logo_muvwatch"
+              />
             </a>
           </div>
           <div class="navbar-center">
@@ -25,12 +30,17 @@
               <div class="filtros">
                 <span
                   class="material-symbols-outlined icon-inline"
-                  aria-hidden="true" onclick="filtro()"
+                  aria-hidden="true"
+                  onclick="filtro()"
                   >filter_alt</span
                 >
               </div>
               <div class="caja-busqueda">
-                <input id="search-input" type="text" placeholder="Buscar función..." />
+                <input
+                  id="search-input"
+                  type="text"
+                  placeholder="Buscar función..."
+                />
                 <span class="material-symbols-outlined">search</span>
               </div>
             </div>
@@ -45,7 +55,7 @@
               Cliente A
               <div class="menu-cliente" id="menuCliente">
                 <a href="#">Perfil</a>
-                <a href="/src/login.html">Cerrar sesión</a>
+                <a href="../login.html">Cerrar sesión</a>
               </div>
             </div>
           </div>
@@ -57,7 +67,8 @@
         <nav>
           <a href="lobby-cliente.html" class="enlace-a">Inicio</a>
           <a href="../mod-cliente/promociones.html" class="enlace-a"
-            >Promociones</a>
+            >Promociones</a
+          >
           <a href="contactanos.html" class="enlace-a">Contactanos</a>
           <a href="../mod-cliente/carrito.html">Carrito</a>
         </nav>
@@ -95,8 +106,42 @@
           <div class="caja-reserva">
             <h3>Reservar</h3>
             <p><strong>Función:</strong> <span id="funcionNombre">—</span></p>
-            <p><strong>Fecha:</strong> <span id="funcionFecha">—</span></p>
-            <p><strong>Hora:</strong> <span id="funcionHora">—</span></p>
+            <div class="seccion-info" style="margin-top: 12px">
+              <label for="selectFunciones"
+                ><strong>Seleccionar fecha:</strong></label
+              >
+              <select
+                id="selectFunciones"
+                aria-label="Funciones disponibles"
+                style="width: 100%; padding: 6px; margin-top: 6px"
+              >
+                <option value="">-- Seleccione una función --</option>
+              </select>
+              <div
+                id="loadingIndicator"
+                style="
+                  display: none;
+                  margin-top: 8px;
+                  font-size: 13px;
+                  color: #666;
+                "
+              >
+                Cargando funciones...
+              </div>
+              <div
+                id="reservaMensaje"
+                style="
+                  display: none;
+                  margin-top: 8px;
+                  color: #a33;
+                  font-size: 13px;
+                "
+              ></div>
+            </div>
+
+            <div class="seccion-info" style="margin-top: 8px">
+              <p><strong>Fecha:</strong> <span id="funcionFecha">—</span></p>
+            </div>
 
             <div class="seccion-info">
               <h4>Estado de las sillas:</h4>
@@ -115,6 +160,7 @@
 
             <div class="info-seleccionadas">
               Seleccionadas: <span id="contadorSeleccionadas">0</span>
+              <div style="margin-top:8px">Total: <strong id="totalSeleccion">$0</strong></div>
             </div>
 
             <div class="seccion-info">

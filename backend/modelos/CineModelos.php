@@ -19,9 +19,9 @@ class Pelicula {
 
     public function obtenerCartelera() {
         $consulta = "SELECT p.id_pelicula, p.nombre, p.sipnosis, p.clasificacion,
-                           p.genero, p.reparto, p.director, p.duracion, p.fecha_estreno,
-                           f.id_funcion, f.fecha_funcion, f.precio, f.descuento,
-                           s.id_sala, s.nombre as sala, s.capacidad
+                   p.genero, p.reparto, p.director, p.duracion, p.fecha_estreno,
+                   f.id_funcion, CONCAT(f.fecha_funcion, ' ', f.hora) as fecha_funcion, f.precio, f.descuento,
+                   s.id_sala, s.nombre as sala, s.capacidad
                     FROM " . $this->tabla . " p
                     INNER JOIN tbl_funcion f ON p.id_pelicula = f.id_pelicula
                     INNER JOIN tbl_salas s ON f.id_sala = s.id_sala
@@ -70,9 +70,9 @@ class Pelicula {
 
     public function obtenerPromociones() {
         $consulta = "SELECT p.id_pelicula, p.nombre, p.sipnosis, p.clasificacion,
-                           p.genero, p.reparto, p.director, p.duracion, p.fecha_estreno,
-                           f.id_funcion, f.fecha_funcion, f.precio, f.descuento,
-                           s.id_sala, s.nombre as sala,
+                   p.genero, p.reparto, p.director, p.duracion, p.fecha_estreno,
+                   f.id_funcion, CONCAT(f.fecha_funcion, ' ', f.hora) as fecha_funcion, f.precio, f.descuento,
+                   s.id_sala, s.nombre as sala,
                            ROUND((f.descuento / f.precio) * 100, 0) as porcentaje_descuento
                     FROM " . $this->tabla . " p
                     INNER JOIN tbl_funcion f ON p.id_pelicula = f.id_pelicula
@@ -108,8 +108,8 @@ class Funcion {
     }
 
     public function obtenerPorId() {
-        $consulta = "SELECT f.id_funcion, f.id_pelicula, f.id_sala, f.fecha_funcion, f.precio, f.descuento, f.activa,
-                            p.nombre as pelicula, s.nombre as sala, s.capacidad
+        $consulta = "SELECT f.id_funcion, f.id_pelicula, f.id_sala, CONCAT(f.fecha_funcion, ' ', f.hora) as fecha_funcion, f.precio, f.descuento, f.activa,
+                    p.nombre as pelicula, s.nombre as sala, s.capacidad
                      FROM tbl_funcion f
                      INNER JOIN tbl_pelicula p ON f.id_pelicula = p.id_pelicula
                      INNER JOIN tbl_salas s ON f.id_sala = s.id_sala
@@ -124,12 +124,12 @@ class Funcion {
     }
 
     public function obtenerPorPelicula() {
-        $consulta = "SELECT id_funcion, fecha_funcion, precio, descuento, id_sala
-                     FROM tbl_funcion
+        $consulta = "SELECT id_funcion, CONCAT(fecha_funcion, ' ', hora) as fecha_funcion, precio, descuento, id_sala
+                 FROM tbl_funcion
                      WHERE id_pelicula = :id_pelicula
                      AND activa = 1
-                     AND fecha_funcion >= CURDATE()
-                     ORDER BY fecha_funcion";
+                 AND CONCAT(fecha_funcion, ' ', hora) >= CONCAT(CURDATE(), ' 00:00:00')
+                 ORDER BY fecha_funcion";
 
         $stmt = $this->conexion->prepare($consulta);
         $stmt->bindParam(':id_pelicula', $this->id_pelicula);

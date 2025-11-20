@@ -878,12 +878,6 @@ header nav:last-child {
   justify-content: space-between;
 }
 
-.chatbot-header img {
-  width: 28px;
-  height: 28px;
-  margin-right: 8px;
-}
-
 .chatbot-close {
   cursor: pointer;
   font-size: 22px;
@@ -898,38 +892,16 @@ header nav:last-child {
   font-size: 15px;
 }
 
-.chatbot-footer {
-  padding: 12px;
-  background: #eee;
-  display: flex;
-  gap: 8px;
+.chatbot-body button{
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
-.chatbot-footer input {
-  flex: 1;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  padding: 8px;
-  font-size: 15px;
-  outline: none;
-}
-
-.chatbot-footer button {
-  background: #0075d8;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.chatbot-footer button .material-symbols-outlined {
-  font-size: 20px;
-}
 
 /* ============================================
    MATERIAL SYMBOLS

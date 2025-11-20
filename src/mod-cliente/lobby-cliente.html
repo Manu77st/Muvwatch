@@ -52,7 +52,7 @@
       <nav>
         <a href="lobby-cliente.html" class="enlace-a" style="border-bottom-color: #3b7ba6; background: #f5f5f5">Inicio</a>
         <a href="../mod-cliente/promociones.html" class="enlace-a">Promociones</a>
-        <a href="contactanos.html" class="enlace-a">Contáctanos</a>
+        <a href="contactanos.html" class="enlace-a">Contactanos</a>
         <a href="../mod-cliente/carrito.html" class="enlace-a">Carrito</a>
       </nav>
     </div>
@@ -71,33 +71,26 @@
   <!-- Modal de detalles de película -->
   <div id="movieModal" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeMovieModal()">&times;</span>
-      <div class="modal-body">
-        <div class="modal-left">
-          <img id="modalMovieImage" src="../../images/Peliculas_Cartelera" alt="Movie Poster" />
-          <h2 id="modalMovieTitle"></h2>
-        </div>
-        <div class="modal-right">
-          <div class="synopsis-section">
-            <h3 class="data-titulo">Sinopsis</h3>
-            <p id="modalSynopsis"></p>
-          </div>
-          <div class="movie-details">
-            <p><strong>Nombre original:</strong> <span id="modalOriginalName"></span></p>
-            <p><strong>Clasificación:</strong> <span id="modalClassification"></span></p>
-            <p><strong>Reparto:</strong> <span id="modalCast"></span></p>
-            <p><strong>Director:</strong> <span id="modalDirector"></span></p>
-          </div>
-          <div class="trailer-section">
-            <h3 class="data-titulo">Trailer</h3>
-            <div class="trailer-placeholder">
-              <span class="material-symbols-outlined">play_circle</span>
+        <span class="close" onclick="closeMovieModal()">&times;</span>
+        <div class="modal-body">
+            <div class="modal-image">
+                <img id="modalMovieImage" src="" alt="Película">
             </div>
-          </div>
+            <div class="modal-info">
+                <h2 id="modalMovieTitle">Título de la película</h2>
+                <div class="movie-details">
+                    <p><strong>Sinopsis:</strong> <span id="modalSynopsis"></span></p>
+                    <p><strong>Género:</strong> <span id="modalGenero"></span></p>
+                    <p><strong>Clasificación:</strong> <span id="modalClassification"></span></p>
+                    <p><strong>Reparto:</strong> <span id="modalCast"></span></p>
+                    <p><strong>Director:</strong> <span id="modalDirector"></span></p>
+                    <p><strong>Duración:</strong> <span id="modalDuracion"></span></p>
+                    <p><strong>Fecha de estreno:</strong> <span id="modalEstreno"></span></p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 
   <!-- Botón y ventana de chatbot -->
   <div class="chatbot-btn" id="chatbotBtn">
@@ -106,24 +99,13 @@
 
   <div class="chatbot-window" id="chatbotWindow">
     <div class="chatbot-header">
+       <span class="material-symbols-outlined" style="background-color: white; color: blue; width: 50px; border-radius: 10px; padding-left: 10px; height: 35px; font-size: 30px;">smart_toy</span>
       <span>
-        <img src="../../images/chatbot_icon.png" alt="Chatbot"/>
         Chatsito Muvwatch
       </span>
       <span class="chatbot-close" id="chatbotClose">&times;</span>
     </div>
     <div class="chatbot-body">
-      <div>
-        <span class="material-symbols-outlined" style="font-size: 18px; vertical-align: middle">chat</span>
-        ¡Hola! ¿En qué puedo ayudarte hoy?
-      </div>
-    </div>
-    <div class="chatbot-footer">
-      <input type="text" placeholder="Escribe tu mensaje..." />
-      <button style="background-color: #0075d8">
-        <span class="material-symbols-outlined" aria-hidden="true">send</span>
-      </button>
-    </div>
   </div>
 
   <!-- Script -->

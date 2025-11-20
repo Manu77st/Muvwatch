@@ -109,14 +109,15 @@ CREATE TABLE `tbl_funcion` (
   `id_pelicula` int(11) NOT NULL,
   `id_sala` int(11) NOT NULL,
   `fecha_funcion` date NOT NULL,
+  `hora` time NOT NULL,
   `precio` decimal(8,2) NOT NULL,
   `descuento` decimal(8,2) NOT NULL,
   `activa` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcado de datos para la tabla `tbl_funcion`
-INSERT INTO `tbl_funcion` (`id_funcion`, `id_pelicula`, `id_sala`, `fecha_funcion`, `precio`, `descuento`, `activa`) VALUES
-(1, 1, 1, '2025-09-15', 15000.00, 2000.00, 1);
+INSERT INTO `tbl_funcion` (`id_funcion`, `id_pelicula`, `id_sala`, `fecha_funcion`, `hora`, `precio`, `descuento`, `activa`) VALUES
+(1, 1, 1, '2025-09-15', '18:30:00', 15000.00, 2000.00, 1);
 
 -- --------------------------------------------------------
 -- Estructura de tabla para la tabla `tbl_pelicula`
@@ -412,5 +413,150 @@ ALTER TABLE `tbl_ventas`
   ADD CONSTRAINT `tbl_ventas_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `tbl_clientes` (`id_cliente`) ON DELETE CASCADE,
   ADD CONSTRAINT `tbl_ventas_ibfk_2` FOREIGN KEY (`id_cajero`) REFERENCES `tbl_cajeros` (`id_cajero`) ON DELETE CASCADE,
   ADD CONSTRAINT `tbl_ventas_ibfk_3` FOREIGN KEY (`id_funcion`) REFERENCES `tbl_funcion` (`id_funcion`) ON DELETE CASCADE;
+INSERT INTO `tbl_sillas` (`id_sala`, `fila`, `columna`, `tipo`, `activa`) VALUES
+(1, 'A', 1, 'Standard', 1),
+(1, 'A', 2, 'Standard', 1),
+(1, 'A', 3, 'Standard', 1),
+(1, 'A', 4, 'Standard', 1),
+(1, 'A', 5, 'Standard', 1),
+(1, 'A', 6, 'Standard', 1),
+(1, 'A', 7, 'Standard', 1),
+(1, 'A', 8, 'Standard', 1),
+(1, 'A', 9, 'Standard', 1),
+(1, 'A', 10, 'Standard', 1),
+
+(1, 'B', 1, 'Standard', 1),
+(1, 'B', 2, 'Standard', 1),
+(1, 'B', 3, 'Standard', 1),
+(1, 'B', 4, 'Standard', 1),
+(1, 'B', 5, 'Standard', 1),
+(1, 'B', 6, 'Standard', 1),
+(1, 'B', 7, 'Standard', 1),
+(1, 'B', 8, 'Standard', 1),
+(1, 'B', 9, 'Standard', 1),
+(1, 'B', 10, 'Standard', 1),
+
+(1, 'C', 1, 'Standard', 1),
+(1, 'C', 2, 'Standard', 1),
+(1, 'C', 3, 'Standard', 1),
+(1, 'C', 4, 'Standard', 1),
+(1, 'C', 5, 'Standard', 1),
+(1, 'C', 6, 'Standard', 1),
+(1, 'C', 7, 'Standard', 1),
+(1, 'C', 8, 'Standard', 1),
+(1, 'C', 9, 'Standard', 1),
+(1, 'C', 10, 'Standard', 1),
+
+(1, 'D', 1, 'Standard', 1),
+(1, 'D', 2, 'Standard', 1),
+(1, 'D', 3, 'Discapacitado', 1),
+(1, 'D', 4, 'Standard', 1),
+(1, 'D', 5, 'Standard', 1),
+(1, 'D', 6, 'Standard', 1),
+(1, 'D', 7, 'Standard', 1),
+(1, 'D', 8, 'Standard', 1),
+(1, 'D', 9, 'Standard', 1),
+(1, 'D', 10, 'Standard', 1),
+
+(1, 'E', 1, 'Standard', 1),
+(1, 'E', 2, 'Standard', 1),
+(1, 'E', 3, 'Standard', 1),
+(1, 'E', 4, 'Standard', 1),
+(1, 'E', 5, 'Standard', 1),
+(1, 'E', 6, 'Standard', 1),
+(1, 'E', 7, 'Standard', 1),
+(1, 'E', 8, 'Standard', 1),
+(1, 'E', 9, 'Standard', 1),
+(1, 'E', 10, 'Standard', 1),
+
+(1, 'F', 1, 'Discapacitado', 1),
+(1, 'F', 2, 'Standard', 1),
+(1, 'F', 3, 'Standard', 1),
+(1, 'F', 4, 'Standard', 1),
+(1, 'F', 5, 'Standard', 1),
+(1, 'F', 6, 'Standard', 1),
+(1, 'F', 7, 'Standard', 1),
+(1, 'F', 8, 'Standard', 1),
+(1, 'F', 9, 'Standard', 1),
+(1, 'F', 10, 'Standard', 1),
+
+(1, 'G', 1, 'Standard', 1),
+(1, 'G', 2, 'Standard', 1),
+(1, 'G', 3, 'Standard', 1),
+(1, 'G', 4, 'Standard', 1),
+(1, 'G', 5, 'Standard', 1),
+(1, 'G', 6, 'Standard', 1),
+(1, 'G', 7, 'Standard', 1),
+(1, 'G', 8, 'Standard', 1),
+(1, 'G', 9, 'Standard', 1),
+(1, 'G', 10, 'Standard', 1),
+
+(1, 'H', 1, 'Standard', 1),
+(1, 'H', 2, 'Discapacitado', 1),
+(1, 'H', 3, 'Standard', 1),
+(1, 'H', 4, 'Standard', 1),
+(1, 'H', 5, 'Standard', 1),
+(1, 'H', 6, 'Standard', 1),
+(1, 'H', 7, 'Standard', 1),
+(1, 'H', 8, 'Discapacitado', 1),
+(1, 'H', 9, 'Standard', 1),
+(1, 'H', 10, 'Standard', 1),
+
+(1, 'I', 1, 'Standard', 1),
+(1, 'I', 2, 'Standard', 1),
+(1, 'I', 3, 'Standard', 1),
+(1, 'I', 4, 'Standard', 1),
+(1, 'I', 5, 'Standard', 1),
+(1, 'I', 6, 'Standard', 1),
+(1, 'I', 7, 'Standard', 1),
+(1, 'I', 8, 'Standard', 1),
+(1, 'I', 9, 'Standard', 1),
+(1, 'I', 10, 'Standard', 1),
+
+(1, 'J', 1, 'Standard', 1),
+(1, 'J', 2, 'Standard', 1),
+(1, 'J', 3, 'Standard', 1),
+(1, 'J', 4, 'Standard', 1),
+(1, 'J', 5, 'Standard', 1),
+(1, 'J', 6, 'Discapacitado', 1),
+(1, 'J', 7, 'Standard', 1),
+(1, 'J', 8, 'Standard', 1),
+(1, 'J', 9, 'Standard', 1),
+(1, 'J', 10, 'Standard', 1);
+
+
+-- --------------------------------------------------------
+-- Inserción de nuevas películas
+-- --------------------------------------------------------
+
+INSERT INTO `tbl_pelicula` (`nombre`, `sipnosis`, `clasificacion`, `genero`, `reparto`, `director`, `duracion`, `fecha_estreno`, `activa`) VALUES
+('The Matrix', 'Un hacker descubre la verdadera naturaleza de la realidad.', 'R', 'Ciencia Ficción', 'Keanu Reeves, Laurence Fishburne', 'Lana Wachowski, Lilly Wachowski', 136, '1999-03-31', 1),
+('Avengers: Endgame', 'Los héroes deben derrotar a Thanos y restaurar el orden.', 'PG-13', 'Acción', 'Robert Downey Jr., Chris Evans', 'Anthony Russo, Joe Russo', 181, '2019-04-26', 1),
+('Interstellar', 'Un grupo de exploradores viaja a través de un agujero de gusano para salvar la humanidad.', 'PG-13', 'Ciencia Ficción', 'Matthew McConaughey, Anne Hathaway', 'Christopher Nolan', 169, '2014-11-07', 1);
+
+INSERT INTO tbl_funcion (id_pelicula, id_sala, fecha_funcion, hora, precio, descuento, activa) VALUES
+(2,1,'2025-11-19','14:00:00',15000,2000,1),
+(3,1,'2025-11-19','16:00:00',18000,2500,1),
+(4,1,'2025-11-19','18:00:00',17000,1500,1),
+(2,1,'2025-11-19','20:00:00',15000,2000,1),
+(3,1,'2025-11-19','22:00:00',18000,2500,1),
+
+(4,1,'2025-11-20','14:00:00',17000,1500,1),
+(2,1,'2025-11-20','16:00:00',15000,2000,1),
+(3,1,'2025-11-20','18:00:00',18000,2500,1),
+(4,1,'2025-11-20','20:00:00',17000,1500,1),
+(2,1,'2025-11-20','22:00:00',15000,2000,1),
+
+(3,1,'2025-11-21','14:00:00',18000,2500,1),
+(4,1,'2025-11-21','16:00:00',17000,1500,1),
+(2,1,'2025-11-21','18:00:00',15000,2000,1),
+(3,1,'2025-11-21','20:00:00',18000,2500,1),
+(4,1,'2025-11-21','22:00:00',17000,1500,1),
+
+(2,1,'2025-11-22','14:00:00',15000,2000,1),
+(3,1,'2025-11-22','16:00:00',18000,2500,1),
+(4,1,'2025-11-22','18:00:00',17000,1500,1),
+(2,1,'2025-11-22','20:00:00',15000,2000,1),
+(3,1,'2025-11-22','22:00:00',18000,2500,1);
 
 COMMIT;

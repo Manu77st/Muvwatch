@@ -68,7 +68,7 @@ $errorCarga = '';
 
 try {
 $sql = "SELECT f.id_funcion, f.id_sala, f.fecha_funcion, f.precio, f.descuento,
-                   p.id_pelicula, p.nombre, p.sipnosis, p.genero, p.reparto, p.director, p.clasificacion
+                   p.id_pelicula, p.nombre, p.sipnosis, p.genero, p.reparto, p.director, p.clasificacion, p.poster_url
             FROM tbl_funcion f
             INNER JOIN tbl_pelicula p ON p.id_pelicula = f.id_pelicula
             WHERE f.activa = 1 AND p.activa = 1
@@ -289,7 +289,9 @@ $sql = "SELECT f.id_funcion, f.id_sala, f.fecha_funcion, f.precio, f.descuento,
                     $originalName = $titulo;
                     $poster = $posterPlaceholder;
 
-                    if ($idPelicula > 0) {
+                    if (!empty($funcion['poster_url'])) {
+                        $poster = $funcion['poster_url'];
+                    } elseif ($idPelicula > 0) {
                         $pattern = rtrim($posterUploadsDir, '/\\') . '/pelicula_' . $idPelicula . '.*';
                         $posterCandidates = glob($pattern);
 
@@ -328,7 +330,7 @@ $sql = "SELECT f.id_funcion, f.id_sala, f.fecha_funcion, f.precio, f.descuento,
                                 Editar
                             </button>
 
-                            <form class="delete-form" action="../backend/admin/eliminar_funcion.php" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar la función <?= $titulo; ?>?');">
+                            <form class="delete-form" action="/proyecto/Muvwatch/backend/admin/eliminar_funcion.php" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar la función <?= $titulo; ?>?');">
                                 <input type="hidden" name="id_funcion" value="<?= (int)$funcion['id_funcion']; ?>">
                                 <button class="btn-delete" type="submit">
                                     <span class="material-symbols-outlined">delete</span>
@@ -529,5 +531,3 @@ $sql = "SELECT f.id_funcion, f.id_sala, f.fecha_funcion, f.precio, f.descuento,
 </body>
 
 </html>
-
-

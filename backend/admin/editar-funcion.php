@@ -190,7 +190,7 @@ if ($funcion) {
         <main class="contenedor-funcion">
             <h2 class="titulo-funcion">Editar función</h2>
 
-            <form class="form-funcion form-funcion--edit" action="../backend/admin/actualizar_funcion.php" method="POST" enctype="multipart/form-data">
+            <form class="form-funcion form-funcion--edit" action="actualizar_funcion.php" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="id_funcion" value="<?= (int)$funcion['id_funcion']; ?>">
                 <input type="hidden" name="id_pelicula" value="<?= (int)$funcion['id_pelicula']; ?>">
 
@@ -247,4 +247,3 @@ if ($funcion) {
 <script src="/proyecto/Muvwatch/scripts/menu-cliente.js"></script>
 <script src="/proyecto/Muvwatch/scripts/admin-search.js"></script>
 </html>
-

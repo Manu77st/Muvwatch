@@ -222,6 +222,7 @@ CREATE TABLE `tbl_pelicula` (
   `director` varchar(100) NOT NULL,
   `duracion` int(11) NOT NULL,
   `fecha_estreno` date DEFAULT NULL,
+  `poster_url` varchar(255) DEFAULT NULL,
   `activa` tinyint(1) DEFAULT 1,
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -230,8 +231,8 @@ CREATE TABLE `tbl_pelicula` (
 -- Volcado de datos para la tabla `tbl_pelicula`
 --
 
-INSERT INTO `tbl_pelicula` (`id_pelicula`, `nombre`, `sipnosis`, `clasificacion`, `genero`, `reparto`, `director`, `duracion`, `fecha_estreno`, `activa`, `fecha_creacion`) VALUES
-(1, 'Inception', 'Un ladrón que roba secretos a través de sueños.', 'PG-13', 'Ciencia Ficción', 'Leonardo DiCaprio, Joseph Gordon-Levitt', 'Christopher Nolan', 148, '2010-07-16', 1, '2025-09-11 01:15:06');
+INSERT INTO `tbl_pelicula` (`id_pelicula`, `nombre`, `sipnosis`, `clasificacion`, `genero`, `reparto`, `director`, `duracion`, `fecha_estreno`, `poster_url`, `activa`, `fecha_creacion`) VALUES
+(1, 'Inception', 'Un ladrón que roba secretos a través de sueños.', 'PG-13', 'Ciencia Ficción', 'Leonardo DiCaprio, Joseph Gordon-Levitt', 'Christopher Nolan', 148, '2010-07-16', NULL, 1, '2025-09-11 01:15:06');
 
 -- --------------------------------------------------------
 

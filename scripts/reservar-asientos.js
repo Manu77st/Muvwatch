@@ -1,4 +1,34 @@
-// reservar-asientos.js – Versión completamente corregida
+// reservar-asientos.js 
+// Agrega esto al inicio de la función inicio() para debug
+async function inicio() {
+    try {
+        console.log("🔄 Iniciando página de reserva...");
+        console.log("📋 sessionStorage actual:", {
+            id_pelicula: sessionStorage.getItem("id_pelicula"),
+            pelicula_nombre: sessionStorage.getItem("pelicula_nombre"),
+            funciones_cache: sessionStorage.getItem("funciones_cache") ? "EXISTE" : "NO EXISTE"
+        });
+        
+        // Limpiar cache corrupto al inicio
+        limpiarCacheCorrupto();
+        
+        idPelicula = obtenerIdPelicula();
+        
+        if (!idPelicula) {
+            msg("Error: No se pudo identificar la película");
+            setTimeout(() => window.location.href = "lobby-cliente.html", 2000);
+            return;
+        }
+
+        console.log("✅ ID Película encontrado:", idPelicula);
+        await cargarNombrePelicula(idPelicula);
+        await cargarFunciones(idPelicula);
+
+    } catch (err) {
+        console.error("❌ Error en inicialización:", err);
+        msg("Error al cargar los datos");
+    }
+}
 (() => {
   "use strict";
 
@@ -155,31 +185,77 @@
 
   async function cargarNombrePelicula(idPelicula) {
     try {
-      if (window.peliculasCache && window.peliculasCache[idPelicula]) {
-        const nombre = window.peliculasCache[idPelicula].nombre;
-        if (funcionNombre) funcionNombre.textContent = nombre;
-        return;
-      }
-
-      const nombreSession = sessionStorage.getItem("pelicula_nombre");
-      if (nombreSession && funcionNombre) {
-        funcionNombre.textContent = nombreSession;
-        return;
-      }
-
-      try {
-        const res = await api(`${API}?accion=pelicula&id=${idPelicula}`);
-        if (res.exito && res.datos && funcionNombre) {
-          funcionNombre.textContent = res.datos.nombre || "Película";
+        console.log("🔍 Buscando nombre para película ID:", idPelicula);
+        
+        // 1. Intentar desde cache global (si existe)
+        if (window.peliculasCache && window.peliculasCache[idPelicula]) {
+            const nombre = window.peliculasCache[idPelicula].nombre;
+            console.log("✅ Nombre desde cache global:", nombre);
+            if (funcionNombre) {
+                funcionNombre.textContent = nombre;
+                // Guardar en sessionStorage para futuras referencias
+                sessionStorage.setItem("pelicula_nombre", nombre);
+            }
+            return;
         }
-      } catch (apiError) {
-        if (funcionNombre) funcionNombre.textContent = "Película #" + idPelicula;
-      }
+
+        // 2. Intentar desde sessionStorage
+        const nombreSession = sessionStorage.getItem("pelicula_nombre");
+        if (nombreSession && funcionNombre) {
+            console.log("✅ Nombre desde sessionStorage:", nombreSession);
+            funcionNombre.textContent = nombreSession;
+            return;
+        }
+
+        // 3. Intentar desde funciones cache
+        const funcionesCache = sessionStorage.getItem("funciones_cache");
+        if (funcionesCache) {
+            try {
+                const funciones = JSON.parse(funcionesCache);
+                if (funciones.length > 0 && funciones[0].pelicula) {
+                    const nombre = funciones[0].pelicula;
+                    console.log("✅ Nombre desde funciones cache:", nombre);
+                    if (funcionNombre) {
+                        funcionNombre.textContent = nombre;
+                        sessionStorage.setItem("pelicula_nombre", nombre);
+                    }
+                    return;
+                }
+            } catch (e) {
+                console.warn("Error leyendo funciones cache:", e);
+            }
+        }
+
+        // 4. Último recurso: llamar a la API
+        console.log("🔄 Consultando API para nombre de película...");
+        try {
+            const res = await api(`${API}?accion=pelicula&id=${idPelicula}`);
+            if (res.exito && res.datos && res.datos.nombre) {
+                const nombre = res.datos.nombre;
+                console.log("✅ Nombre desde API:", nombre);
+                if (funcionNombre) {
+                    funcionNombre.textContent = nombre;
+                    sessionStorage.setItem("pelicula_nombre", nombre);
+                }
+            } else {
+                throw new Error("No se pudo obtener el nombre de la película");
+            }
+        } catch (apiError) {
+            console.error("❌ Error API pelicula:", apiError);
+            // Valor por defecto
+            if (funcionNombre) {
+                funcionNombre.textContent = "Película #" + idPelicula;
+            }
+        }
 
     } catch (err) {
-      if (funcionNombre) funcionNombre.textContent = "Película #" + idPelicula;
+        console.error("❌ Error en cargarNombrePelicula:", err);
+        // Valor por defecto como fallback
+        if (funcionNombre) {
+            funcionNombre.textContent = "Película";
+        }
     }
-  }
+}
 
   // -------------------------
   // Cargar funciones - VERSIÓN CORREGIDA

@@ -16,31 +16,12 @@
       <nav class="navbar">
         <div class="container-navbar">
           <div class="navbar-left">
-            <a href="lobby-cliente.html" class="logo-link">
-              <img id="logo-nav" src="/images/Logo.svg" alt="Logo_muvwatch" />
+            <a href="/Muvwatch/backend/admin/lobby_admin.php" class="logo-link">
+              <img id="logo-nav" src="/Muvwatch/images/Logo.svg" alt="Logo_muvwatch" />
             </a>
           </div>
           <div class="navbar-center">
-            <div class="container-search">
-              <div class="filtros">
-                <span
-                  class="material-symbols-outlined icon-inline"
-                  aria-hidden="true"
-                  onclick="filtro()"
-                  >filter_alt</span
-                >
-              </div>
-              <div class="caja-busqueda">
-                <input
-                  id="search-input"
-                  type="text"
-                  placeholder="Buscar función..."
-                />
-                <span class="material-symbols-outlined" onclick="busquedas()"
-                  >search</span
-                >
-              </div>
-            </div>
+              <!-- Barra de búsqueda eliminada -->
           </div>
           <div class="navbar-right">
             <div class="cliente-box" id="clienteBox">
@@ -52,7 +33,7 @@
               Cliente A
               <div class="menu-cliente" id="menuCliente">
                 <a href="#">Perfil</a>
-                <a href="/src/login.html">Cerrar sesión</a>
+                <a href="/Muvwatch/backend/logout.php">Cerrar sesión</a>
               </div>
             </div>
           </div>
@@ -61,12 +42,12 @@
       <div class="menu-secundario">
         <nav>
           <a
-            href="lobby-cliente.html"
+            href="/Muvwatch/backend/admin/lobby_admin.php"
             class="enlace-a"
             style="border-bottom-color: #3b7ba6; background: #f5f5f5"
             >Inicio</a>
-          <a href="../mod-cliente/carrito.html">Reportes</a>
-          <a href="">Clientes VIP</a>
+              Administrador
+            <a href="/Muvwatch/backend/admin/Consultar-clientes-VIP.php">Clientes VIP</a>
         </nav>
       </div>
     </header>
@@ -91,10 +72,7 @@
                 <option value="">Fecha final</option>
                 <option value="2024-12-31">31/12/2024</option>
                 <option value="2024-11-30">30/11/2024</option>
-                <option value="2024-10-31">31/10/2024</option>
-            </select>
-
-            <select title="pelicula">
+          <!-- Barra de búsqueda eliminada -->
                 <option value="">Película</option>
                 <option value="mission-impossible">Mission Impossible</option>
                 <option value="spiderman">Spiderman</option>
@@ -155,6 +133,7 @@
         </table>
     </main>
 </body>
-
+<script src="/Muvwatch/scripts/menu-cliente.js"></script>
+<script src="/Muvwatch/scripts/admin-search.js"></script>
 </html>
 

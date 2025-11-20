@@ -1,148 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultar Clientes</title>
-     <link rel="stylesheet" href="../styles/styles-cliente.css">
-      <link rel="stylesheet" href="../styles/style-admin.css">
-      <link rel="stylesheet" href="../styles/styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-
-
-</head>
-<body>
-      <nav class="navbar">
-        <div class="container-navbar">
-          <div class="navbar-left">
-            <a href="lobby-cliente.html" class="logo-link">
-              <img id="logo-nav" src="/images/Logo.svg" alt="Logo_muvwatch" />
-            </a>
-          </div>
-          <div class="navbar-center">
-            <div class="container-search">
-              <div class="filtros">
-                <span
-                  class="material-symbols-outlined icon-inline"
-                  aria-hidden="true"
-                  onclick="filtro()"
-                  >filter_alt</span
-                >
-              </div>
-              <div class="caja-busqueda">
-                <input
-                  id="search-input"
-                  type="text"
-                  placeholder="Buscar función..."
-                />
-                <span class="material-symbols-outlined" onclick="busquedas()"
-                  >search</span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="navbar-right">
-            <div class="cliente-box" id="clienteBox">
-              <span
-                class="material-symbols-outlined icon-inline profile-icon"
-                aria-hidden="true"
-                >account_circle</span
-              >
-              Cliente A
-              <div class="menu-cliente" id="menuCliente">
-                <a href="#">Perfil</a>
-                <a href="/src/login.html">Cerrar sesión</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-      <div class="menu-secundario">
-        <nav>
-           <a
-            href="lobby_admin.html"
-            class="enlace-a"
-            style="border-bottom-color: #3b7ba6; background: #f5f5f5"
-            >Inicio</a>
-          <a href="Reportes-ventas.html">Reportes</a>
-          <a href="Consultar-clientes-VIP.html">Clientes VIP</a>
-        </nav>
-      </div>
-    </header>
-    <div id="resultados"></div>
-
-    <main class="main-container">
-        <h2>Consultar clientes vip</h2>
-
-        <div class="filtros">
-            <div class="campo-buscar">
-                <input type="text" placeholder="Buscar">
-                <span class="material-symbols-outlined">search</span>
-            </div>
-
-            <select title="tipo-membresia">
-                <option value="">Membresía</option>
-                <option value="gold">Gold</option>
-                <option value="silver">Silver</option>
-            </select>
-
-            <select title="estado-membresia">
-                <option value="">Estado</option>
-                <option value="activo">Activo</option>
-                <option value="inactivo">Inactivo</option>
-            </select>
-        </div>
-
-        <!-- Tabla -->
-        <table class="tabla-clientes">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Documento</th>
-                    <th>Correo</th>
-                    <th>Memb</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Breiner Durán</td>
-                    <td>1065127509</td>
-                    <td>breiner@gmail.com</td>
-                    <td>13459461</td>
-                    <td>Inactivo</td>
-                    <td>
-                        <button class="btn-editar" onclick="window.location.href='editar-cliente-vip.html'">✏️</button>
-                        <button class="btn-eliminar">🗑️</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>María González</td>
-                    <td>1234567890</td>
-                    <td>maria.gonzalez@email.com</td>
-                    <td>98765432</td>
-                    <td>Activo</td>
-                    <td>
-                        <button class="btn-editar" onclick="window.location.href='editar-cliente-vip.html'">✏️</button>
-                        <button class="btn-eliminar">🗑️</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Carlos Rodríguez</td>
-                    <td>0987654321</td>
-                    <td>carlos.rodriguez@email.com</td>
-                    <td>11223344</td>
-                    <td>Activo</td>
-                    <td>
-                        <button class="btn-editar" onclick="window.location.href='editar-cliente-vip.html'">✏️</button>
-                        <button class="btn-eliminar">🗑️</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </main>
-</body>
-
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirigiendo...</title>
+    <meta
+      http-equiv="refresh"
+      content="0;url=/Muvwatch/backend/admin/Consultar-clientes-VIP.php"
+    />
+    <script>
+      window.location.href =
+        "/Muvwatch/backend/admin/Consultar-clientes-VIP.php";
+    </script>
+  </head>
+  <body>
+    <p>
+      Si no eres redirigido automáticamente, haz clic
+      <a href="/Muvwatch/backend/admin/Consultar-clientes-VIP.php">aquí</a>.
+    </p>
+  </body>
 </html>

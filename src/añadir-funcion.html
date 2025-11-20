@@ -1,126 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Añadir funcion</title>
-   <link rel="stylesheet" href="../styles/styles-cliente.css">
-      <link rel="stylesheet" href="../styles/style-admin.css">
-      <link rel="stylesheet" href="../styles/styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Añadir función</title>
+    <link rel="stylesheet" href="../styles/styles-cliente.css" />
+    <link rel="stylesheet" href="../styles/style-admin.css" />
+    <link rel="stylesheet" href="../styles/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container-navbar">
+        <div class="navbar-left">
+          <a href="/Muvwatch/backend/admin/lobby_admin.php" class="logo-link">
+            <img
+              id="logo-nav"
+              src="/Muvwatch/images/Logo.svg"
+              alt="Logo_muvwatch"
+            />
+          </a>
+        </div>
 
-
-</head>
-<body>
-      <nav class="navbar">
-        <div class="container-navbar">
-          <div class="navbar-left">
-            <a href="lobby-cliente.html" class="logo-link">
-              <img id="logo-nav" src="/images/Logo.svg" alt="Logo_muvwatch" />
-            </a>
-          </div>
-          <div class="navbar-center">
-            <div class="container-search">
-              <div class="filtros">
-                <span
-                  class="material-symbols-outlined icon-inline"
-                  aria-hidden="true"
-                  onclick="filtro()"
-                  >filter_alt</span
-                >
-              </div>
-              <div class="caja-busqueda">
-                <input
-                  id="search-input"
-                  type="text"
-                  placeholder="Buscar función..."
-                />
-                <span class="material-symbols-outlined" onclick="busquedas()"
-                  >search</span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="navbar-right">
-            <div class="cliente-box" id="clienteBox">
-              <span
-                class="material-symbols-outlined icon-inline profile-icon"
-                aria-hidden="true"
-                >account_circle</span
-              >
-              Cliente A
-              <div class="menu-cliente" id="menuCliente">
-                <a href="#">Perfil</a>
-                <a href="/src/login.html">Cerrar sesión</a>
-              </div>
+        <div class="navbar-right">
+          <div class="cliente-box" id="clienteBox">
+            <span
+              class="material-symbols-outlined icon-inline profile-icon"
+              aria-hidden="true"
+              >account_circle</span
+            >
+            Administrador
+            <div class="menu-cliente" id="menuCliente">
+              <a href="#">Perfil</a>
+              <a href="/Muvwatch/backend/logout.php">Cerrar sesión</a>
             </div>
           </div>
         </div>
+      </div>
+    </nav>
+
+    <div class="menu-secundario">
+      <nav>
+        <a
+          href="/Muvwatch/backend/admin/lobby_admin.php"
+          class="enlace-a"
+                    <!-- Barra de búsqueda eliminada -->
       </nav>
-      <div class="menu-secundario">
-        <nav>
-          <a
-            href="lobby_admin.html"
-            class="enlace-a"
-            style="border-bottom-color: #3b7ba6; background: #f5f5f5"
-            >Inicio</a>
-          <a href="Reportes-ventas.html">Reportes</a>
-          <a href="Consultar-clientes-VIP.html">Clientes VIP</a>
-        </nav>
-      </div>
-    </header>
+    </div>
+
     <div id="resultados"></div>
+
     <div class="contenedor-funcion">
-  <h2 class="titulo-funcion">AÑADIR FUNCIÓN</h2>
+      <h2 class="titulo-funcion">AÑADIR FUNCIÓN</h2>
 
-  <form class="form-funcion">
-    <div class="form-izquierda">
-      <label class="image-upload">
-        <input type="file" accept="image/*">
-        <div class="preview">
-          <span class="icono">📷</span>
-          <p>Insertar imagen</p>
-          <small>formato .jpg, .png</small>
+      <!-- IMPORTANTE: action y method para llamar a guardar_funcion.php -->
+      <form
+        class="form-funcion"
+        action="../backend/admin/guardar_funcion.php"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div class="form-izquierda">
+          <label class="image-upload">
+            <!-- Por ahora el backend no guarda la imagen, pero dejamos el name para más adelante -->
+            <input type="file" name="poster" accept=".jpg,.jpeg,.png,.webp" />
+            <div class="preview">
+              <span class="icono">📷</span>
+              <p>Insertar imagen</p>
+              <small>formato .jpg, .png</small>
+            </div>
+          </label>
+
+          <!-- name="nombre" y name="descripcion" usados en guardar_funcion.php -->
+          <input
+            type="text"
+            name="nombre"
+            placeholder="Nombre de la película"
+            required
+          />
+          <textarea
+            name="descripcion"
+            placeholder="Descripción"
+            required
+          ></textarea>
         </div>
-      </label>
 
-      <input type="text" placeholder="Nombre de la película">
-      <textarea placeholder="Descripción"></textarea>
+        <div class="form-derecha">
+          <div class="grupo">
+            <input
+              type="text"
+              name="clasificacion"
+              placeholder="Clasificación"
+              required
+            />
+            <input type="text" name="genero" placeholder="Géneros" required />
+          </div>
+
+          <div class="grupo">
+            <input type="text" name="reparto" placeholder="Reparto" required />
+            <input
+              type="text"
+              name="director"
+              placeholder="Director"
+              required
+            />
+          </div>
+
+          <div class="grupo">
+            <input
+              type="number"
+              name="precio"
+              placeholder="Precio"
+              step="0.01"
+              min="0"
+              required
+            />
+            <input
+              type="number"
+              name="descuento"
+              placeholder="Descuento"
+              step="0.01"
+              min="0"
+              value="0"
+            />
+          </div>
+
+          <div class="grupo">
+            <!-- datetime-local: el PHP ya corta a YYYY-MM-DD -->
+            <input
+              type="datetime-local"
+              name="fecha_funcion"
+              placeholder="Horario"
+              required
+            />
+            <!-- id_sala numérico para que el cast a int funcione bien -->
+            <input
+              type="number"
+              name="id_sala"
+              placeholder="Sala"
+              min="1"
+              value="1"
+              required
+            />
+          </div>
+
+          <div class="grupo">
+            <input type="url" name="trailer" placeholder="Enlace del tráiler" />
+            <input type="date" name="fecha_estreno" placeholder="Publicación" />
+          </div>
+        </div>
+
+        <div class="botones-funcion">
+          <button
+            type="button"
+            class="btn-cancelar"
+            onclick="window.location.href='/Muvwatch/backend/admin/lobby_admin.php'"
+          >
+            Cancelar
+          </button>
+          <button type="submit" class="btn-agregar">Agregar</button>
+        </div>
+      </form>
     </div>
-
-    <div class="form-derecha">
-      <div class="grupo">
-        <input type="text" placeholder="Clasificación">
-        <input type="text" placeholder="Géneros">
-      </div>
-
-      <div class="grupo">
-        <input type="text" placeholder="Reparto">
-        <input type="text" placeholder="Director">
-      </div>
-
-      <div class="grupo">
-        <input type="number" placeholder="Precio">
-        <input type="number" placeholder="Descuento">
-      </div>
-
-      <div class="grupo">
-        <input type="datetime-local" placeholder="Horario">
-        <input type="text" placeholder="Sala">
-      </div>
-
-      <div class="grupo">
-        <input type="url" placeholder="Enlace del tráiler">
-        <input type="date" placeholder="Publicación">
-      </div>
-    </div>
-  </form>
-
-  <div class="botones-funcion">
-    <button class="btn-cancelar">Cancelar</button>
-    <button class="btn-agregar">Agregar</button>
-  </div>
-</div>
-
-</body>
+  </body>
+  <script src="/Muvwatch/scripts/menu-cliente.js"></script>
+  <script src="/Muvwatch/scripts/admin-search.js"></script>
 </html>

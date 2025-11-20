@@ -16,31 +16,9 @@
       <nav class="navbar">
         <div class="container-navbar">
           <div class="navbar-left">
-            <a href="lobby-cliente.html" class="logo-link">
-              <img id="logo-nav" src="/images/Logo.svg" alt="Logo_muvwatch" />
+            <a href="/Muvwatch/src/lobby-cliente.html" class="logo-link">
+              <img id="logo-nav" src="/Muvwatch/images/Logo.svg" alt="Logo_muvwatch" />
             </a>
-          </div>
-          <div class="navbar-center">
-            <div class="container-search">
-              <div class="filtros">
-                <span
-                  class="material-symbols-outlined icon-inline"
-                  aria-hidden="true"
-                  onclick="filtro()"
-                  >filter_alt</span
-                >
-              </div>
-              <div class="caja-busqueda">
-                <input
-                  id="search-input"
-                  type="text"
-                  placeholder="Buscar función..."
-                />
-                <span class="material-symbols-outlined" onclick="busquedas()"
-                  >search</span
-                >
-              </div>
-            </div>
           </div>
           <div class="navbar-right">
             <div class="cliente-box" id="clienteBox">
@@ -49,10 +27,10 @@
                 aria-hidden="true"
                 >account_circle</span
               >
-              Cliente A
+              Administrador
               <div class="menu-cliente" id="menuCliente">
                 <a href="#">Perfil</a>
-                <a href="/src/login.html">Cerrar sesión</a>
+                <a href="/Muvwatch/backend/logout.php">Cerrar sesión</a>
               </div>
             </div>
           </div>
@@ -86,7 +64,7 @@
 
             <!-- Películas existentes -->
             <div class="movie-card" onclick="openMovieModal('mission-impossible')">
-                <img src="../images/Peliculas_Cartelera/Mision imposible.jpg" alt="Mission Impossible">
+                <img src="/Muvwatch/images/Peliculas_Cartelera/Mision imposible.jpg" alt="Mission Impossible">
                 <h3>Mission Impossible</h3>
                 <div class="movie-actions">
                     <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
@@ -102,14 +80,14 @@
 
                     <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('mission-impossible')">
                         <span class="material-symbols-outlined">delete</span>
-                        Eliminar
+                                    Administrador
                     </button>
                 </div>
 
             </div>
 
             <div class="movie-card" onclick="openMovieModal('spiderman')">
-                <img src="../images/Peliculas_Cartelera/Spider-man.jpg" alt="Spiderman">
+                <img src="/Muvwatch/images/Peliculas_Cartelera/Spider-man.jpg" alt="Spiderman">
                 <h3>Spiderman</h3>
                 <div class="movie-actions">
                     <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
@@ -122,16 +100,11 @@
                         <span class="material-symbols-outlined">edit</span>
                         Editar
                     </button>
-
-                    <button class="btn-delete" onclick="event.stopPropagation(); deleteMovie('mission-impossible')">
-                        <span class="material-symbols-outlined">delete</span>
-                        Eliminar
-                    </button>
                 </div>
             </div>
 
             <div class="movie-card" onclick="openMovieModal('inside-out-2')">
-                <img src="../images/Peliculas_Cartelera/Intesamente_2.jpg" alt="Inside Out 2">
+                <img src="/Muvwatch/images/Peliculas_Cartelera/Intesamente_2.jpg" alt="Inside Out 2">
                 <h3>Intensamente 2</h3>
                 <div class="movie-actions">
                     <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
@@ -153,7 +126,7 @@
             </div>
 
             <div class="movie-card" onclick="openMovieModal('beetlejuice')">
-                <img src="../images/Peliculas_Cartelera/Bettlejuice.jpg" alt="Beetlejuice">
+                <img src="/Muvwatch/images/Peliculas_Cartelera/Bettlejuice.jpg" alt="Beetlejuice">
                 <h3>Beetlejuice</h3>
                 <div class="movie-actions">
                     <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('mission-impossible')">
@@ -175,7 +148,7 @@
             </div>
 
             <div class="movie-card" onclick="openMovieModal('paddington')">
-                <img src="../images/Peliculas_Cartelera/Paddington.jpg" alt="Paddington">
+                <img src="/Muvwatch/images/Peliculas_Cartelera/Paddington.jpg" alt="Paddington">
                 <h3>Paddington</h3>
                 <div class="movie-actions">
                     <button class="btn-view" onclick="event.stopPropagation(); openMovieModal('mission-impossible')">

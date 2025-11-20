@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reportes de ventas</title>
-    <link rel="stylesheet" href="../styles/styles-cliente.css">
+    <link rel="stylesheet" href="/Muvwatch/styles/styles-cliente.css">
       <link rel="stylesheet" href="../styles/style-admin.css">
       <link rel="stylesheet" href="../styles/styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
@@ -16,8 +16,8 @@
       <nav class="navbar">
         <div class="container-navbar">
           <div class="navbar-left">
-            <a href="lobby-cliente.html" class="logo-link">
-              <img id="logo-nav" src="/images/Logo.svg" alt="Logo_muvwatch" />
+            <a href="/Muvwatch/backend/admin/lobby_admin.php" class="logo-link">
+              <img id="logo-nav" src="/Muvwatch/images/Logo.svg" alt="Logo_muvwatch" />
             </a>
           </div>
           <div class="navbar-center">
@@ -47,12 +47,11 @@
               <span
                 class="material-symbols-outlined icon-inline profile-icon"
                 aria-hidden="true"
-                >account_circle</span
-              >
-              Cliente A
+                >account_circle</span>
+              Administrador
               <div class="menu-cliente" id="menuCliente">
                 <a href="#">Perfil</a>
-                <a href="/src/login.html">Cerrar sesión</a>
+                <a href="/Muvwatch/backend/logout.php">Cerrar sesión</a>
               </div>
             </div>
           </div>
@@ -61,13 +60,12 @@
       <div class="menu-secundario">
         <nav>
           <a
-            href="lobby-cliente.html"
+            href="/Muvwatch/backend/admin/lobby_admin.php"
             class="enlace-a"
-            style="border-bottom-color: #3b7ba6; background: #f5f5f5"
+            
             >Inicio</a>
-          <a href="../mod-cliente/carrito.html">Reportes</a>
-          <a href="">Clientes VIP</a>
-        </nav>
+          <a href="/Muvwatch/src/Reportes-ventas.html" style="border-bottom-color: #3b7ba6; background: #f5f5f5">Reportes</a>
+          <a href="/Muvwatch/backend/admin/Consultar-clientes-VIP.php">Clientes VIP</a>
       </div>
     </header>
     <div id="resultados"></div>
@@ -76,16 +74,7 @@
     <h2>REPORTES DE VENTAS DE BOLETERIA</h2>
 
     <div class="filtros">
-        <div class="campo-buscar">
-            <input type="text" placeholder="Buscar">
-            <span class="material-symbols-outlined">search</span>
-        </div>
-
-        <select>
-            <option>Fecha inicial</option>
-        </select>
-
-        <select>
+                      <!-- Barra de búsqueda eliminada -->
             <option>Fecha final</option>
         </select>
 
@@ -111,5 +100,7 @@
         </tbody>
     </table>
 </main>
-
+</body>
+<script src="/Muvwatch/scripts/menu-cliente.js"></script>
+<script src="/Muvwatch/scripts/admin-search.js"></script>
 </html>

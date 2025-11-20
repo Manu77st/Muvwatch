@@ -32,35 +32,37 @@
         <div class="card left-section">
           <div class="info-row">
             <span class="info-label">Función:</span>
-            <span class="info-value">Mission impossible</span>
+            <span class="info-value" id="venta_funcion"
+              >Mission impossible</span
+            >
           </div>
           <div class="info-row">
             <span class="info-label">Fecha:</span>
-            <span class="info-value">30/08/2025</span>
+            <span class="info-value" id="venta_fecha">30/08/2025</span>
           </div>
           <div class="info-row">
             <span class="info-label">Hora:</span>
-            <span class="info-value">9:20 pm</span>
+            <span class="info-value" id="venta_hora">9:20 pm</span>
           </div>
           <div class="info-row">
             <span class="info-label">Sala:</span>
-            <span class="info-value">4</span>
+            <span class="info-value" id="venta_sala">4</span>
           </div>
           <div class="info-row">
             <span class="info-label">Sillas:</span>
-            <span class="info-value">C5, C6</span>
+            <span class="info-value" id="venta_sillas">C5, C6</span>
           </div>
           <div class="info-row">
             <span class="info-label">Bloque:</span>
-            <span class="info-value">1</span>
+            <span class="info-value" id="venta_bloque">1</span>
           </div>
           <div class="info-row">
             <span class="info-label">Precio total:</span>
-            <span class="info-value">$$$$</span>
+            <span class="info-value" id="venta_precio">$$$$</span>
           </div>
           <div class="info-row">
             <span class="info-label">Descuento:</span>
-            <span class="info-value">10%</span>
+            <span class="info-value" id="venta_descuento">10%</span>
           </div>
 
           <div class="payment-method">
@@ -157,6 +159,223 @@
         </div>
       </div>
     </main>
-    <script src="../scripts/pago-modulo.js"></script>
+    <script src="../scripts/cajero.js"></script>
+    <script>
+      (function () {
+        const API = "../backend/api/index.php";
+
+        function formatearMoneda(n) {
+          return "$" + parseFloat(n || 0).toLocaleString("es-CO");
+        }
+
+        function cargarDatosVenta() {
+          // ✅ BUSCAR EN AMBOS LUGARES
+          const temp =
+            sessionStorage.getItem("datos_pago") ||
+            sessionStorage.getItem("venta_temp");
+          if (!temp) {
+            console.error("❌ No hay datos de pago en sessionStorage");
+            alert("No hay datos de pago. Regresa a la reserva.");
+            return;
+          }
+
+          const venta = JSON.parse(temp);
+          console.log("✅ Datos de pago cargados:", venta);
+
+          // Información de la función
+          document.getElementById("venta_funcion").textContent =
+            venta.pelicula_nombre || "Película";
+          document.getElementById("venta_fecha").textContent =
+            venta.fecha_funcion ? venta.fecha_funcion.split("T")[0] : "—";
+
+          // Extraer hora
+          let hora = "—";
+          if (venta.fecha_funcion) {
+            if (venta.fecha_funcion.includes(" ")) {
+              hora = venta.fecha_funcion.split(" ")[1]?.substring(0, 5) || "—";
+            } else if (venta.fecha_funcion.includes("T")) {
+              hora = venta.fecha_funcion.split("T")[1]?.substring(0, 5) || "—";
+            }
+          }
+          document.getElementById("venta_hora").textContent = hora;
+
+          document.getElementById("venta_sala").textContent = venta.sala || "—";
+
+          // Asientos
+          const asientosTexto = venta.asientos_seleccionados
+            ? venta.asientos_seleccionados
+                .map((a) => `${a.fila}${a.columna}`)
+                .join(", ")
+            : "—";
+          document.getElementById("venta_sillas").textContent = asientosTexto;
+
+          document.getElementById("venta_precio").textContent = formatearMoneda(
+            venta.total
+          );
+          document.getElementById("venta_descuento").textContent = "0%";
+        }
+
+        // Toggle credit/debit card divs
+        document.addEventListener("DOMContentLoaded", () => {
+          cargarDatosVenta();
+
+          const radios = document.querySelectorAll('input[name="payment"]');
+          radios.forEach((r) =>
+            r.addEventListener("change", (e) => {
+              const credit = document.getElementById("creditCard");
+              const debit = document.getElementById("debitCard");
+              if (e.target.value === "credit") {
+                credit.classList.remove("hidden");
+                debit.classList.add("hidden");
+              } else {
+                debit.classList.remove("hidden");
+                credit.classList.add("hidden");
+              }
+            })
+          );
+
+          const payBtn = document.querySelector(".pay-button");
+          if (payBtn) payBtn.addEventListener("click", handlePayment);
+        });
+
+        async function handlePayment() {
+          console.log("🔄 Iniciando proceso de pago...");
+
+          const temp =
+            sessionStorage.getItem("datos_pago") ||
+            sessionStorage.getItem("venta_temp");
+          console.log("📦 Datos en sessionStorage:", temp);
+
+          if (!temp) {
+            alert("No hay datos de pago. Regresa a la reserva.");
+            return;
+          }
+
+          const venta = JSON.parse(temp);
+          console.log("🎬 Datos de la venta:", venta);
+
+          const metodo =
+            document.querySelector('input[name="payment"]:checked')?.value ||
+            "credit";
+          console.log("💳 Método de pago:", metodo);
+
+          try {
+            // ✅ PRIMERO: Probar SOLO con procesar_pago (más completo)
+            console.log("🚀 Intentando procesar_pago...");
+
+            const payloadPago = {
+              id_funcion: parseInt(venta.id_funcion),
+              asientos_seleccionados: venta.asientos_seleccionados,
+              metodo_pago: metodo === "credit" ? "tarjeta" : "tarjeta",
+              total: parseFloat(venta.total),
+            };
+
+            console.log("📤 Payload para procesar_pago:", payloadPago);
+
+            const respuestaPago = await fetch(
+              "../backend/api/index.php?accion=procesar_pago",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify(payloadPago),
+              }
+            );
+
+            const textoRespuesta = await respuestaPago.text();
+            console.log("📥 Respuesta RAW:", textoRespuesta);
+
+            let resultadoPago;
+            try {
+              resultadoPago = JSON.parse(textoRespuesta);
+              console.log("📥 Respuesta procesar_pago (JSON):", resultadoPago);
+            } catch (e) {
+              console.error("❌ Error parseando JSON:", e);
+              console.log("📥 Respuesta como texto:", textoRespuesta);
+              throw new Error("Respuesta inválida del servidor");
+            }
+
+            if (!resultadoPago.exito) {
+              console.error(
+                "❌ Error en procesar_pago:",
+                resultadoPago.mensaje
+              );
+
+              // ✅ INTENTAR FALLBACK: crear_reserva simple
+              console.log("🔄 Intentando fallback con crear_reserva...");
+
+              const payloadReserva = {
+                id_funcion: parseInt(venta.id_funcion),
+                asientos: venta.asientos_seleccionados.map((a) =>
+                  parseInt(a.id_silla)
+                ),
+              };
+
+              console.log("📤 Payload para crear_reserva:", payloadReserva);
+
+              const respuestaReserva = await fetch(
+                "../backend/api/index.php?accion=crear_reserva",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  credentials: "include",
+                  body: JSON.stringify(payloadReserva),
+                }
+              );
+
+              const resultadoReserva = await respuestaReserva.json();
+              console.log("📥 Respuesta crear_reserva:", resultadoReserva);
+
+              if (!resultadoReserva.exito) {
+                throw new Error(
+                  "Ambos métodos fallaron: " +
+                    resultadoPago.mensaje +
+                    " | " +
+                    resultadoReserva.mensaje
+                );
+              }
+
+              alert(
+                "✅ ¡Reserva creada! ID: " + resultadoReserva.datos.id_reserva
+              );
+            } else {
+              alert(
+                "✅ ¡Pago completado! Ticket: " +
+                  (resultadoPago.numero_ticket || "N/A")
+              );
+            }
+
+            // ✅ LIMPIAR Y REDIRIGIR
+            console.log("🧹 Limpiando datos temporales...");
+            limpiarDatosTemporales();
+
+            setTimeout(() => {
+              console.log("🔄 Redirigiendo a carrito...");
+              window.location.href = "carrito.html";
+            }, 2000);
+          } catch (err) {
+            console.error("💥 Error completo en pago:", err);
+            alert("❌ Error al procesar el pago: " + err.message);
+          }
+        }
+
+        // ✅ FUNCIÓN PARA LIMPIAR DATOS (la misma de antes)
+        function limpiarDatosTemporales() {
+          const items = [
+            "datos_pago",
+            "venta_temp",
+            "reserva_id_funcion",
+            "reserva_asientos",
+            "reserva_total",
+            "id_pelicula",
+            "pelicula_nombre",
+            "funciones_cache",
+            "id_funcion_preseleccionada",
+          ];
+
+          items.forEach((item) => sessionStorage.removeItem(item));
+        }
+      })();
+    </script>
   </body>
 </html>

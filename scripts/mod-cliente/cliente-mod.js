@@ -339,7 +339,7 @@ async function cargarReservas() {
 }
 
 // ========================================
-// RENDERIZAR CARTELERA - CORREGIDO
+// RENDERIZAR CARTELERA 
 // ========================================
 function renderizarCartelera(peliculas) {
     const grid = document.querySelector('.movies-grid');
@@ -394,9 +394,9 @@ function renderizarCartelera(peliculas) {
     }).join('');
 }
 
-// ========================================
-// RENDERIZAR PROMOCIONES - CORREGIDO
-// ========================================
+
+// RENDERIZAR PROMOCIONES 
+
 function renderizarPromociones(peliculas) {
     const grid = document.querySelector('.movies-grid');
     if(!grid) return;
@@ -762,7 +762,7 @@ function renderReservasList(reservas, container) {
         const item = document.createElement('div');
         item.className = 'chat-reserva-item';
         item.innerHTML = `
-            <strong>${r.pelicula || '—'}</strong> — ${r.fecha_funcion || '—'}<br/>
+            <strong>${r.pelicula || '—'}</strong> — ${r.fecha_funcion || '—' } - ${r.hora || '-'}<br/>
             <small>Asientos: ${r.asientos || '—'} — Estado: ${r.estado || '—'}</small>
         `;
         list.appendChild(item);

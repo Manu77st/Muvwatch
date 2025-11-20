@@ -412,5 +412,146 @@ class ClienteControlador {
 
         return ['exito' => true, 'datos' => $compras];
     }
+
+    // ===== PROCESAR PAGO / VENTA =====
+    public function procesarPago($datos) {
+        // Verificar sesión (debe ser un cliente)
+        $id_cliente = Sesion::verificarCliente();
+
+        // Validar datos
+        if (empty($datos['id_funcion']) || empty($datos['asientos_seleccionados']) || !is_array($datos['asientos_seleccionados'])) {
+            return ['exito' => false, 'mensaje' => 'Datos de pago incompletos'];
+        }
+
+        $id_funcion = $datos['id_funcion'];
+        $asientos = $datos['asientos_seleccionados'];
+        $metodo_pago = $datos['metodo_pago'] ?? 'tarjeta';
+
+        $this->conexion->beginTransaction();
+        try {
+            // Validar disponibilidad de asientos
+            $funcion = new Funcion($this->conexion);
+            $funcion->id_funcion = $id_funcion;
+
+            foreach ($asientos as $a) {
+                $id_silla = $a['id_silla'] ?? null;
+                if (!$id_silla) throw new Exception('Asiento inválido');
+                if (!$funcion->asientoDisponible($id_silla)) {
+                    throw new Exception('El asiento ' . $id_silla . ' no está disponible');
+                }
+            }
+
+            // Calcular subtotal
+            $subtotal = 0.0;
+            foreach ($asientos as $a) {
+                $precio = isset($a['precio']) ? floatval($a['precio']) : 0.0;
+                $subtotal += $precio;
+            }
+
+            // Aplicar descuento VIP si corresponde
+            $usuario = Sesion::obtenerDatosUsuario();
+            $porcentaje_vip = $usuario['descuento'] ?? 0;
+            $descuento_vip = round($subtotal * (floatval($porcentaje_vip) / 100.0), 2);
+
+            $total = round($subtotal - $descuento_vip, 2);
+
+            // Si el cliente envió un total y difiere, no continuar
+            if (isset($datos['total'])) {
+                $total_enviado = floatval($datos['total']);
+                if (abs($total_enviado - $total) > 0.5) {
+                    throw new Exception('Total enviado no coincide con cálculo del servidor');
+                }
+            }
+
+            // Determinar id_cajero por defecto (si no hay cajero en sesión, usar uno del sistema)
+            $id_cajero = 2; // id por defecto existente en la BD (EMP001)
+            $usuarioSesion = Sesion::obtenerDatosUsuario();
+            if ($usuarioSesion && isset($usuarioSesion['tipo']) && $usuarioSesion['tipo'] === 'cajero') {
+                $id_cajero = $usuarioSesion['id'];
+            }
+
+            $numero_ticket = 'TICKET' . strtoupper(uniqid());
+
+            // Insertar venta
+            $stmt = $this->conexion->prepare("INSERT INTO tbl_ventas (id_cliente, id_cajero, id_funcion, fecha_venta, subtotal, descuento_vip, total, metodo_pago, numero_ticket) VALUES (:id_cliente, :id_cajero, :id_funcion, NOW(), :subtotal, :descuento_vip, :total, :metodo_pago, :numero_ticket)");
+            $stmt->bindParam(':id_cliente', $id_cliente);
+            $stmt->bindParam(':id_cajero', $id_cajero);
+            $stmt->bindParam(':id_funcion', $id_funcion);
+            $stmt->bindParam(':subtotal', $subtotal);
+            $stmt->bindParam(':descuento_vip', $descuento_vip);
+            $stmt->bindParam(':total', $total);
+            $stmt->bindParam(':metodo_pago', $metodo_pago);
+            $stmt->bindParam(':numero_ticket', $numero_ticket);
+            $stmt->execute();
+
+            $id_venta = $this->conexion->lastInsertId();
+
+            // Insertar detalles_venta
+            $stmtDet = $this->conexion->prepare("INSERT INTO detalles_venta (id_venta, id_silla, precio_silla) VALUES (:id_venta, :id_silla, :precio_silla)");
+            foreach ($asientos as $a) {
+                $id_silla = $a['id_silla'];
+                $precio_silla = isset($a['precio']) ? floatval($a['precio']) : 0.0;
+                $stmtDet->bindParam(':id_venta', $id_venta);
+                $stmtDet->bindParam(':id_silla', $id_silla);
+                $stmtDet->bindParam(':precio_silla', $precio_silla);
+                $stmtDet->execute();
+            }
+
+            // Si existe una reserva activa del mismo cliente para esta función que contiene exactamente
+            // los mismos asientos, marcarla como convertida (no se borran los detalles para registro)
+            try {
+                $ids = array_map(function($x){ return intval($x['id_silla']); }, $asientos);
+                if (count($ids) > 0) {
+                    $placeholders = implode(',', array_fill(0, count($ids), '?'));
+                    $sqlReserva = "SELECT dr.id_reserva, COUNT(*) as matched 
+                                   FROM detalles_reserva dr 
+                                   INNER JOIN tbl_reservas r ON dr.id_reserva = r.id_reserva 
+                                   WHERE r.id_cliente = ? AND r.id_funcion = ? AND r.estado = 'activa' 
+                                    AND dr.id_silla IN ($placeholders) 
+                                   GROUP BY dr.id_reserva 
+                                   HAVING COUNT(*) = ? 
+                                   LIMIT 1";
+
+                    $stmtRes = $this->conexion->prepare($sqlReserva);
+                    // bind: first cliente, funcion, then each id_silla, then count
+                    $bindIndex = 1;
+                    $stmtRes->bindValue($bindIndex++, $id_cliente);
+                    $stmtRes->bindValue($bindIndex++, $id_funcion);
+                    foreach ($ids as $idv) {
+                        $stmtRes->bindValue($bindIndex++, $idv);
+                    }
+                    $stmtRes->bindValue($bindIndex++, count($ids));
+                    $stmtRes->execute();
+                    $filaReserva = $stmtRes->fetch(PDO::FETCH_ASSOC);
+                    if ($filaReserva && isset($filaReserva['id_reserva'])) {
+                        $id_reserva_convertir = $filaReserva['id_reserva'];
+                        $upd = $this->conexion->prepare("UPDATE tbl_reservas SET estado = 'convertida' WHERE id_reserva = :id_reserva LIMIT 1");
+                        $upd->bindParam(':id_reserva', $id_reserva_convertir);
+                        $upd->execute();
+                    }
+                }
+            } catch (Exception $e) {
+                // No bloquear la venta por un problema menor al buscar la reserva
+                error_log('Error buscando reserva para convertir: ' . $e->getMessage());
+            }
+
+            // Registrar actividad
+            $logStmt = $this->conexion->prepare("INSERT INTO logs_actividad (id_usuario, accion, descripcion) VALUES (:id_usuario, :accion, :descripcion)");
+            $accion = 'Venta creada';
+            $descripcion = 'Venta #' . $id_venta . ' - Funcion ' . $id_funcion . ' - Asientos: ' . count($asientos);
+            $logStmt->bindParam(':id_usuario', $id_cliente);
+            $logStmt->bindParam(':accion', $accion);
+            $logStmt->bindParam(':descripcion', $descripcion);
+            $logStmt->execute();
+
+            $this->conexion->commit();
+
+            return ['exito' => true, 'mensaje' => 'Pago procesado', 'id_venta' => $id_venta, 'numero_ticket' => $numero_ticket, 'total' => $total];
+
+        } catch (Exception $e) {
+            $this->conexion->rollBack();
+            return ['exito' => false, 'mensaje' => $e->getMessage()];
+        }
+    }
 }
 ?>

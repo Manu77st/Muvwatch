@@ -204,7 +204,7 @@ class Cliente {
         $consulta = "SELECT r.id_reserva, r.fecha_reserva, r.hora, 
                            r.fecha_expiracion, r.estado,
                            p.nombre as pelicula, p.clasificacion, p.duracion, p.genero,
-                           s.nombre as sala, f.fecha_funcion, f.precio,
+                          s.nombre as sala, CONCAT(f.fecha_funcion, ' ', f.hora) as fecha_funcion, f.precio,
                            GROUP_CONCAT(CONCAT(si.fila, si.columna) 
                                 ORDER BY si.fila, si.columna SEPARATOR ', ') as asientos,
                            COUNT(si.id_silla) as cantidad_asientos
@@ -233,7 +233,7 @@ class Cliente {
         $consulta = "SELECT r.id_reserva, r.fecha_reserva, r.hora, 
                            r.fecha_expiracion, r.estado,
                            p.nombre as pelicula, p.clasificacion, p.duracion, p.genero,
-                           s.nombre as sala, f.fecha_funcion, f.precio,
+                          s.nombre as sala, CONCAT(f.fecha_funcion, ' ', f.hora) as fecha_funcion, f.precio,
                            GROUP_CONCAT(CONCAT(si.fila, si.columna) 
                                 ORDER BY si.fila, si.columna SEPARATOR ', ') as asientos,
                            COUNT(si.id_silla) as cantidad_asientos

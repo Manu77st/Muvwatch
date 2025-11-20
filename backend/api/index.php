@@ -201,6 +201,15 @@ try {
             Respuesta::json($resultado, $resultado['exito'] ? 200 : 401);
             break;
 
+        case 'procesar_pago':
+            if($metodo !== 'POST') {
+                Respuesta::error('Método no permitido', 405);
+            }
+            $controlador = new ClienteControlador();
+            $resultado = $controlador->procesarPago($datos);
+            Respuesta::json($resultado, $resultado['exito'] ? 201 : 400);
+            break;
+
         // ========== ACCIÓN NO ENCONTRADA ==========
         default:
             Respuesta::error('Acción no encontrada: ' . $accion, 404);

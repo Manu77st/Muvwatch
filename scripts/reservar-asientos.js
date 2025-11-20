@@ -1,33 +1,34 @@
-// reservar-asientos.js 
+// reservar-asientos.js
 // Agrega esto al inicio de la función inicio() para debug
 async function inicio() {
-    try {
-        console.log("🔄 Iniciando página de reserva...");
-        console.log("📋 sessionStorage actual:", {
-            id_pelicula: sessionStorage.getItem("id_pelicula"),
-            pelicula_nombre: sessionStorage.getItem("pelicula_nombre"),
-            funciones_cache: sessionStorage.getItem("funciones_cache") ? "EXISTE" : "NO EXISTE"
-        });
-        
-        // Limpiar cache corrupto al inicio
-        limpiarCacheCorrupto();
-        
-        idPelicula = obtenerIdPelicula();
-        
-        if (!idPelicula) {
-            msg("Error: No se pudo identificar la película");
-            setTimeout(() => window.location.href = "lobby-cliente.html", 2000);
-            return;
-        }
+  try {
+    console.log("🔄 Iniciando página de reserva...");
+    console.log("📋 sessionStorage actual:", {
+      id_pelicula: sessionStorage.getItem("id_pelicula"),
+      pelicula_nombre: sessionStorage.getItem("pelicula_nombre"),
+      funciones_cache: sessionStorage.getItem("funciones_cache")
+        ? "EXISTE"
+        : "NO EXISTE",
+    });
 
-        console.log("✅ ID Película encontrado:", idPelicula);
-        await cargarNombrePelicula(idPelicula);
-        await cargarFunciones(idPelicula);
+    // Limpiar cache corrupto al inicio
+    limpiarCacheCorrupto();
 
-    } catch (err) {
-        console.error("❌ Error en inicialización:", err);
-        msg("Error al cargar los datos");
+    idPelicula = obtenerIdPelicula();
+
+    if (!idPelicula) {
+      msg("Error: No se pudo identificar la película");
+      setTimeout(() => (window.location.href = "lobby-cliente.html"), 2000);
+      return;
     }
+
+    console.log("✅ ID Película encontrado:", idPelicula);
+    await cargarNombrePelicula(idPelicula);
+    await cargarFunciones(idPelicula);
+  } catch (err) {
+    console.error("❌ Error en inicialización:", err);
+    msg("Error al cargar los datos");
+  }
 }
 (() => {
   "use strict";
@@ -60,32 +61,37 @@ async function inicio() {
   // -------------------------
   async function api(url, opciones = {}) {
     opciones.credentials = opciones.credentials || "include";
-    
+
     try {
       const resp = await fetch(url, opciones);
       const text = await resp.text();
-      
-      if (text.trim().startsWith('<!') || text.includes('<br />') || text.includes('<b>')) {
-        console.error('❌ El servidor devolvió HTML:', text.substring(0, 200));
-        throw new Error('Error del servidor');
+
+      if (
+        text.trim().startsWith("<!") ||
+        text.includes("<br />") ||
+        text.includes("<b>")
+      ) {
+        console.error("❌ El servidor devolvió HTML:", text.substring(0, 200));
+        throw new Error("Error del servidor");
       }
-      
+
       let datos;
       try {
         datos = JSON.parse(text);
       } catch (parseError) {
-        console.error('❌ Error parseando JSON:', text.substring(0, 200));
-        throw new Error('Respuesta inválida');
+        console.error("❌ Error parseando JSON:", text.substring(0, 200));
+        throw new Error("Respuesta inválida");
       }
-      
+
       if (!resp.ok) {
-        throw new Error(`Error ${resp.status}: ${datos.mensaje || 'Error del servidor'}`);
+        throw new Error(
+          `Error ${resp.status}: ${datos.mensaje || "Error del servidor"}`
+        );
       }
-      
+
       return datos;
-      
     } catch (error) {
-      console.error('❌ Error en petición API:', error);
+      console.error("❌ Error en petición API:", error);
       throw error;
     }
   }
@@ -106,7 +112,7 @@ async function inicio() {
   // -------------------------
   function calcularPrecioAsiento(tipoAsiento) {
     const precioStandard = precioBase;
-    if (tipoAsiento === 'Discapacitado') {
+    if (tipoAsiento === "Discapacitado") {
       return Math.round(precioStandard * 0.9); // 10% de descuento
     }
     return precioStandard;
@@ -117,9 +123,9 @@ async function inicio() {
   // -------------------------
   function filtrarFuncionesFuturas(funcionesArray) {
     const ahora = new Date();
-    return funcionesArray.filter(funcion => 
-      new Date(funcion.fecha_funcion) > ahora
-    ).sort((a, b) => new Date(a.fecha_funcion) - new Date(b.fecha_funcion));
+    return funcionesArray
+      .filter((funcion) => new Date(funcion.fecha_funcion) > ahora)
+      .sort((a, b) => new Date(a.fecha_funcion) - new Date(b.fecha_funcion));
   }
 
   // -------------------------
@@ -148,15 +154,15 @@ async function inicio() {
   async function inicio() {
     try {
       console.log("🔄 Iniciando página de reserva...");
-      
+
       // Limpiar cache corrupto al inicio
       limpiarCacheCorrupto();
-      
+
       idPelicula = obtenerIdPelicula();
-      
+
       if (!idPelicula) {
         msg("Error: No se pudo identificar la película");
-        setTimeout(() => window.location.href = "lobby-cliente.html", 2000);
+        setTimeout(() => (window.location.href = "lobby-cliente.html"), 2000);
         return;
       }
 
@@ -164,6 +170,10 @@ async function inicio() {
       await cargarNombrePelicula(idPelicula);
       await cargarFunciones(idPelicula);
 
+      // Configurar el botón de confirmar
+      if (botonConfirmar) {
+        botonConfirmar.onclick = () => procesarReserva();
+      }
     } catch (err) {
       console.error("❌ Error en inicialización:", err);
       msg("Error al cargar los datos");
@@ -179,83 +189,82 @@ async function inicio() {
       return idSession;
     }
     const urlParams = new URLSearchParams(window.location.search);
-    const idUrl = urlParams.get('id_pelicula');
+    const idUrl = urlParams.get("id_pelicula");
     return idUrl;
   }
 
   async function cargarNombrePelicula(idPelicula) {
     try {
-        console.log("🔍 Buscando nombre para película ID:", idPelicula);
-        
-        // 1. Intentar desde cache global (si existe)
-        if (window.peliculasCache && window.peliculasCache[idPelicula]) {
-            const nombre = window.peliculasCache[idPelicula].nombre;
-            console.log("✅ Nombre desde cache global:", nombre);
-            if (funcionNombre) {
-                funcionNombre.textContent = nombre;
-                // Guardar en sessionStorage para futuras referencias
-                sessionStorage.setItem("pelicula_nombre", nombre);
-            }
-            return;
-        }
+      console.log("🔍 Buscando nombre para película ID:", idPelicula);
 
-        // 2. Intentar desde sessionStorage
-        const nombreSession = sessionStorage.getItem("pelicula_nombre");
-        if (nombreSession && funcionNombre) {
-            console.log("✅ Nombre desde sessionStorage:", nombreSession);
-            funcionNombre.textContent = nombreSession;
-            return;
-        }
-
-        // 3. Intentar desde funciones cache
-        const funcionesCache = sessionStorage.getItem("funciones_cache");
-        if (funcionesCache) {
-            try {
-                const funciones = JSON.parse(funcionesCache);
-                if (funciones.length > 0 && funciones[0].pelicula) {
-                    const nombre = funciones[0].pelicula;
-                    console.log("✅ Nombre desde funciones cache:", nombre);
-                    if (funcionNombre) {
-                        funcionNombre.textContent = nombre;
-                        sessionStorage.setItem("pelicula_nombre", nombre);
-                    }
-                    return;
-                }
-            } catch (e) {
-                console.warn("Error leyendo funciones cache:", e);
-            }
-        }
-
-        // 4. Último recurso: llamar a la API
-        console.log("🔄 Consultando API para nombre de película...");
-        try {
-            const res = await api(`${API}?accion=pelicula&id=${idPelicula}`);
-            if (res.exito && res.datos && res.datos.nombre) {
-                const nombre = res.datos.nombre;
-                console.log("✅ Nombre desde API:", nombre);
-                if (funcionNombre) {
-                    funcionNombre.textContent = nombre;
-                    sessionStorage.setItem("pelicula_nombre", nombre);
-                }
-            } else {
-                throw new Error("No se pudo obtener el nombre de la película");
-            }
-        } catch (apiError) {
-            console.error("❌ Error API pelicula:", apiError);
-            // Valor por defecto
-            if (funcionNombre) {
-                funcionNombre.textContent = "Película #" + idPelicula;
-            }
-        }
-
-    } catch (err) {
-        console.error("❌ Error en cargarNombrePelicula:", err);
-        // Valor por defecto como fallback
+      // 1. Intentar desde cache global (si existe)
+      if (window.peliculasCache && window.peliculasCache[idPelicula]) {
+        const nombre = window.peliculasCache[idPelicula].nombre;
+        console.log("✅ Nombre desde cache global:", nombre);
         if (funcionNombre) {
-            funcionNombre.textContent = "Película";
+          funcionNombre.textContent = nombre;
+          // Guardar en sessionStorage para futuras referencias
+          sessionStorage.setItem("pelicula_nombre", nombre);
         }
+        return;
+      }
+
+      // 2. Intentar desde sessionStorage
+      const nombreSession = sessionStorage.getItem("pelicula_nombre");
+      if (nombreSession && funcionNombre) {
+        console.log("✅ Nombre desde sessionStorage:", nombreSession);
+        funcionNombre.textContent = nombreSession;
+        return;
+      }
+
+      // 3. Intentar desde funciones cache
+      const funcionesCache = sessionStorage.getItem("funciones_cache");
+      if (funcionesCache) {
+        try {
+          const funciones = JSON.parse(funcionesCache);
+          if (funciones.length > 0 && funciones[0].pelicula) {
+            const nombre = funciones[0].pelicula;
+            console.log("✅ Nombre desde funciones cache:", nombre);
+            if (funcionNombre) {
+              funcionNombre.textContent = nombre;
+              sessionStorage.setItem("pelicula_nombre", nombre);
+            }
+            return;
+          }
+        } catch (e) {
+          console.warn("Error leyendo funciones cache:", e);
+        }
+      }
+
+      // 4. Último recurso: llamar a la API
+      console.log("🔄 Consultando API para nombre de película...");
+      try {
+        const res = await api(`${API}?accion=pelicula&id=${idPelicula}`);
+        if (res.exito && res.datos && res.datos.nombre) {
+          const nombre = res.datos.nombre;
+          console.log("✅ Nombre desde API:", nombre);
+          if (funcionNombre) {
+            funcionNombre.textContent = nombre;
+            sessionStorage.setItem("pelicula_nombre", nombre);
+          }
+        } else {
+          throw new Error("No se pudo obtener el nombre de la película");
+        }
+      } catch (apiError) {
+        console.error("❌ Error API pelicula:", apiError);
+        // Valor por defecto
+        if (funcionNombre) {
+          funcionNombre.textContent = "Película #" + idPelicula;
+        }
+      }
+    } catch (err) {
+      console.error("❌ Error en cargarNombrePelicula:", err);
+      // Valor por defecto como fallback
+      if (funcionNombre) {
+        funcionNombre.textContent = "Película";
+      }
     }
-}
+  }
 
   // -------------------------
   // Cargar funciones - VERSIÓN CORREGIDA
@@ -263,7 +272,7 @@ async function inicio() {
   async function cargarFunciones(idPelicula) {
     loading(true);
     msg("Cargando funciones...");
-    
+
     try {
       console.log("🔄 Cargando funciones para película:", idPelicula);
 
@@ -272,12 +281,15 @@ async function inicio() {
       if (funcionesCache) {
         try {
           const cacheData = JSON.parse(funcionesCache);
-          
+
           // Validar que el cache no esté corrupto o vacío
           if (Array.isArray(cacheData) && cacheData.length > 0) {
             // ✅ FILTRAR FUNCIONES FUTURAS DEL CACHE
             funciones = filtrarFuncionesFuturas(cacheData);
-            console.log("✅ Funciones desde cache (futuras):", funciones.length);
+            console.log(
+              "✅ Funciones desde cache (futuras):",
+              funciones.length
+            );
             renderizarFunciones();
             loading(false);
             return;
@@ -294,11 +306,11 @@ async function inicio() {
       // Cargar desde API
       console.log("🔄 Solicitando datos desde API...");
       const res = await api(`${API}?accion=pelicula&id=${idPelicula}`);
-      
+
       if (!res.exito) {
         throw new Error(res.mensaje || "Error al cargar funciones");
       }
-      
+
       if (!res.datos) {
         throw new Error("No se encontraron datos de la película");
       }
@@ -316,19 +328,22 @@ async function inicio() {
       funciones = filtrarFuncionesFuturas(res.datos.funciones);
       console.log("✅ Funciones futuras cargadas desde API:", funciones.length);
       console.log("📋 Detalle de funciones:", funciones);
-      
+
       // Guardar en cache SOLO si hay funciones válidas
       if (funciones.length > 0) {
         try {
           sessionStorage.setItem("funciones_cache", JSON.stringify(funciones));
-          console.log("💾 Cache actualizado con", funciones.length, "funciones futuras");
+          console.log(
+            "💾 Cache actualizado con",
+            funciones.length,
+            "funciones futuras"
+          );
         } catch (e) {
           console.warn("No se pudo guardar en cache");
         }
       }
-      
-      renderizarFunciones();
 
+      renderizarFunciones();
     } catch (err) {
       console.error("❌ Error cargando funciones:", err);
       msg("Error: " + err.message);
@@ -338,44 +353,15 @@ async function inicio() {
     }
   }
 
-  function mostrarFuncionesEjemplo() {
-    console.warn("🔄 Mostrando funciones de ejemplo por fallo en API");
-    
-    // Funciones de ejemplo realistas (solo futuras)
-    const ahora = new Date();
-    funciones = [
-      {
-        id_funcion: 1,
-        fecha_funcion: new Date(ahora.getTime() + 86400000).toISOString().split('T')[0], // Mañana
-        sala: "1",
-        id_sala: 1,
-        precio: 15000,
-        descuento: 2000,
-        pelicula: "Inception"
-      },
-      {
-        id_funcion: 2,
-        fecha_funcion: new Date(ahora.getTime() + 172800000).toISOString().split('T')[0], // Pasado mañana
-        sala: "2", 
-        id_sala: 2,
-        precio: 15000,
-        descuento: 0,
-        pelicula: "Inception"
-      }
-    ];
-    
-    renderizarFunciones();
-    msg("Mostrando datos de ejemplo - Error de conexión");
-  }
-
   function renderizarFunciones() {
     if (!selectFunciones) {
       console.error("❌ selectFunciones no encontrado en DOM");
       return;
     }
 
-    selectFunciones.innerHTML = '<option value="">-- Seleccione una función --</option>';
-    
+    selectFunciones.innerHTML =
+      '<option value="">-- Seleccione una función --</option>';
+
     if (funciones.length === 0) {
       console.warn("⚠️ No hay funciones para renderizar");
       msg("No hay funciones disponibles para esta película");
@@ -385,22 +371,42 @@ async function inicio() {
     funciones.forEach((funcion) => {
       const option = document.createElement("option");
       option.value = funcion.id_funcion;
-      
+
       const fecha = new Date(funcion.fecha_funcion);
-      const fechaFormateada = fecha.toLocaleDateString('es-CO', {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
+      const fechaFormateada = fecha.toLocaleDateString("es-CO", {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
       });
-      
+      // Obtener hora: preferimos campo `funcion.hora`, si no existe
+      // extraemos la hora desde `funcion.fecha_funcion` (formato 'YYYY-MM-DD HH:MM:SS')
+      let hora = funcion.hora;
+      if ((!hora || hora === null) && funcion.fecha_funcion) {
+        try {
+          const raw = String(funcion.fecha_funcion);
+          const iso = raw.includes("T") ? raw : raw.replace(" ", "T");
+          const d = new Date(iso);
+          if (!isNaN(d.getTime())) {
+            hora = d.toLocaleTimeString("es-CO", {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+          }
+        } catch (e) {
+          console.debug("No se pudo parsear hora desde fecha_funcion:", e);
+        }
+      }
+      if (!hora) hora = "—";
       const precioFinal = funcion.precio - (funcion.descuento || 0);
-      option.textContent = `${fechaFormateada} - Sala ${funcion.sala || funcion.id_sala} - $${precioFinal.toLocaleString('es-CO')}`;
+      option.textContent = `${fechaFormateada} ${hora} - Sala ${
+        funcion.sala || funcion.id_sala
+      } - $${precioFinal.toLocaleString("es-CO")}`;
       option.dataset.precio = funcion.precio;
       option.dataset.sala = funcion.sala || funcion.id_sala;
       option.dataset.fecha = funcion.fecha_funcion;
       option.dataset.descuento = funcion.descuento || 0;
-      
+
       selectFunciones.appendChild(option);
     });
 
@@ -410,15 +416,17 @@ async function inicio() {
 
   function manejarCambioFuncion() {
     const funcionId = selectFunciones.value;
-    
+
     if (!funcionId) {
       limpiarSala();
       return;
     }
 
     idFuncion = funcionId;
-    const funcionSeleccionada = funciones.find(f => f.id_funcion == funcionId);
-    
+    const funcionSeleccionada = funciones.find(
+      (f) => f.id_funcion == funcionId
+    );
+
     if (!funcionSeleccionada) {
       console.error("❌ Función seleccionada no encontrada");
       return;
@@ -434,11 +442,11 @@ async function inicio() {
 
     if (funcionFecha) {
       const fecha = new Date(funcion.fecha_funcion);
-      funcionFecha.textContent = fecha.toLocaleDateString('es-CO', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      funcionFecha.textContent = fecha.toLocaleDateString("es-CO", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     }
 
@@ -447,23 +455,26 @@ async function inicio() {
       tituloSala.textContent = `SALA ${sala} | ESTÁNDAR`;
     }
 
-    precioBase = parseFloat(funcion.precio) - parseFloat(funcion.descuento || 0);
-    
+    precioBase =
+      parseFloat(funcion.precio) - parseFloat(funcion.descuento || 0);
+
     // Actualizar información de precios en el panel
     actualizarInfoPrecios();
-    
+
     console.log("💰 Precio base actual:", precioBase);
   }
 
   function actualizarInfoPrecios() {
     const precioStandard = precioBase;
     const precioDiscapacitado = Math.round(precioBase * 0.9);
-    
-    const infoPrecios = document.querySelector('.seccion-info h4 + div');
+
+    const infoPrecios = document.querySelector(".seccion-info h4 + div");
     if (infoPrecios) {
       infoPrecios.innerHTML = `
-        <div>Standard $${precioStandard.toLocaleString('es-CO')}</div>
-        <div>Discapacitados $${precioDiscapacitado.toLocaleString('es-CO')} (10% descuento)</div>
+        <div>Standard $${precioStandard.toLocaleString("es-CO")}</div>
+        <div>Discapacitados $${precioDiscapacitado.toLocaleString(
+          "es-CO"
+        )} (10% descuento)</div>
       `;
     }
   }
@@ -471,12 +482,14 @@ async function inicio() {
   async function cargarAsientos(funcionId) {
     loading(true);
     msg("Cargando asientos...");
-    
+
     try {
       console.log("🔄 Cargando asientos para función:", funcionId);
-      
-      const res = await api(`${API}?accion=obtener_asientos&id_funcion=${funcionId}`);
-      
+
+      const res = await api(
+        `${API}?accion=obtener_asientos&id_funcion=${funcionId}`
+      );
+
       if (!res.exito) throw new Error(res.mensaje);
       if (!res.datos || !res.datos.asientos) {
         throw new Error("No se pudieron cargar los asientos");
@@ -484,10 +497,9 @@ async function inicio() {
 
       asientos = res.datos.asientos;
       console.log("✅ Asientos cargados:", asientos.length);
-      
+
       renderizarAsientos();
       msg("");
-
     } catch (err) {
       console.error("❌ Error cargando asientos:", err);
       msg("Error al cargar asientos");
@@ -499,33 +511,34 @@ async function inicio() {
 
   function mostrarAsientosEjemplo() {
     console.warn("🔄 Mostrando asientos de ejemplo");
-    
+
     asientos = generarAsientosEjemplo();
     renderizarAsientos();
   }
 
   function generarAsientosEjemplo() {
     const asientosEjemplo = [];
-    const filas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-    const columnas = Array.from({length: 14}, (_, i) => i + 1);
-    
+    const filas = ["A", "B", "C", "D", "E", "F", "G", "H"];
+    const columnas = Array.from({ length: 14 }, (_, i) => i + 1);
+
     let id = 1;
-    filas.forEach(fila => {
-      columnas.forEach(columna => {
+    filas.forEach((fila) => {
+      columnas.forEach((columna) => {
         const disponible = Math.random() > 0.3; // 70% disponibles
-        const tipo = fila === 'A' && Math.random() > 0.7 ? 'Discapacitado' : 'Standard';
-        
+        const tipo =
+          fila === "A" && Math.random() > 0.7 ? "Discapacitado" : "Standard";
+
         asientosEjemplo.push({
           id_silla: id++,
           fila: fila,
           columna: columna,
           activa: 1,
           disponible: disponible ? 1 : 0,
-          tipo: tipo
+          tipo: tipo,
         });
       });
     });
-    
+
     return asientosEjemplo;
   }
 
@@ -534,17 +547,17 @@ async function inicio() {
   // -------------------------
   function renderizarAsientos() {
     console.log("🎬 Renderizando asientos...");
-    
+
     if (!bloqueL || !bloqueR) {
       console.error("❌ Bloques de asientos no encontrados");
       return;
     }
 
-    bloqueL.innerHTML = '';
-    bloqueR.innerHTML = '';
+    bloqueL.innerHTML = "";
+    bloqueR.innerHTML = "";
 
     const asientosPorFila = {};
-    asientos.forEach(asiento => {
+    asientos.forEach((asiento) => {
       if (!asientosPorFila[asiento.fila]) {
         asientosPorFila[asiento.fila] = [];
       }
@@ -553,32 +566,34 @@ async function inicio() {
 
     const filasOrdenadas = Object.keys(asientosPorFila).sort();
 
-    filasOrdenadas.forEach(fila => {
-      const asientosFila = asientosPorFila[fila].sort((a, b) => a.columna - b.columna);
-      
-      const columnas = asientosFila.map(a => a.columna);
+    filasOrdenadas.forEach((fila) => {
+      const asientosFila = asientosPorFila[fila].sort(
+        (a, b) => a.columna - b.columna
+      );
+
+      const columnas = asientosFila.map((a) => a.columna);
       const columnaMax = Math.max(...columnas);
       const puntoDivision = Math.ceil(columnaMax / 2);
 
-      const filaIzquierda = document.createElement('div');
-      const filaDerecha = document.createElement('div');
-      
-      filaIzquierda.className = 'fila-asientos';
-      filaDerecha.className = 'fila-asientos';
+      const filaIzquierda = document.createElement("div");
+      const filaDerecha = document.createElement("div");
 
-      const labelIzquierda = document.createElement('div');
-      labelIzquierda.className = 'label-fila';
+      filaIzquierda.className = "fila-asientos";
+      filaDerecha.className = "fila-asientos";
+
+      const labelIzquierda = document.createElement("div");
+      labelIzquierda.className = "label-fila";
       labelIzquierda.textContent = fila;
       filaIzquierda.appendChild(labelIzquierda);
 
-      const labelDerecha = document.createElement('div');
-      labelDerecha.className = 'label-fila';
+      const labelDerecha = document.createElement("div");
+      labelDerecha.className = "label-fila";
       labelDerecha.textContent = fila;
       filaDerecha.appendChild(labelDerecha);
 
-      asientosFila.forEach(asiento => {
+      asientosFila.forEach((asiento) => {
         const divAsiento = crearDivAsiento(asiento);
-        
+
         if (asiento.columna <= puntoDivision) {
           filaIzquierda.appendChild(divAsiento);
         } else {
@@ -598,34 +613,34 @@ async function inicio() {
   }
 
   function crearDivAsiento(asiento) {
-    const div = document.createElement('div');
-    div.className = 'asiento';
+    const div = document.createElement("div");
+    div.className = "asiento";
     div.dataset.id = asiento.id_silla;
     div.dataset.fila = asiento.fila;
     div.dataset.columna = asiento.columna;
     div.dataset.tipo = asiento.tipo;
 
     let estado, color, cursor, texto;
-    
+
     if (!asiento.activa) {
-      estado = 'inactiva';
-      color = '#95a5a6';
-      cursor = 'not-allowed';
-      texto = '❌';
+      estado = "inactiva";
+      color = "#95a5a6";
+      cursor = "not-allowed";
+      texto = "❌";
     } else if (!asiento.disponible) {
-      estado = 'ocupada';
-      color = '#e74c3c';
-      cursor = 'not-allowed';
-      texto = '✖';
+      estado = "ocupada";
+      color = "#e74c3c";
+      cursor = "not-allowed";
+      texto = "✖";
     } else if (seleccionados.includes(asiento.id_silla)) {
-      estado = 'seleccionada';
-      color = '#3498db';
-      cursor = 'pointer';
+      estado = "seleccionada";
+      color = "#3498db";
+      cursor = "pointer";
       texto = asiento.fila + asiento.columna;
     } else {
-      estado = 'disponible';
-      color = asiento.tipo === 'Discapacitado' ? '#9b59b6' : '#2ecc71';
-      cursor = 'pointer';
+      estado = "disponible";
+      color = asiento.tipo === "Discapacitado" ? "#9b59b6" : "#2ecc71";
+      cursor = "pointer";
       texto = asiento.fila + asiento.columna;
     }
 
@@ -643,17 +658,21 @@ async function inicio() {
       font-weight: bold;
       color: white;
       transition: all 0.2s ease;
-      border: 2px solid ${estado === 'seleccionada' ? '#f1c40f' : 'transparent'};
+      border: 2px solid ${
+        estado === "seleccionada" ? "#f1c40f" : "transparent"
+      };
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     `;
 
     div.textContent = texto;
-    
+
     const precioAsiento = calcularPrecioAsiento(asiento.tipo);
-    div.title = `Asiento ${asiento.fila}${asiento.columna} - ${asiento.tipo} - $${precioAsiento.toLocaleString('es-CO')} - ${estado}`;
+    div.title = `Asiento ${asiento.fila}${asiento.columna} - ${
+      asiento.tipo
+    } - $${precioAsiento.toLocaleString("es-CO")} - ${estado}`;
 
     if (asiento.activa && asiento.disponible) {
-      div.addEventListener('click', () => toggleAsiento(asiento.id_silla, div));
+      div.addEventListener("click", () => toggleAsiento(asiento.id_silla, div));
     }
 
     return div;
@@ -661,76 +680,133 @@ async function inicio() {
 
   function toggleAsiento(idAsiento, elemento) {
     const index = seleccionados.indexOf(idAsiento);
-    
+
     if (index > -1) {
       seleccionados.splice(index, 1);
-      const asiento = asientos.find(a => a.id_silla == idAsiento);
-      elemento.style.background = asiento.tipo === 'Discapacitado' ? '#9b59b6' : '#2ecc71';
-      elemento.style.border = '2px solid transparent';
+      const asiento = asientos.find((a) => a.id_silla == idAsiento);
+      elemento.style.background =
+        asiento.tipo === "Discapacitado" ? "#9b59b6" : "#2ecc71";
+      elemento.style.border = "2px solid transparent";
       elemento.textContent = asiento.fila + asiento.columna;
     } else {
       seleccionados.push(idAsiento);
-      elemento.style.background = '#3498db';
-      elemento.style.border = '2px solid #f1c40f';
-      elemento.textContent = '✓';
+      elemento.style.background = "#3498db";
+      elemento.style.border = "2px solid #f1c40f";
+      elemento.textContent = "✓";
     }
-    
+
     actualizarContador();
   }
 
   function limpiarSala() {
-    if (bloqueL) bloqueL.innerHTML = '';
-    if (bloqueR) bloqueR.innerHTML = '';
+    if (bloqueL) bloqueL.innerHTML = "";
+    if (bloqueR) bloqueR.innerHTML = "";
     if (funcionFecha) funcionFecha.textContent = "—";
     if (tituloSala) tituloSala.textContent = "SALA —";
-    
+
     seleccionados = [];
     actualizarContador();
   }
 
   function actualizarContador() {
     if (contador) contador.textContent = seleccionados.length;
-    
+
     let total = 0;
-    seleccionados.forEach(idAsiento => {
-      const asiento = asientos.find(a => a.id_silla == idAsiento);
+    seleccionados.forEach((idAsiento) => {
+      const asiento = asientos.find((a) => a.id_silla == idAsiento);
       if (asiento) {
         total += calcularPrecioAsiento(asiento.tipo);
       }
     });
-    
+
     const totalElement = document.getElementById("totalSeleccion");
     if (totalElement) {
       totalElement.textContent = `$${total.toLocaleString("es-CO")}`;
     }
   }
 
-  if (botonConfirmar) {
-    botonConfirmar.onclick = async () => {
-      if (!idFuncion) return alert("Selecciona una función");
-      if (seleccionados.length === 0) return alert("Selecciona al menos un asiento");
+  // -------------------------
+  // PROCESAR RESERVA - MÉTODOS CORREGIDOS
+  // -------------------------
+  async function procesarReserva() {
+    if (!idFuncion) {
+      alert("Selecciona una función");
+      return;
+    }
 
-      try {
-        const body = {
-          id_funcion: idFuncion,
-          asientos: seleccionados,
+    if (seleccionados.length === 0) {
+      alert("Selecciona al menos un asiento");
+      return;
+    }
+
+    try {
+      console.log("🔄 Procesando reserva...");
+
+      // Guardar datos para la página de pago
+      guardarDatosParaPago();
+
+      console.log("✅ Datos guardados, redirigiendo a pago...");
+
+      // Redirigir a la página de pago (ruta relativa correcta desde src/mod-cliente/)
+      window.location.href = "../otro-metodo.html";
+    } catch (error) {
+      console.error("❌ Error al procesar la reserva:", error);
+      alert("Error al procesar la reserva: " + error.message);
+    }
+  }
+
+  function guardarDatosParaPago() {
+    const funcionSeleccionada = funciones.find(
+      (f) => f.id_funcion == idFuncion
+    );
+
+    if (!funcionSeleccionada) {
+      throw new Error("No se encontró la función seleccionada");
+    }
+
+    const datosPago = {
+      id_funcion: idFuncion,
+      id_pelicula: idPelicula,
+      pelicula_nombre: funcionNombre ? funcionNombre.textContent : "Película",
+      fecha_funcion: funcionSeleccionada.fecha_funcion,
+      sala: funcionSeleccionada.sala || funcionSeleccionada.id_sala,
+      asientos_seleccionados: seleccionados.map((id) => {
+        const asiento = asientos.find((a) => a.id_silla == id);
+        return {
+          id_silla: id,
+          fila: asiento.fila,
+          columna: asiento.columna,
+          tipo: asiento.tipo,
+          precio: calcularPrecioAsiento(asiento.tipo),
         };
-
-        const r = await api(`${API}?accion=crear_reserva`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-
-        if (!r.exito) throw new Error(r.mensaje);
-
-        alert("Reserva creada con éxito");
-        window.location.href = "mis-reservas.html";
-      } catch (err) {
-        console.error(err);
-        alert("Error al crear la reserva: " + err.message);
-      }
+      }),
+      funciones: funciones,
+      precio_base: precioBase,
+      total: calcularTotal(),
+      timestamp: new Date().toISOString(),
     };
+
+    // Guardar en sessionStorage
+    sessionStorage.setItem("datos_pago", JSON.stringify(datosPago));
+
+    // También guardar individualmente para fácil acceso
+    sessionStorage.setItem("reserva_id_funcion", idFuncion);
+    sessionStorage.setItem("reserva_asientos", JSON.stringify(seleccionados));
+    sessionStorage.setItem("reserva_total", calcularTotal().toString());
+
+    console.log("💾 Datos para pago guardados:", datosPago);
+    console.log("📦 sessionStorage actualizado con datos de reserva");
+  }
+
+  function calcularTotal() {
+    let total = 0;
+    seleccionados.forEach((idAsiento) => {
+      const asiento = asientos.find((a) => a.id_silla == idAsiento);
+      if (asiento) {
+        total += calcularPrecioAsiento(asiento.tipo);
+      }
+    });
+    return total;
   }
 
   // -------------------------
@@ -754,10 +830,9 @@ async function inicio() {
   window.forzarRecargaAPI = forzarRecargaAPI;
 
   // Inicializar cuando el DOM esté listo
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', inicio);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", inicio);
   } else {
     inicio();
   }
-
 })();

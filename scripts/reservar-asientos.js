@@ -451,8 +451,8 @@ async function inicio() {
     }
 
     if (tituloSala) {
-      const sala = funcion.sala || funcion.id_sala;
-      tituloSala.textContent = `SALA ${sala} | ESTÁNDAR`;
+      const sala = funcion.sala || funcion.id_sala;git
+      tituloSala.textContent = ` ${sala} | ESTÁNDAR`;
     }
 
     precioBase =

@@ -18,9 +18,12 @@
                 <input type="text" placeholder="Buscar función">
                 <span class="material-symbols-outlined right-icon">search</span>
             </div>
-            <div class="user-container">
+            <div class="user-container" id="userMenuToggle">
                 <span class="material-symbols-outlined">account_circle</span>
                 <span class="username">Cajero1</span>
+                <div class="user-menu" id="userMenu">
+                    <a href="../backend/logout.php" class="user-menu-item">Cerrar sesión</a>
+                </div>
             </div>
         </div>
     </header>
@@ -95,5 +98,6 @@
             <button class="confirm-btn" onclick="linkToCajero()">Confirmar</button>
         </aside>
         <script src="../scripts/reservar-asientos.js"></script>
+        <script src="../scripts/lobby-cajero.js"></script>
     </body>
 </html>

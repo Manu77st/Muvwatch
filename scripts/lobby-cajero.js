@@ -1,72 +1,78 @@
-function openMovieModal(movieId) {
-    const modal = document.getElementById('movieModal');
-    const movieData = getMovieData(movieId);
+// Datos de funciones obtenidos desde el backend
+let funcionesData = [];
 
-    document.getElementById('modalMovieImage').src = movieData.image;
-    document.getElementById('modalMovieTitle').textContent = movieData.title;
-    document.getElementById('modalOriginalName').textContent = movieData.originalName;
-    document.getElementById('modalClassification').textContent = movieData.classification;
-    document.getElementById('modalCast').textContent = movieData.cast;
-    document.getElementById('modalDirector').textContent = movieData.director;
-    document.getElementById('modalSynopsis').textContent = movieData.synopsis;
+// Cargar funciones al iniciar la página
+document.addEventListener('DOMContentLoaded', function () {
+    cargarFunciones();
+});
+
+function cargarFunciones() {
+    fetch('../backend/api_funciones_cajero.php')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) return;
+
+            funcionesData = data.data || [];
+            renderFunciones();
+        })
+        .catch(error => {
+            console.error('Error al cargar funciones:', error);
+        });
+}
+
+function renderFunciones() {
+    const grid = document.querySelector('.movies-grid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+
+    funcionesData.forEach(funcion => {
+        const card = document.createElement('div');
+        card.className = 'movie-card';
+
+        // Por ahora usamos una imagen genérica; luego se puede guardar ruta en BD
+        card.innerHTML = `
+            <img src="../images/Peliculas_Cartelera/default.jpg" alt="${funcion.nombre}">
+            <h3>${funcion.nombre}</h3>
+            <div class="movie-actions">
+                <button class="btn-view">
+                    <span class="material-symbols-outlined">visibility</span>
+                    Ver detalles
+                </button>
+                <button class="btn-tobook" onclick="window.location.href='reservar-asientos.html?id_funcion=${funcion.id_funcion}'">
+                    <span class="material-symbols-outlined">theater_comedy</span>
+                    Reservar asientos
+                </button>
+            </div>
+        `;
+
+        const verDetallesBtn = card.querySelector('.btn-view');
+        verDetallesBtn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            openMovieModal(funcion);
+        });
+
+        grid.appendChild(card);
+    });
+}
+
+function openMovieModal(funcion) {
+    const modal = document.getElementById('movieModal');
+
+    // Contenido del modal basado en los datos de la función/película
+    document.getElementById('modalMovieImage').src = '../images/Peliculas_Cartelera/default.jpg';
+    document.getElementById('modalMovieTitle').textContent = funcion.nombre;
+    document.getElementById('modalOriginalName').textContent = funcion.nombre;
+    document.getElementById('modalClassification').textContent = funcion.clasificacion;
+    document.getElementById('modalCast').textContent = funcion.reparto;
+    document.getElementById('modalDirector').textContent = funcion.director;
+    document.getElementById('modalSynopsis').textContent = funcion.sipnosis;
 
     modal.style.display = 'block';
 }
 
 function closeMovieModal() {
     document.getElementById('movieModal').style.display = 'none';
-}
-
-function getMovieData(movieId) {
-    const movies = {
-        'mission-impossible': {
-            image: '../images/Peliculas_Cartelera/Mision imposible.jpg',
-            title: 'Mission Impossible',
-            originalName: 'Mission: Impossible',
-            classification: 'PG-13',
-            cast: 'Tom Cruise, Jon Voight, Emmanuelle Béart, Henry Czerny, Jean Reno, Ving Rhames',
-            director: 'Brian De Palma',
-            synopsis: 'Ethan Hunt es un agente de la Fuerza de Tareas de Imposibles (IMF) que se ve obligado a aceptar una misión para limpiar su nombre después de ser acusado de traición. Debe recuperar una lista secreta de agentes encubiertos que ha sido robada por un traidor dentro de la IMF.'
-        },
-        'spiderman': {
-            image: '../images/Peliculas_Cartelera/spider-man.jpg',
-            title: 'Spiderman',
-            originalName: 'Spider-Man: Across the Spider-Verse',
-            classification: 'PG-13',
-            cast: 'Shameik Moore, Hailee Steinfeld, Oscar Isaac, Jake Johnson',
-            director: 'Joaquim Dos Santos, Kemp Powers, Justin K. Thompson',
-            synopsis: 'Miles Morales regresa para una nueva aventura épica que transportará al amigable vecino de Brooklyn a través del Multiverso para unir fuerzas con Gwen Stacy y un nuevo equipo de Spider-People.'
-        },
-        'inside-out-2': {
-            image: '../images/Peliculas_Cartelera/Intesamente_2.jpg',
-            title: 'Inside Out 2',
-            originalName: 'Inside Out 2',
-            classification: 'PG',
-            cast: 'Amy Poehler, Phyllis Smith, Lewis Black, Tony Hale',
-            director: 'Kelsey Mann',
-            synopsis: 'Riley, ahora una adolescente, debe navegar por una nueva emoción: Ansiedad. Joy, Tristeza, Ira, Miedo y Asco deben ayudar a Riley a adaptarse a los cambios de la adolescencia.'
-        },
-        'beetlejuice': {
-            image: '../images/Peliculas_Cartelera/Bettlejuice.jpg',
-            title: 'Beetlejuice',
-            originalName: 'Beetlejuice 2',
-            classification: 'PG-13',
-            cast: 'Michael Keaton, Winona Ryder, Catherine O\'Hara, Jenna Ortega',
-            director: 'Tim Burton',
-            synopsis: 'La secuela de la película clásica de 1988 sigue a Lydia Deetz y su familia cuando regresan a Winter River, donde se encuentran con Beetlejuice una vez más.'
-        },
-        'paddington': {
-            image: '../images/Peliculas_Cartelera/Paddington.jpg',
-            title: 'Paddington',
-            originalName: 'PADDINGTON AVENTURA EN LA SELVA',
-            classification: 'PG',
-            cast: 'Ben Whishaw, Hugh Grant, Madeleine Harris, Samuel Joslin',
-            director: 'Paul King',
-            synopsis: 'Paddington se embarca en una aventura épica en la selva peruana para encontrar su verdadero hogar, mientras el Sr. Brown y su familia lo siguen en una misión de rescate.'
-        }
-    };
-
-    return movies[movieId] || movies['mission-impossible'];
 }
 
 // Cerrar modal al hacer clic fuera de él
@@ -76,3 +82,21 @@ window.onclick = function (event) {
         modal.style.display = 'none';
     }
 }
+
+// Menú de usuario (perfil Cajero1)
+document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.getElementById('userMenuToggle');
+    const menu = document.getElementById('userMenu');
+
+    if (!toggle || !menu) return;
+
+    toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const isVisible = menu.style.display === 'block';
+        menu.style.display = isVisible ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', function () {
+        menu.style.display = 'none';
+    });
+});

@@ -1,7 +1,7 @@
 <?php
 
 $host = 'localhost';
-$db = 'muvwacth';
+$db = 'muvwatch';
 $user = 'root';
 $pass = '';
 $charset = 'utf8mb4';

@@ -29,11 +29,48 @@ document.addEventListener('DOMContentLoaded', () => {
     updateFromRadios();
 
     // Exponer función global para manejar el pago
-    window.handlePayment = function () {
+    window.handlePayment = async function () {
         const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-        const cardType = paymentMethod === 'credit' ? 'crédito' : 'débito';
-        alert(`Procesando pago con tarjeta de ${cardType}...`);
-        window.history.go(-2);
+        const metodo = 'tarjeta'; // podrías mapear a 'efectivo', 'tarjeta', etc.
+
+        const params = new URLSearchParams(window.location.search);
+        const idFuncion = params.get('id_funcion');
+        const total = Number(params.get('total') || '0');
+        const sillasParam = params.get('sillas') || '';
+        const sillas = sillasParam ? sillasParam.split(',') : [];
+
+        if (!idFuncion || !total || !sillas.length) {
+            alert('Faltan datos de la venta. Vuelva a intentar desde la selección de asientos.');
+            return;
+        }
+
+        try {
+            const response = await fetch('../backend/registrar_venta.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id_funcion: Number(idFuncion),
+                    total: total,
+                    sillas: sillas,
+                    metodo_pago: metodo,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                alert('Error al registrar la venta.');
+                return;
+            }
+
+            alert(`Venta registrada. Ticket: ${data.numero_ticket}`);
+            window.location.href = 'lobby-cajero.html';
+        } catch (error) {
+            console.error('Error en el pago:', error);
+            alert('Ocurrió un error al procesar el pago.');
+        }
     };
 
     // Formato de número de tarjeta de crédito/débito en grupos de 4 dígitos

@@ -26,15 +26,15 @@
             <div class="card left-section">
                 <div class="info-row">
                     <span class="info-label">Función:</span>
-                    <span class="info-value">Mission impossible</span>
+                    <span class="info-value" id="info-funcion">-</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Fecha:</span>
-                    <span class="info-value">30/08/2025</span>
+                    <span class="info-value" id="info-fecha">-</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Hora:</span>
-                    <span class="info-value">9:20 pm</span>
+                    <span class="info-value" id="info-hora">-</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Sala:</span>
@@ -42,7 +42,7 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Sillas:</span>
-                    <span class="info-value">C5, C6</span>
+                    <span class="info-value" id="info-sillas">-</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Bloque:</span>
@@ -50,11 +50,11 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Precio total:</span>
-                    <span class="info-value">$$$$</span>
+                    <span class="info-value" id="info-total">$0</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Descuento:</span>
-                    <span class="info-value">10%</span>
+                    <span class="info-value" id="info-descuento">0%</span>
                 </div>
                 
                 <div class="payment-method">
@@ -108,6 +108,26 @@
         </div>
     </main>
     <script src="../scripts/cajero.js"></script>
+    <script>
+        function getQueryParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const funcion = getQueryParam('funcion') || '-';
+            const fecha = getQueryParam('fecha') || '-';
+            const hora = getQueryParam('hora') || '-';
+            const sillas = getQueryParam('sillas') || '-';
+            const total = getQueryParam('total') || '0';
+
+            document.getElementById('info-funcion').textContent = decodeURIComponent(funcion);
+            document.getElementById('info-fecha').textContent = fecha;
+            document.getElementById('info-hora').textContent = hora;
+            document.getElementById('info-sillas').textContent = sillas;
+            document.getElementById('info-total').textContent = '$' + Number(total).toLocaleString('es-CO');
+        });
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi Perfil - Muvwatch</title>
+    <link rel="stylesheet" href="../../styles/styles-cliente.css" />
+    <link rel="stylesheet" href="../../styles/styles-perfil.css" />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-200..200"
+    />
+</head>
+<body>
+    <header>
+        <nav class="navbar" style="background-color: #3b7ba6;">
+            <div class="container-navbar">
+                <div class="navbar-title">
+                    <img
+                        src="../../images/Logo-reducido.png"
+                        alt="Logo Muvwatch"
+                        style="height: 40px"
+                    />
+                </div>
+
+                <!-- Perfil Cliente -->
+                <div class="navbar-right">
+                    <div class="cliente-box" id="clienteBox">
+                        <span
+                            class="material-symbols-outlined icon-inline profile-icon"
+                            aria-hidden="true"
+                        >
+                            account_circle
+                        </span>
+                        <span id="userNameDisplay">Cliente</span>
+                        <div class="menu-cliente" id="menuCliente">
+                            <a href="#" onclick="abrirPerfil(event)">Perfil</a>
+                            <a href="../../src/login.html">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="perfil-container">
+            <div class="perfil-header">
+                <h1>Mi Perfil</h1>
+            </div>
+
+            <div class="perfil-card">
+                <div id="mensaje" class="message"></div>
+
+                <form id="formPerfil" class="perfil-form">
+                    <!-- Nombres -->
+                    <div class="form-group">
+                        <label for="nombres">Nombres</label>
+                        <input
+                            type="text"
+                            id="nombres"
+                            name="nombres"
+                            placeholder="Tus nombres"
+                            required
+                        />
+                    </div>
+
+                    <!-- Apellidos -->
+                    <div class="form-group">
+                        <label for="apellidos">Apellidos</label>
+                        <input
+                            type="text"
+                            id="apellidos"
+                            name="apellidos"
+                            placeholder="Tus apellidos"
+                            required
+                        />
+                    </div>
+
+                    <!-- Correo -->
+                    <div class="form-group read-only">
+                        <label for="correo">Correo</label>
+                        <input
+                            type="email"
+                            id="correo"
+                            name="correo"
+                            placeholder="correo@example.com"
+                            readonly
+                        />
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input
+                            type="tel"
+                            id="telefono"
+                            name="telefono"
+                            placeholder="Tú número de teléfono"
+                            required
+                        />
+                    </div>
+
+                    <!-- Tipo de Documento -->
+                    <div class="form-group read-only">
+                        <label for="tipo_documento">Tipo de Documento</label>
+                        <select id="tipo_documento" name="tipo_documento" disabled>
+                            <option value="">Tipo de Documento</option>
+                            <option value="CC">Cédula de Ciudadanía (CC)</option>
+                            <option value="CE">Cédula de Extranjería (CE)</option>
+                            <option value="Pasaporte">Pasaporte</option>
+                            <option value="TI">Tarjeta de Identidad (TI)</option>
+                        </select>
+                    </div>
+
+                    <!-- Número de Documento -->
+                    <div class="form-group read-only">
+                        <label for="numero_documento">Número de Documento</label>
+                        <input
+                            type="text"
+                            id="numero_documento"
+                            name="numero_documento"
+                            placeholder="Número de documento"
+                            readonly
+                        />
+                    </div>
+
+                    <!-- Fecha de Nacimiento -->
+                    <div class="form-group read-only">
+                        <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                        <input
+                            type="date"
+                            id="fecha_nacimiento"
+                            name="fecha_nacimiento"
+                            readonly
+                        />
+                    </div>
+
+                    <!-- Estado VIP -->
+                    <div class="form-group read-only">
+                        <label for="vip_status">Estado VIP</label>
+                        <input
+                            type="text"
+                            id="vip_status"
+                            name="vip_status"
+                            readonly
+                        />
+                    </div>
+                </form>
+
+                <div class="perfil-actions">
+                    <button type="button" class="btn btn-primary" id="btnGuardar">
+                        Guardar Cambios
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btnCancelar">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../scripts/mod-cliente/cliente-mod.js"></script>
+    <script src="../../scripts/mod-cliente/perfil.js"></script>
+</body>
+</html>

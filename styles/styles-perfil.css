@@ -1,0 +1,215 @@
+/* Estilos específicos para la página de perfil
+   Usa la paleta de colores de styles-cliente.css sin modificarlo
+   Responsive y sin campos cortados
+*/
+
+:root {
+  --color-primary: #0075d8;
+  --color-primary-dark: #005aa3;
+  --color-secondary: #f0f0f0;
+  --color-text: #333;
+  --color-border: #ddd;
+  --color-error: #d41a1a;
+  --color-success: #28a745;
+  --color-white: #fff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+}
+
+/* Contenedor principal */
+.perfil-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.perfil-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.perfil-header h1 {
+  font-size: 2rem;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+/* Tarjeta de perfil */
+.perfil-card {
+  background-color: var(--color-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Formulario */
+.perfil-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 117, 216, 0.1);
+}
+
+.form-group input[readonly],
+.form-group input[disabled],
+.form-group select[disabled] {
+  background-color: var(--color-secondary);
+  cursor: not-allowed;
+  color: #999;
+}
+
+/* Campos de vista solo (read-only) */
+.form-group.read-only input,
+.form-group.read-only select {
+  background-color: var(--color-secondary);
+  border-color: var(--color-border);
+  cursor: not-allowed;
+}
+
+/* Botones */
+.perfil-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mensajes */
+.message {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  display: block;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .perfil-container {
+    padding: 1rem;
+  }
+
+  .perfil-card {
+    padding: 1.5rem;
+  }
+
+  .perfil-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .perfil-form {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .perfil-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .perfil-card {
+    padding: 1rem;
+  }
+
+  .perfil-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .form-group input,
+  .form-group select {
+    font-size: 16px;
+  }
+}

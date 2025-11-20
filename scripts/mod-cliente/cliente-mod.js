@@ -443,7 +443,8 @@ function descargarTicket(id_reserva) {
 // ========================================
 function abrirPerfil(e) {
     if(e) e.preventDefault();
-    window.location.href = 'perfil-cliente.html';
+    // usar el nombre de archivo real `perfil.html` (está en el mismo directorio `src/mod-cliente`)
+    window.location.href = 'perfil.html';
 }
 
 function irACartelera() {

@@ -26,35 +26,35 @@
             <div class="card left-section">
                 <div class="info-row">
                     <span class="info-label">Función:</span>
-                    <span class="info-value">Mission impossible</span>
+                    <span class="info-value" id="venta_funcion">Mission impossible</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Fecha:</span>
-                    <span class="info-value">30/08/2025</span>
+                    <span class="info-value" id="venta_fecha">30/08/2025</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Hora:</span>
-                    <span class="info-value">9:20 pm</span>
+                    <span class="info-value" id="venta_hora">9:20 pm</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Sala:</span>
-                    <span class="info-value">4</span>
+                    <span class="info-value" id="venta_sala">4</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Sillas:</span>
-                    <span class="info-value">C5, C6</span>
+                    <span class="info-value" id="venta_sillas">C5, C6</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Bloque:</span>
-                    <span class="info-value">1</span>
+                    <span class="info-value" id="venta_bloque">1</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Precio total:</span>
-                    <span class="info-value">$$$$</span>
+                    <span class="info-value" id="venta_precio">$$$$</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Descuento:</span>
-                    <span class="info-value">10%</span>
+                    <span class="info-value" id="venta_descuento">10%</span>
                 </div>
                 
                 <div class="payment-method">
@@ -108,6 +108,83 @@
         </div>
     </main>
     <script src="../scripts/cajero.js"></script>
+        <script>
+        (function(){
+            const API = '../backend/api/index.php';
+
+            function formatearMoneda(n){
+                return '$' + parseFloat(n || 0).toLocaleString('es-CO');
+            }
+
+            function cargarDatosVenta(){
+                const temp = sessionStorage.getItem('venta_temp');
+                if(!temp) return;
+                const venta = JSON.parse(temp);
+                document.getElementById('venta_funcion').textContent = venta.pelicula || ('Función ' + venta.id_funcion);
+                document.getElementById('venta_fecha').textContent = venta.fecha || '—';
+                document.getElementById('venta_hora').textContent = venta.hora || '—';
+                document.getElementById('venta_sala').textContent = venta.sala || '—';
+                document.getElementById('venta_sillas').textContent = (venta.asientos || []).join(', ');
+                document.getElementById('venta_precio').textContent = formatearMoneda((venta.precio_unitario || 0) * (venta.cantidad || 0));
+                document.getElementById('venta_descuento').textContent = '0%';
+            }
+
+            // Toggle credit/debit card divs
+            document.addEventListener('DOMContentLoaded', () => {
+                cargarDatosVenta();
+
+                const radios = document.querySelectorAll('input[name="payment"]');
+                radios.forEach(r => r.addEventListener('change', (e)=>{
+                    const credit = document.getElementById('creditCard');
+                    const debit = document.getElementById('debitCard');
+                    if(e.target.value === 'credit'){
+                        credit.classList.remove('hidden'); debit.classList.add('hidden');
+                    } else {
+                        debit.classList.remove('hidden'); credit.classList.add('hidden');
+                    }
+                }));
+
+                const payBtn = document.querySelector('.pay-button');
+                if(payBtn) payBtn.addEventListener('click', handlePayment);
+            });
+
+            async function handlePayment(){
+                const temp = sessionStorage.getItem('venta_temp');
+                if(!temp) return alert('No hay datos de pago. Regresa a la reserva.');
+                const venta = JSON.parse(temp);
+                const metodo = document.querySelector('input[name="payment"]:checked')?.value || 'credit';
+
+                // Si hay campos de tarjeta, podríamos validar aquí (minimal)
+                // Crear la venta: primero crear reserva en backend y luego crear venta
+                try{
+                    // Llamada para crear venta (el endpoint creará reserva si es necesario)
+                    const payload = {
+                        id_funcion: venta.id_funcion,
+                        asientos: venta.asientos,
+                        metodo_pago: metodo === 'credit' ? 'tarjeta' : 'tarjeta'
+                    };
+
+                    const resp = await fetch(API + '?accion=crear_venta', {
+                        method: 'POST',
+                        headers: {'Content-Type':'application/json'},
+                        credentials: 'include',
+                        body: JSON.stringify(payload)
+                    });
+                    const json = await resp.json();
+                    if(!json.exito) throw new Error(json.mensaje || 'Error procesando pago');
+
+                    alert('Pago procesado. Ticket: ' + (json.datos?.numero_ticket || 'N/A'));
+                    // limpiar temporal
+                    sessionStorage.removeItem('venta_temp');
+                    // Redirigir al carrito (mis reservas / historial)
+                    window.location.href = 'carrito.html';
+                } catch(err){
+                    console.error(err);
+                    alert('Error procesando pago: ' + err.message);
+                }
+            }
+        })();
+        </script>
 </body>
 
 </html>
